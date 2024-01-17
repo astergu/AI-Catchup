@@ -16,6 +16,9 @@ Categorical accuracy
 
 ## Attempts
 
+[https://www.kaggle.com/competitions/ml2022spring-hw2](https://www.kaggle.com/competitions/ml2022spring-hw2)
+
+` Initial Baseline: based on code provided by the course.`
 
 | Model | Modifications | Private MSE | Public MSE |
 | ------------ | --------------- | --------------- | ------------- |
@@ -27,4 +30,5 @@ Categorical accuracy
 | More model tuning | hidden_dim=1024 <br> hidden_layers 2->3 | 0.71653 | 0.71416 |
 | Dynamic learning rate (update every epoch) | CosineAnnealingLR | 0.72599 | 0.7233 |
 | Make network deeper | hidden layers 3->4 | 0.7268 | 0.72438 |
-| Add dropout | Dropout layer before linear | 0.72849 | 0.72714 |
+| Add dropout | Dropout layer (p=0.1) before linear | 0.72849 | 0.72714 |
+| Add dropout | Dropout layer (p=0.25) before linear | 0.72921 | 0.72762 |

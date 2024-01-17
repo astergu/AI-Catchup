@@ -5,6 +5,8 @@
 
 ## Attempts
 
+[https://www.kaggle.com/competitions/ml2022spring-hw1](https://www.kaggle.com/competitions/ml2022spring-hw1)
+
 ` Initial Baseline: based on code provided by the course.`
 
 | Model | Modifications | Private MSE | Public MSE |
