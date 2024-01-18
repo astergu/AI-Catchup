@@ -3,6 +3,15 @@
 - Testing data: 1078 samples
 - Evaluation metric: **Mean Squared Error (MSE)**
 
+
+## Suggested baselines
+
+- `Simple`: 2.28371
+- `Medium`: 1.49430
+- `Strong`: 1.05728
+- `Boss`: 0.86161
+
+
 ## Attempts
 
 [https://www.kaggle.com/competitions/ml2022spring-hw1](https://www.kaggle.com/competitions/ml2022spring-hw1)

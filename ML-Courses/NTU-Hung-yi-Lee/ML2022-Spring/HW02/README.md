@@ -14,6 +14,19 @@ A unit of speech sound in a language that can serve to distinguish one word from
 
 Categorical accuracy
 
+## Suggested baselines
+
+- `Simple`: 0.45797 (sample code)
+- `Medium`: 0.69747
+  - concat n frames, add layers
+- `Strong`: 0.75028
+  - concat n frames
+  - batchnorm
+  - dropout
+  - add layers
+- `Boss`: 0.82324
+  - sequence-labeling (using RNN)
+
 ## Attempts
 
 [https://www.kaggle.com/competitions/ml2022spring-hw2](https://www.kaggle.com/competitions/ml2022spring-hw2)
