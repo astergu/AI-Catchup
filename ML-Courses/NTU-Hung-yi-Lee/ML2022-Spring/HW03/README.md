@@ -34,10 +34,11 @@ Accuracy
 
 ## Attempts
 
+[https://www.kaggle.com/c/ml2022spring-hw3b](https://www.kaggle.com/c/ml2022spring-hw3b)
 
 ` Initial Baseline: based on code provided by the course.`
 
-| Model | Modifications | Private MSE | Public MSE |
+| Model | Modifications | Private Accuracy | Public Accuracy |
 | ------------ | --------------- | --------------- | ------------- |
 | Initial Baseline | | 0.47332 | 0.48306 |
 | Train Augmentation |  transforms.RandomRotation(20) | 0.52283 | 0.50199 | 

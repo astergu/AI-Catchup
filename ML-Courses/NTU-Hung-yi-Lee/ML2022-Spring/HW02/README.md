@@ -33,7 +33,7 @@ Categorical accuracy
 
 ` Initial Baseline: based on code provided by the course.`
 
-| Model | Modifications | Private MSE | Public MSE |
+| Model | Modifications | Private Accuracy | Public Accuracy |
 | ------------ | --------------- | --------------- | ------------- |
 | Initial baseline |  | 0.46226 | 0.46066 |
 | Frame concat | Concat frames = 29 | 0.66413 | 0.66212 | 

@@ -20,7 +20,19 @@ Predict speaker class from given speech of dataset `VoxCeleb2`.
 
 ## Attempts
 
+[https://www.kaggle.com/c/ml2022spring-hw4](https://www.kaggle.com/c/ml2022spring-hw4)
+
+> Somehow submission failed with errors (key finding error), so I will just use the best `Validation Accuracy` as evaluation metric.
+>  
+> The accuracy listed below can not be compared to the `suggested baselines`.
+
 ` Initial Baseline: based on code provided by the course.`
 
-| Model | Modifications | Private MSE | Public MSE |
-| ------------ | --------------- | --------------- | ------------- |
+| Model | Modifications | Validation Accuracy |
+| ---------- | ---------- | ----------- |
+| Initial Baseline |  | 0.6494 |
+| Tranformer tuning | d_model=128 | 0.7039  | 
+| Transformer tuning | Transformer layers (num_layers=2) | 0.7412 |  
+| Transformer tuning | Transformer layers (num_layers=3) | 0.7708 |  
+| Transformer tuning | Transformer layer (nhead 2->4) | 0.7936 |  
+| Transformer tuning | Transformer layer (dim_feedforward 256->512, num_layers=4) | 0.8137 |  
