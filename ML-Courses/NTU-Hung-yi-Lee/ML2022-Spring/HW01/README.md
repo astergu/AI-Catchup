@@ -1,4 +1,4 @@
-# COVID-19 Daily Cases Prediction
+# Homework 1: COVID-19 Daily Cases Prediction
 - Training data: 2699 samples
 - Testing data: 1078 samples
 - Evaluation metric: **Mean Squared Error (MSE)**

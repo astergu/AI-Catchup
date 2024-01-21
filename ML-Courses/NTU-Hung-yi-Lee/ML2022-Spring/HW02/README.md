@@ -1,4 +1,4 @@
-# Framewise Phoneme Classification on the LibriSpeech Dataset
+# Homework 2: Framewise Phoneme Classification on the LibriSpeech Dataset
 
 ## Data
 

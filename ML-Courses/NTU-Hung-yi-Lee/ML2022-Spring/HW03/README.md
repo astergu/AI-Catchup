@@ -1,4 +1,4 @@
-# Image Classification
+# Homework 3: Image Classification
 
 ## Data
 
