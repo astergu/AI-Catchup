@@ -178,7 +178,7 @@ In this section, we will show you how to implement the linear regression model c
 ```python
 true_w = torch.tensor([2, -3.4])
 true_b = 4.2
-features, labels = d2l.synthetic_data(true_w, true_b, 1000)
+features, labels = d2l.synthetic_data(true_w, true_b, 10000)
 ```
 
 #### Reading the Dataset
@@ -244,3 +244,6 @@ for epoch in range(num_epochs):
     l = loss(net(features), labels)
     print(f'epoch {epoch + 1}, loss {l: f}')
 ```
+
+## Softmax Regression
+
