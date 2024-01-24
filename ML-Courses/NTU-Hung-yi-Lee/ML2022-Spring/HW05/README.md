@@ -36,3 +36,17 @@ The task is to translate English to Traditional Chinese.
   - Switch to Transformer and tuning hyperparameter.
 - `Boss`: 29.13
   - Apply back-translation.
+  
+## Attempts
+
+[https://ml.ee.ntu.edu.tw/hw5/](https://ml.ee.ntu.edu.tw/hw5/)
+
+> `fairseq` in this code only works on python 3.9 (or may be even lower version), so I had to create a conda virtual enviroment with python 3.9.
+> 
+> `conda create --name py39 python=3.9`
+>
+> Since we can not use the judge platform, so I will use validation BLEU instead.
+
+| Model | Modifications | BLEU |
+| ---------- | ---------- | ----------- |
+| Initial Baseline | | 16.18 |
