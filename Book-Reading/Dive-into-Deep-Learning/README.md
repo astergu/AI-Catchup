@@ -247,3 +247,147 @@ for epoch in range(num_epochs):
 
 ## Softmax Regression
 
+### The Image Classification Dataset
+
+One of the widely used dataset for image classification is the `MNIST` dataset. We will focus on our discussion in the comming sections on the qualitatively similar, but comparatively complex `Fashion-MNIST` dataset.
+
+```python
+from torchvision import transforms
+
+def load_data_fashion_mnist(batch_size, resize=None):
+    """Download the Fashion-MNIST dataset and then load it into memory"""
+    trans = [transforms.ToTensor()]
+    if resize:
+        trans.insert(0, transforms.Resize(resize))
+    trans = transforms.Compose(trans)
+    mnist_train = torchvision.datasets.FashionMNIST(root="./data", train=True, transform=trans, download=True)
+    mnist_test = torchvision.datasets.FashionMNIST(root="./data", train=False, transform=trans, download=True)
+    return (data.DataLoader(mnist_train, batch_size, shuffle=True, num_workers=4),
+            data.DataLoader(mnist_test, batch_size, shuffle=False, num_workers=4))
+```
+
+### Implementation of Softmax Regression from Scratch
+
+#### Initializing Model Parameters
+
+Each example in the raw dataset is a 28 $\times$ 28 image. In this section, we will flatten each image, treating them as vectors of length 784. Recall that in Softmax regression, we have as many outputs as there are classes. Because our dataset has 10 classes, our network will have an output dimension of 10. Consequently, our weights will constitute a 784 $\times$ 10 matrix and the biases will constitute a 1 $\times$ 10 row vector. 
+
+```python
+num_inputs = 784
+num_outputs = 10
+
+W = torch.normal(0, 0.01, size=(num_inputs, num_outputs), requires_grad=True)
+b = torch.zeros(num_outputs, requires_grad=True)
+```
+
+#### Defining the Softmax Operation
+
+```python
+def softmax(X):
+    X_exp = torch.exp(X)
+    partition = X_exp.sum(1, keepdim=True)
+    return X_exp / partition # broadcasting mechanism
+```
+
+As you can see, for any random input, we turn each element into a non-negative number. Moreover, each row sums up to 1, as is required for a probability.
+
+```python
+X = torch.normal(0, 1, (2, 5))
+X_prob = softmax(X)
+X_prob, X_prob.sum(1)
+```
+
+Note that while this looks correct mathematically, we were a bit sloppy in our implementation because we failed to take precautions against numerical overflow or underflow due to large or very small elements of the matrix.
+
+#### Defining the Model
+
+```python
+def net(X):
+    return softmax(torch.matmul(X.reshape((-1, W.shape[0])), W) + b)
+```
+
+#### Defining the Loss Function
+
+```python
+def cross_entropy(y_hat, y):
+    return -torch.log(y_hat[range(len(y_hat)), y])
+
+cross_entropy(y_hat, y)
+```
+
+#### Classification Accuracy
+
+Given the predicted probability distribution `y_hat`, we typically choose the class with the highest predicted probability whenever we must output a hard prediction.
+
+```python
+def accuracy(y_hat, y):
+    """Compute the number of correct predictions"""
+    if len(y_hat.shape) > 1 and y_hat.shape[1] > 1:
+        y_hat = y_hat.argmax(axis=1)
+    cmp = y_hat.type(y.dtype) == y
+    return float(cmp.type(y.dtype).sum())
+```
+
+```python
+def evaluate_accuracy(net, data_iter):
+    """Compute the accuracy for a model on a dataset."""
+    if isinstance(net, torch.nn.Module):
+        net.eval() # set the model to evaluation mode
+    metric = Accumulator(2) # No. of correct predictions, no. of predictions
+
+    with torch.no_grad():
+        for X, y in data_iter:
+            metric.add(accuracy(net(X), y), y.numel())
+    return metric[0] / metric[1]
+```
+
+Here `Accumulator` is a utility class to accumulate sums over multiple variables.
+
+```python
+class Accumulator:
+    """For accumulating sums over n variables."""
+    def __init__(self, n):
+        self.data = [0.0] * n
+
+    def add(self, *args):
+        self.data = [a + float(b) for a, b in zip(self.data, args)]
+    
+    def reset(self):
+        self.data = [0.0] * len(self.data)
+    
+    def __getitem__(self, idx):
+        return self.data[idx]
+```
+
+#### Training
+
+First, we define a function to train for one epoch. Note that `updater` is a general function to update the model parameters, which accepts the batch size as an argument. It can be either a wrapper of the `d2l.sgd` function or a framework's built-in optimization function.
+
+```python
+def train_epoch(net, train_ieter, loss, updater):
+    # Set the model to training mode
+    if isinstance(net, torch.nn.Module):
+        net.train()
+    # Sum of training loss, sum of training accuracy, no. of examples
+    metric = Accumulator(3)
+    for X, y in train_iter:
+        # Compute gradients and update parameters
+        y_hat = net(X)
+        l = loss(y_hat, y)
+        if isinstance(updater, torch.optim.Optimizer):
+            # Using PyTorch in-built optimizer & loss criterion
+            updaer.zero_grad()
+            l.mean().backward()
+            updater.step()
+        else:
+            # Using custom built optimizer & loss criterion
+            l.sum().backward()
+            updater(X.shape[0])
+        metric.add(float(l.sum()), accuracy(y_hat, y), y.numel())
+    
+    # Return training loss and training accuracy
+    return metric[0] / metric[2], metric[1] / metric[2]
+```
+
+# Multilayer Perceptrons
+
