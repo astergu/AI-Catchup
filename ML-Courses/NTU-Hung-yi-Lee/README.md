@@ -1,3 +1,5 @@
+![General Guide](./images/general_guide.png)
+
 # ML 2022 Courses
 
 | Topic  | Course | Optional Materials | Homework | 
