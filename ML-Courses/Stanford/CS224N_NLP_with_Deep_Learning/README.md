@@ -1,8 +1,6 @@
 # CS224N: Natural Language Processing with Deep Learning
 
-[Course Homepage](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/)
-
-[[course videos]](https://www.youtube.com/watch?v=rmVRLeJRkl4&list=PLoROMvodv4rOSH4v6133s9LFPRHjEmbmJ)
+[Course Homepage](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/) [[course videos]](https://www.youtube.com/watch?v=rmVRLeJRkl4&list=PLoROMvodv4rOSH4v6133s9LFPRHjEmbmJ)
 
 **Scope**
 
@@ -27,7 +25,7 @@
 Lecture | Topics | Course Materials | Assignments |
 | --------- | --------- | --------- | --------- |
 | **Lecture 1** | **Word Vectors** <br> [[slides]](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/slides/cs224n-2023-lecture01-wordvecs1.pdf) [[notes]](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/readings/cs224n_winter2023_lecture1_notes_draft.pdf)  <br> **Gensim word vectors** | Suggested Readings: <br> 1. [Efficient Estimation of Word Representations in Vector Space](http://arxiv.org/pdf/1301.3781.pdf) (original word2vec paper) <br> 2. [Distributed Representations of Words and Phrases and their Compositionality](http://papers.nips.cc/paper/5021-distributed-representations-of-words-and-phrases-and-their-compositionality.pdf) (negative sampling paper) |  |
-
+| **Lecture 2** | **Word Vectors, Word Window CLassification, Language Models**  | | |
 
 ## Lecture 1: Introduction and Word Vectors
 

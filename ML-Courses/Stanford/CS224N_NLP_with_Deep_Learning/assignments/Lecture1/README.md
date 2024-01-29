@@ -1,6 +1,6 @@
 > Before you start, make sure you read the `README.txt` in the same directory as this notebook for important setup information.
 
-# Tasks
+# Part 1: Count-Based Word Vectors
 
 ## Question 1.1: Implement `distinct_words`
 
@@ -87,10 +87,71 @@ def reduce_to_k_dim(M, k=2):
     M_reduced = None
     print("Running Truncated SVD over %i words..." % (M.shape[0]))
     
-    ### SOLUTION BEGIN
-        
-    ### SOLUTION END
+    svd = TruncatedSVD(n_components=k)
+    svd.fit(M)
+    M_reduced = svd.transform(M)
 
     print("Done.")
     return M_reduced
 ```
+
+## Question 1.4: Implement `plot_embeddings`
+
+Here you will write a function to plot a set of 2D vectors in 2D space. For graphs, we will use Matplotlib (plt).
+
+```python
+def plot_embeddings(M_reduced, word2ind, words):
+    """ Plot in a scatterplot the embeddings of the words specified in the list "words".
+        NOTE: do not plot all the words listed in M_reduced / word2ind.
+        Include a label next to each point.
+        
+        Params:
+            M_reduced (numpy matrix of shape (number of unique words in the corpus , 2)): matrix of 2-dimensioal word embeddings
+            word2ind (dict): dictionary that maps word to indices for matrix M
+            words (list of strings): words whose embeddings we want to visualize
+    """
+    word_embeddings = [M_reduced[word2ind[w]] for w in words]
+    for word, emb in zip(words, word_embeddings):
+        plt.scatter(emb[0], emb[1], marker='x', color='red')
+        plt.text(emb[0], emb[1], word, fontsize=8)
+
+    plt.show()
+```
+
+## Question 1.5: Co-Occurrence Plot Analysis
+
+We will compute the co-occurrence matrix with fixed window of 4 (the default window size), over the Reuters "gold" corpus. Then we will use TruncatedSVD to compute 2-dimensional embeddings of each word. TruncatedSVD returns U*S, so we need to normalize the returned vectors, so that all the vectors will appear around the unit circle (therefore closeness is directional closeness).
+
+```python
+reuters_corpus = read_corpus()
+M_co_occurrence, word2ind_co_occurrence = compute_co_occurrence_matrix(reuters_corpus)
+M_reduced_co_occurrence = reduce_to_k_dim(M_co_occurrence, k=2)
+
+# Rescale (normalize) the rows to make them each of unit-length
+M_lengths = np.linalg.norm(M_reduced_co_occurrence, axis=1)
+M_normalized = M_reduced_co_occurrence / M_lengths[:, np.newaxis] # broadcasting
+
+words = ['value', 'gold', 'platinum', 'reserves', 'silver', 'metals', 'copper', 'belgium', 'australia', 'china', 'grammes', "mine"]
+
+plot_embeddings(M_normalized, word2ind_co_occurrence, words)
+```
+
+### <font color='blue'> a. Find at least groups of words that cluster together in 2-dimensional embedding space. Given an explanation for each cluster you observe. </font>
+
+`australia` and `belgium` are in the same group, because they are both countries, so they tend to occur together in news. `gold` and `mine` are in the sample group, because they are co-related and tends to appear in same sentences. 
+
+### <font color='blue'> b. What doesn't cluster together you might think should have? Describe at least two examples. </font>
+
+`china` as a country, doesn't cluster together with other countries like `australia` and `belgium`. `silver` as a metal, doesn't cluster together with other metals.
+
+
+# Part 2: Prediction-Based Word Vectors
+
+More recently prediction-based word vectors have demonstrated better performance, such as word2vec and GloVe (which also utilizes the benefit of counts). Here, we shall explore the embeddings produced by GloVe.
+
+## Question 2.1: Glove Plot Analysis
+
+
+### <font color='blue'> a. What is one way the plot is different from the one generated earlier from the co-occurrence matrix? What is one way it's similar? </font>
+
+### <font color='blue'> b. What is a possible cause for the difference? </font>
