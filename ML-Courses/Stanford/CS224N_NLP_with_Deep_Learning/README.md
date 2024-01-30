@@ -25,7 +25,7 @@
 Lecture | Topics | Course Materials | Assignments |
 | --------- | --------- | --------- | --------- |
 | **Lecture 1** | **Word Vectors** <br> [[slides]](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/slides/cs224n-2023-lecture01-wordvecs1.pdf) [[notes]](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/readings/cs224n_winter2023_lecture1_notes_draft.pdf)  <br> **Gensim word vectors** | Suggested Readings: <br> 1. [Efficient Estimation of Word Representations in Vector Space](http://arxiv.org/pdf/1301.3781.pdf) (original word2vec paper) <br> 2. [Distributed Representations of Words and Phrases and their Compositionality](http://papers.nips.cc/paper/5021-distributed-representations-of-words-and-phrases-and-their-compositionality.pdf) (negative sampling paper) |  |
-| **Lecture 2** | **Word Vectors, Word Window CLassification, Language Models**  | | |
+| **Lecture 2** | **Word Vectors, Word Window CLassification, Language Models** <br> [[slides]](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/slides/cs224n-2023-lecture02-wordvecs2.pdf) [[notes]](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/readings/cs224n-2019-notes02-wordvecs2.pdf)  | Suggested Readings: <br> 1.[GloVe: Global Vectors for Word Representation](http://nlp.stanford.edu/pubs/glove.pdf) (original GloVe paper) <br> 2. [Improving Distributional Similarity with Lessons Learned from Word Embeddings](http://www.aclweb.org/anthology/Q15-1016) <br> 3. [Evaluation methods for unsupervised word embeddings](http://www.aclweb.org/anthology/D15-1036) <br><br> Additional Readings: <br> 1. [A Latent Variable Model Approach to PMI-based Word Embeddings](http://aclweb.org/anthology/Q16-1028) <br> 2. [Linear Algebraic Structure of Word Senses, with Applications to Polysemy](https://transacl.org/ojs/index.php/tacl/article/viewFile/1346/320) <br> [On the Dimensionality of Word Embedding](https://papers.nips.cc/paper/7368-on-the-dimensionality-of-word-embedding.pdf)  | |
 
 ## Lecture 1: Introduction and Word Vectors
 
@@ -50,3 +50,16 @@ We will build a dense vector for each word, chosen so that it is aimilar to vect
 - Go through each position `t` in the text, which as a center word `c` and context ("outside") word `o`
 - Use the `simiilarity of the word vectors` for `c` and `o` to `calculate the probabilty` of `o` given `c` (or vice versa)
 - `Keep adjusting the word vectors` to maximize this probability
+
+## Lecture 2: Word Vectors, Word Senses, and Neural Network Classifiers
+
+Two model variants:
+
+1. **Skip-gram (SG)**
+   Predict context ("outside") words (position independent) given center word
+2. **Continuous Bas of Words (CBOW)**
+   Predict center word from (bag of) context words
+
+Additional efficiency in training: **Negative sampling**
+
+

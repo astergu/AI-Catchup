@@ -154,4 +154,50 @@ More recently prediction-based word vectors have demonstrated better performance
 
 ### <font color='blue'> a. What is one way the plot is different from the one generated earlier from the co-occurrence matrix? What is one way it's similar? </font>
 
+In this plot, `china` is close to `reserves`. However, `grammes` is far from other nodes as before.
+
+
 ### <font color='blue'> b. What is a possible cause for the difference? </font>
+
+In news, `reserves` may not occur together frequently with `china`, but may appear immediately after (around) `china`. 
+
+## Question 2.2: Words with Multiple Meanings
+
+Polysemes and homonyms are words that have more than one meaning (see this wiki page to learn more about the difference between polysemes and homonyms ). Find a word with at least two different meanings such that the top-10 most similar words (according to cosine similarity) contain related words from both meanings. 
+
+
+```python
+wv_from_bin.most_similar("good")
+```
+
+> [('better', 0.8141133785247803),
+ ('really', 0.8016481995582581),
+ ('always', 0.7913187146186829),
+ ('sure', 0.7792829871177673),
+ ('you', 0.7747212052345276),
+ ('very', 0.7718809843063354),
+ ('things', 0.7658981084823608),
+ ('well', 0.7652329802513123),
+ ('think', 0.7623050808906555),
+ ('we', 0.7586264610290527)]
+
+### <font color='blue'> Please state the word you discover and the multiple meanings that occur in the top 10. Why do you think many of the polysemous or homonymic words you tried didn't work (i.e. the top-10 most similar words only contain one of the meanings of the words)? </font>
+
+`similar` here doesn't mean polysemes or homonyms, just mean the words tend to appear in similar contexts.
+
+## Question 2.3: Synonyms & Antonyms
+
+You should use the the wv_from_bin.distance(w1, w2) function here in order to compute the cosine distance between two words. Please give a possible explanation for why this counter-intuitive result may have happened.
+
+```python
+w1 = "good" 
+w2 = "bad"
+w3 = "wonderful"
+w1_w2_dist = wv_from_bin.distance(w1, w2)
+w1_w3_dist = wv_from_bin.distance(w1, w3)
+
+print("Synonyms {}, {} have cosine distance: {}".format(w1, w2, w1_w2_dist))
+print("Antonyms {}, {} have cosine distance: {}".format(w1, w3, w1_w3_dist))
+```
+
+### <font color='blue'>  </font>
