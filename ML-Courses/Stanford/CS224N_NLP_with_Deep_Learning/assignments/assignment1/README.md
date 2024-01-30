@@ -136,11 +136,11 @@ words = ['value', 'gold', 'platinum', 'reserves', 'silver', 'metals', 'copper', 
 plot_embeddings(M_normalized, word2ind_co_occurrence, words)
 ```
 
-### <font color='blue'> a. Find at least groups of words that cluster together in 2-dimensional embedding space. Given an explanation for each cluster you observe. </font>
+### <font color='red' size='3'> a. Find at least groups of words that cluster together in 2-dimensional embedding space. Given an explanation for each cluster you observe. </font>
 
 `australia` and `belgium` are in the same group, because they are both countries, so they tend to occur together in news. `gold` and `mine` are in the sample group, because they are co-related and tends to appear in same sentences. 
 
-### <font color='blue'> b. What doesn't cluster together you might think should have? Describe at least two examples. </font>
+### <font color='red' size='3'> b. What doesn't cluster together you might think should have? Describe at least two examples. </font>
 
 `china` as a country, doesn't cluster together with other countries like `australia` and `belgium`. `silver` as a metal, doesn't cluster together with other metals.
 
@@ -152,12 +152,12 @@ More recently prediction-based word vectors have demonstrated better performance
 ## Question 2.1: Glove Plot Analysis
 
 
-### <font color='blue'> a. What is one way the plot is different from the one generated earlier from the co-occurrence matrix? What is one way it's similar? </font>
+### <font color='red' size='3'> a. What is one way the plot is different from the one generated earlier from the co-occurrence matrix? What is one way it's similar? </font>
 
 In this plot, `china` is close to `reserves`. However, `grammes` is far from other nodes as before.
 
 
-### <font color='blue'> b. What is a possible cause for the difference? </font>
+### <font color='red' size='3'> b. What is a possible cause for the difference? </font>
 
 In news, `reserves` may not occur together frequently with `china`, but may appear immediately after (around) `china`. 
 
@@ -181,18 +181,18 @@ wv_from_bin.most_similar("good")
  ('think', 0.7623050808906555),
  ('we', 0.7586264610290527)]
 
-### <font color='blue'> Please state the word you discover and the multiple meanings that occur in the top 10. Why do you think many of the polysemous or homonymic words you tried didn't work (i.e. the top-10 most similar words only contain one of the meanings of the words)? </font>
+### <font color='red' size='3'> Please state the word you discover and the multiple meanings that occur in the top 10. Why do you think many of the polysemous or homonymic words you tried didn't work (i.e. the top-10 most similar words only contain one of the meanings of the words)? </font>
 
 `similar` here doesn't mean polysemes or homonyms, just mean the words tend to appear in similar contexts.
 
 ## Question 2.3: Synonyms & Antonyms
 
-You should use the the wv_from_bin.distance(w1, w2) function here in order to compute the cosine distance between two words. Please give a possible explanation for why this counter-intuitive result may have happened.
+You should use the the `wv_from_bin.distance(w1, w2)` function here in order to compute the cosine distance between two words. 
 
 ```python
 w1 = "good" 
 w2 = "bad"
-w3 = "wonderful"
+w3 = "better"
 w1_w2_dist = wv_from_bin.distance(w1, w2)
 w1_w3_dist = wv_from_bin.distance(w1, w3)
 
@@ -200,4 +200,130 @@ print("Synonyms {}, {} have cosine distance: {}".format(w1, w2, w1_w2_dist))
 print("Antonyms {}, {} have cosine distance: {}".format(w1, w3, w1_w3_dist))
 ```
 
-### <font color='blue'>  </font>
+> Synonyms good, bad have cosine distance: 0.28903740644454956
+> Antonyms good, better have cosine distance: 0.18588662147521973
+
+### <font color='red' size='3'> Please give a possible explanation for why this counter-intuitive result may have happened. </font>
+
+`good` and `bad` are both adjectives that can be used to describe situations in news, but `better` may be used in different comparative contexts. 
+
+## Question 2.4: Analogies with Word Vectors
+
+```python
+pprint.pprint(wv_from_bin.most_similar(positive=['woman', 'grandfather'], negative=['man']))
+```
+
+> [('grandmother', 0.7608445286750793),
+ ('granddaughter', 0.7200808525085449),
+ ('daughter', 0.7168302536010742),
+ ('mother', 0.7151536345481873),
+ ('niece', 0.7005682587623596),
+ ('father', 0.6659888029098511),
+ ('aunt', 0.6623408794403076),
+ ('grandson', 0.6618767380714417),
+ ('grandparents', 0.6446609497070312),
+ ('wife', 0.6445354223251343)]
+
+### <font color='red' size='3'> Using only vectors `m`, `g`, `w`, and the vector arithmetic operators `+` and `-` in your answer, to what expression are we maximizing `x`'s cosine similarity? </font>
+
+`man` + `grandfather` - `woman`
+
+## Question 2.5: Finding Analogies
+
+### <font color='red' size='3'> a. For the previous example, it's clear that "grandmother" completes the analogy. But give an intuitive explanation as to why the most_similar function gives us words like "granddaughter", "daughter", or "mother? </font>
+
+
+
+### <font color='red' size='3'> b. Find an example of analogy that holds according to these vectors (i.e. the intended word is ranked top). In your solution please state the full analogy in the form x:y :: a:b. If you believe the analogy is complicated, explain why the analogy holds in one or two sentences. </font>
+
+```python
+x, y, a, b = ["china", "chinese", "america", "american"]
+assert wv_from_bin.most_similar(positive=[a, y], negative=[x])[0][0] == b
+```
+
+## Question 2.6: Incorrect Analogy
+
+### <font color='red' size='3'> a. Below, we expect to see the intended analogy "hand : glove :: foot : sock", but we see an unexpected result instead. Give a potential reason as to why this particular analogy turned out the way it did? </font>
+
+```python
+pprint.pprint(wv_from_bin.most_similar(positive=['foot', 'glove'], negative=['hand']))
+```
+
+> [('45,000-square', 0.4922032058238983),
+ ('15,000-square', 0.4649604558944702),
+ ('10,000-square', 0.45447564125061035),
+ ('6,000-square', 0.44975772500038147),
+ ('3,500-square', 0.4441334009170532),
+ ('700-square', 0.44257497787475586),
+ ('50,000-square', 0.43563973903656006),
+ ('3,000-square', 0.43486514687538147),
+ ('30,000-square', 0.4330596923828125),
+ ('footed', 0.43236875534057617)]
+
+
+In news, `foot` is more frequently talked as the meaning of footage in real estate, rather than `foot` that humans have.
+
+### <font color='red' size='3'> b. Find another example of analogy that does not hold according to these vectors. In your solution, state the intended analogy in the form x:y :: a:b, and state the incorrect value of b according to the word vectors (in the previous example, this would be '45,000-square').  </font>
+
+```python
+x, y, a, b = ["square", "four", "triangle", "three"]
+pprint.pprint(wv_from_bin.most_similar(positive=[a, y], negative=[x]))
+```
+
+## Question 2.7: Guided Analysis of Bias in Word Vectors
+
+It's important to be cognizant of the biases (gender, race, sexual orientation etc.) implicit in our word embeddings. Bias can be dangerous because it can reinforce stereotypes through applications that employ these models.
+
+```python
+pprint.pprint(wv_from_bin.most_similar(positive=['man', 'profession'], negative=['woman']))
+print()
+pprint.pprint(wv_from_bin.most_similar(positive=['woman', 'profession'], negative=['man']))
+```
+
+### <font color='red' size='3'> Point out the difference between the list of female-associated words and the list of male-associated words, and explain how it is reflecting gender bias. </font>
+
+Obviously, man's professions are more related to business, however, women's professions are related to service roles, such as nursing, teacher, etc.
+
+
+## Question 2.8: Independent Analysis of Bias in Word Vectors
+
+Use the `most_similar` function to find another pair of analogies that demonstrates some bias is exhibited by the vectors. Please briefly explain the example of bias that you discover.
+
+```python
+A = "young"
+B = "old"
+word = "best"
+pprint.pprint(wv_from_bin.most_similar(positive=[A, word], negative=[B]))
+print()
+pprint.pprint(wv_from_bin.most_similar(positive=[B, word], negative=[A]))
+```
+
+> [('talented', 0.5989054441452026),
+ ('talent', 0.5488317012786865),
+ ('award', 0.5478774309158325),
+ ('actors', 0.5343650579452515),
+ ('good', 0.533554196357727),
+ ('success', 0.5324625968933105),
+ ('well', 0.5321840047836304),
+ ('better', 0.5309637188911438),
+ ('most', 0.5245237350463867),
+ ('performers', 0.5155372023582458)]
+
+ > [('history', 0.5702727437019348),
+ ('record', 0.5318861603736877),
+ ('one', 0.5158449411392212),
+ ('time', 0.5126581192016602),
+ ('winning', 0.5001153349876404),
+ ('35-year', 0.4995863735675812),
+ ('same', 0.4874439835548401),
+ ('only', 0.48707669973373413),
+ ('previous', 0.4835243821144104),
+ ('good', 0.48213526606559753)]
+
+
+## Question 2.9: Thinking About Bias
+
+### <font color='red' size='3'> a. Give one explanation of how bias gets into the word vectors. Briefly describe a real-world example that demonstrates this source of bias. </font>
+
+
+### <font color='red' size='3'> b. What is one method you can use to mitigate bias exhibited by word vectors? Briefly describe a real-world example that demonstrates this method. </font>
