@@ -113,12 +113,17 @@ def negSamplingLossAndGradient(
     # Negative sampling of words is done for you. Do not modify this if you
     # wish to match the autograder and receive points!
     negSampleWordIndices = getNegativeSamples(outsideWordIdx, dataset, K)
-    indices = [outsideWordIdx] + negSampleWordIndices
+    indices = [outsideWordIdx] + negSampleWordIndices # K + 1
 
     ### YOUR CODE HERE (~10 Lines)
-
     ### Please use your implementation of sigmoid in here.
+    uniq, idx, n_reps = np.unique(indices, return_index=True, return_counts=True)
+    U = outsideVectors[uniq]
 
+    S = sigmoid(centerWordVec @ U.T)
+
+    # Find loss and derivatives w.r.t. v_c, U
+     
     ### END YOUR CODE
 
     return loss, gradCenterVec, gradOutsideVecs
