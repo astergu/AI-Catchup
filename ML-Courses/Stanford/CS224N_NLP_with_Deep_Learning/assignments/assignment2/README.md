@@ -90,8 +90,7 @@ Compute the partial derivative of $J_{neg-sample}$ with respect to a negative sa
 > Answer: <br>
 > Firstly breaking up the sum, we get<br>
 > $J_{neg-sample}(v_c, o, U)=-log(\sigma(u_o^Tv_c))-\sum_{w_j=w_s}log(\sigma(-u_{w_j}^Tv_c))-\sum_{w_j\neq w_s}log(\sigma(-u_{w_s}^Tv_c))$ <br>
-> Now it is obvious that the first and last term vanish by taking the derivative and we are left with
-> $\frac{\partial J_{neg-sample}(v_c, o, U)}{\partial u_{w_s}}=-\sum_{w_j=w_s}(\sigma(-u_{w_s}^Tv_c)-1)v_c$
+> Now it is obvious that the first and last term vanish by taking the derivative and we are left with $\frac{\partial J_{neg-sample}(v_c, o, U)}{\partial u_{w_s}}=-\sum_{w_j=w_s}(\sigma(-u_{w_s}^Tv_c)-1)v_c$
 
 9. Suppose the center word is $c=w_t$ and the context window is $[w_{t-m},...,w_{t-1},w_t, w_{t+1},...,w_{t+m}]$, when $m$ is the context window size. Recall that for the skip-gram version of `word2vec`, the total loss for the context window is $J_{skip-gram}(v_c, w_{t-m},...,w_{t+m},U)=\sum_{-m\leq j \leq m} J(v_c, w_{t+j}, U)$. Here, $J(v_c, w_{t+j}, U) represents an arbitrary loss term for the center word $c=w_t$ and outside word $w_{t+j}$. $J(v_c, w_{t+j}, U)$ could be $J_{naive-softmax}(v_c, w_{t+j}, U)$ or $J_{neg-sample}(v_c, w_{t+j}, U)$, depending our your implementation.
 
@@ -101,11 +100,10 @@ Write down three partial derivatives in terms of $\frac{\partial J(v_c, w_{t+j},
 
 <br>
 
-(1) $\frac{\partial J_{skip-gram}(v_c, w_{t-m},...,w_{t+m}, U)}{\partial U}=\sum_{j\neq 0}\frac{\partial J(v_c,w_{t+j},U)}{\partial U}$ <br>
-(2) $\frac{\partial J_{skip-gram}(v_c, w_{t-m},...,w_{t+m}, U)}{\partial v_c}=\sum_{j \neq 0}\frac{\partial J(v_c,w_{t+j},U)}{\partial v_c}$ <br>
-(3) $\frac{\partial J_{skip-gram}(v_c, w_{t-m},...,w_{t+m}, U)}{\partial v_w}=0$ when $w \neq c$ <br>
-
-
+> Answer: <br>
+> $\frac{\partial J_{skip-gram}(v_c, w_{t-m},...,w_{t+m}, U)}{\partial U}=\sum_{j\neq 0}\frac{\partial J(v_c,w_{t+j},U)}{\partial U}$ <br>
+> $\frac{\partial J_{skip-gram}(v_c, w_{t-m},...,w_{t+m}, U)}{\partial v_c}=\sum_{j \neq 0}\frac{\partial J(v_c,w_{t+j},U)}{\partial v_c}$ <br>
+> $\frac{\partial J_{skip-gram}(v_c, w_{t-m},...,w_{t+m}, U)}{\partial v_w}=0$ when $w \neq c$ 
 
 
 ## Coding: Implementing word2vec
