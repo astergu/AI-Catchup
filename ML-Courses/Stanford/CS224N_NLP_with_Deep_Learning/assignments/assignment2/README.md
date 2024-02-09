@@ -71,20 +71,29 @@ for a sample $w_1,...,w_K$, where $\sigma(\cdot)$ is the sigmoid function.
 > Answer: <br>
 > $\frac{\partial J_{neg-sample}(v_c, o, U)}{v_c} = \frac{\partial(-log(\sigma(u_o^Tv_c))-\sum_{s=1}^Klog(\sigma(-u_{w_s}^Tv_c)))}{\partial v_c}=-(1-\sigma(u_o^Tv_c))u_o+\sum_{s=1}^K(1-\sigma(-u_{w_s}^Tv_c))u_{w_s}$ <br>
 > $\frac{\partial J_{neg-sample}(v_c, o, U)}{u_o}=\frac{\partial(-log(\sigma(u_o^Tv_c))-\sum_{s=1}^Klog(\sigma(-u_{w_s}^Tv_c)))}{\partial u_o}=-(1-\sigma(u_o^Tv_c))v_c$ <br>
-> $\frac{\partial J_{neg-sample}(v_c, o, U)}{u_{w_s}}=\frac{\partial(-log(\sigma(u_o^Tv_c))-\sum_{s=1}^Klog(\sigma(-u_{w_s}^Tv_c)))}{\partial u_{w_s}}=(1-\sigma(u_{w_s}^Tv_c))v_c$ <br>
+> $\frac{\partial J_{neg-sample}(v_c, o, U)}{u_{w_s}}=\frac{\partial(-log(\sigma(u_o^Tv_c))-\sum_{s=1}^Klog(\sigma(-u_{w_s}^Tv_c)))}{\partial u_{w_s}}=(1-\sigma(-u_{w_s}^Tv_c))v_c$ <br>
 
 (2). In lecture, we learned that an efficient implementation of backpropagation leverages the re-use of previously-computed partial derivatives. Which quantity could you reuse amongst the three partial derivatives calculated above to minimize duplicate computation? Write your answer in terms of $U_{o,{w_1,..,w_K}}=[u_o, -u_{w_1},...,-u_{w_K}]$, a matrix with the outside vectors stacked as columns, and 1, $a(K+1) \times 1$ vector of 1's. Addtional terms and functions (other than $U_{o,{w_1,...,w_K}}$ and 1) can be used in your solution.
 
 > Answer: <br>
-
+> The embeddings of negative samples $U_{o,{w_1,..,w_K}}=[u_o, -u_{w_1},...,-u_{w_K}]$ are shared across multiple terms of the loss function as sigmoid function. Therefore, we can reuse the quantity $\sigma(U^Tv_c)-1=[\sigma(u_o^Tvc)-1, \sigma(-u_{w_1}^Tv_c)-1, ..., \sigma(-u_{w_k}^Tv_c)-1]^T$.
 
 (3). Describe with one sentence why this loss function is much more efficient to compute than the naive-softmax loss.
 
-1. Now we will repeat the previous exercise, but without the assumption that the $K$ sampled words are distinct. Assume that $K$ negative samples (words) are drawn from the vocabulary. For simplicity of notation we shall refer to them as $w_1$, $w_2$,...,$w_K$ and their outside vectors as $u_{w_1}$, ..., $u_{w_K}$. In this question, you may not assume that the words are distinct. In other words, $w_i=w_j$ may be true when $i \neq j$ is true. Note that $o \notin {w_1,...,w_K}$. For a center word $c$ and an outside word $o$, the negative sampling loss function is given by: $J_{neg_sample}(v_c, o, U) = -log(\sigma(u_o^Tv_c)) - \sum_{s=1}^{K} log(\sigma(-u_{w_s}^Tv_c))$ for a sample $w_1,...,w_K$, where $\sigma(\cdot)$ is the sigmoid function.<br>
+> Answer: <br>
+> Negative sampling loss is much more efficient because it samples a fixed number K of vocabulary that are involved in loss computation along with the true outside word, whereas naive softmax loss involves normalizing the unnormalized probability meaning it has to go through all word vectors in the whole vocabulary. 
+
+8. Now we will repeat the previous exercise, but without the assumption that the $K$ sampled words are distinct. Assume that $K$ negative samples (words) are drawn from the vocabulary. For simplicity of notation we shall refer to them as $w_1$, $w_2$,...,$w_K$ and their outside vectors as $u_{w_1}$, ..., $u_{w_K}$. In this question, you may not assume that the words are distinct. In other words, $w_i=w_j$ may be true when $i \neq j$ is true. Note that $o \notin {w_1,...,w_K}$. For a center word $c$ and an outside word $o$, the negative sampling loss function is given by: $J_{neg_sample}(v_c, o, U) = -log(\sigma(u_o^Tv_c)) - \sum_{s=1}^{K} log(\sigma(-u_{w_s}^Tv_c))$ for a sample $w_1,...,w_K$, where $\sigma(\cdot)$ is the sigmoid function.<br>
 Compute the partial derivative of $J_{neg-sample}$ with respect to a negative sample $u_{w_s}$. Please write your answers in terms of the vectors $v_c$ and $u_{w_s}$, where $s\in [1, K]$. <br>
 *Hint: break up sum in the loss function into two sums: a sum over all sampled words equal to $w_s$ and a sum over all sampled words not equal to $w_s$. *
 
-1. Suppose the center word is $c=w_t$ and the context window is $[w_{t-m},...,w_{t-1},w_t, w_{t+1},...,w_{t+m}]$, when $m$ is the context window size. Recall that for the skip-gram version of `word2vec`, the total loss for the context window is $J_{skip-gram}(v_c, w_{t-m},...,w_{t+m},U)=\sum_{-m\leq j \leq m} J(v_c, w_{t+j}, U)$. Here, $J(v_c, w_{t+j}, U) represents an arbitrary loss term for the center word $c=w_t$ and outside word $w_{t+j}$. $J(v_c, w_{t+j}, U)$ could be $J_{naive-softmax}(v_c, w_{t+j}, U)$ or $J_{neg-sample}(v_c, w_{t+j}, U)$, depending our your implementation.
+> Answer: <br>
+> Firstly breaking up the sum, we get<br>
+> $J_{neg-sample}(v_c, o, U)=-log(\sigma(u_o^Tv_c))-\sum_{w_j=w_s}log(\sigma(-u_{w_j}^Tv_c))-\sum_{w_j\neq w_s}log(\sigma(-u_{w_s}^Tv_c))$ <br>
+> Now it is obvious that the first and last term vanish by taking the derivative and we are left with
+> $\frac{\partial J_{neg-sample}(v_c, o, U)}{\partial u_{w_s}}=-\sum_{w_j=w_s}(\sigma(-u_{w_s}^Tv_c)-1)v_c$
+
+9. Suppose the center word is $c=w_t$ and the context window is $[w_{t-m},...,w_{t-1},w_t, w_{t+1},...,w_{t+m}]$, when $m$ is the context window size. Recall that for the skip-gram version of `word2vec`, the total loss for the context window is $J_{skip-gram}(v_c, w_{t-m},...,w_{t+m},U)=\sum_{-m\leq j \leq m} J(v_c, w_{t+j}, U)$. Here, $J(v_c, w_{t+j}, U) represents an arbitrary loss term for the center word $c=w_t$ and outside word $w_{t+j}$. $J(v_c, w_{t+j}, U)$ could be $J_{naive-softmax}(v_c, w_{t+j}, U)$ or $J_{neg-sample}(v_c, w_{t+j}, U)$, depending our your implementation.
 
 <br>
 
@@ -92,9 +101,9 @@ Write down three partial derivatives in terms of $\frac{\partial J(v_c, w_{t+j},
 
 <br>
 
-(1) $\frac{\partial J_{skip-gram}(v_c, w_{t-m},...,w_{t+m}, U)}{\partial U}$ <br>
-(2) $\frac{\partial J_{skip-gram}(v_c, w_{t-m},...,w_{t+m}, U)}{\partial v_c}$ <br>
-(3) $\frac{\partial J_{skip-gram}(v_c, w_{t-m},...,w_{t+m}, U)}{\partial v_w}$ when $w \neq c$ <br>
+(1) $\frac{\partial J_{skip-gram}(v_c, w_{t-m},...,w_{t+m}, U)}{\partial U}=\sum_{j\neq 0}\frac{\partial J(v_c,w_{t+j},U)}{\partial U}$ <br>
+(2) $\frac{\partial J_{skip-gram}(v_c, w_{t-m},...,w_{t+m}, U)}{\partial v_c}=\sum_{j \neq 0}\frac{\partial J(v_c,w_{t+j},U)}{\partial v_c}$ <br>
+(3) $\frac{\partial J_{skip-gram}(v_c, w_{t-m},...,w_{t+m}, U)}{\partial v_w}=0$ when $w \neq c$ <br>
 
 
 
