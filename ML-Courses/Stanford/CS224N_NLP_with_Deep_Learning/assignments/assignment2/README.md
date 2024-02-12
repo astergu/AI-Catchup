@@ -83,7 +83,7 @@ for a sample $w_1,...,w_K$, where $\sigma(\cdot)$ is the sigmoid function.
 > Answer: <br>
 > Negative sampling loss is much more efficient because it samples a fixed number K of vocabulary that are involved in loss computation along with the true outside word, whereas naive softmax loss involves normalizing the unnormalized probability meaning it has to go through all word vectors in the whole vocabulary. 
 
-8. Now we will repeat the previous exercise, but without the assumption that the $K$ sampled words are distinct. Assume that $K$ negative samples (words) are drawn from the vocabulary. For simplicity of notation we shall refer to them as $w_1$, $w_2$,...,$w_K$ and their outside vectors as $u_{w_1}$, ..., $u_{w_K}$. In this question, you may not assume that the words are distinct. In other words, $w_i=w_j$ may be true when $i \neq j$ is true. Note that $o \notin {w_1,...,w_K}$. For a center word $c$ and an outside word $o$, the negative sampling loss function is given by: $J_{neg_sample}(v_c, o, U) = -log(\sigma(u_o^Tv_c)) - \sum_{s=1}^{K} log(\sigma(-u_{w_s}^Tv_c))$ for a sample $w_1,...,w_K$, where $\sigma(\cdot)$ is the sigmoid function.<br>
+8. Now we will repeat the previous exercise, but without the assumption that the $K$ sampled words are distinct. Assume that $K$ negative samples (words) are drawn from the vocabulary. For simplicity of notation we shall refer to them as $w_1,w_2,...,w_K$ and their outside vectors as $u_{w_1},...,u_{w_K}$. In this question, you may not assume that the words are distinct. In other words, $w_i=w_j$ may be true when $i \neq j$ is true. Note that $o \notin {w_1,...,w_K}$. For a center word $c$ and an outside word $o$, the negative sampling loss function is given by: $J_{neg_sample}(v_c, o, U) = -log(\sigma(u_o^Tv_c)) - \sum_{s=1}^{K} log(\sigma(-u_{w_s}^Tv_c))$ for a sample $w_1,...,w_K$, where $\sigma(\cdot)$ is the sigmoid function.<br>
 Compute the partial derivative of $J_{neg-sample}$ with respect to a negative sample $u_{w_s}$. Please write your answers in terms of the vectors $v_c$ and $u_{w_s}$, where $s\in [1, K]$. <br>
 *Hint: break up sum in the loss function into two sums: a sum over all sampled words equal to $w_s$ and a sum over all sampled words not equal to $w_s$. *
 
@@ -108,7 +108,7 @@ Write down three partial derivatives in terms of $\frac{\partial J(v_c, w_{t+j},
 
 ## Coding: Implementing word2vec
 
-In this part you will implmenet the word2vec model and train your own word vectors with stochastic gradient descent (SGD). Before you begin, first run the following commands within the assignment directory in order to create the appropriate conda virtual environment. You'll probably want to implement and test each part of this section in order, since the questions are cumulative.
+In this part you will implement the word2vec model and train your own word vectors with stochastic gradient descent (SGD). Before you begin, first run the following commands within the assignment directory in order to create the appropriate conda virtual environment. You'll probably want to implement and test each part of this section in order, since the questions are cumulative.
 
 ```bash
 conda env create -f env.yml
@@ -130,10 +130,10 @@ def sigmoid(x):
     return 1 / (1 + np.exp(-x))
 ```
 
-(2) Implement the sofxmax loss and gradient in the `naiveSoftmaxLossAndGradient` method.
+(2) Implement the softmax loss and gradient in the `naiveSoftmaxLossAndGradient` method.
 
 ```python
-def naiveSoftmaxLossAndGradient(centerWordVec, outsideWordIdx, outsideVectors, dataset):
+def naiveSoftmaxLossAndGradient(centerWordVec, outsideWordIdx, outsideVectors, dataset): # v_c, o, U
     y_hat = softmax(centerWordVec @ outsideVectors)
     y = np.zeros_like(y_hat)
     y[outsideWordIdx] = 1
@@ -148,12 +148,104 @@ def naiveSoftmaxLossAndGradient(centerWordVec, outsideWordIdx, outsideVectors, d
 (3) Implement the negative sampling loss and gradient in the `negSamplingLossAndGradient` method.
 
 ```python
-def negSamplingLossAndGradient(
-    centerWordVec,
-    outsideWordIdx,
-    outsideVectors,
-    dataset,
-    K=10):
+def negSamplingLossAndGradient(centerWordVec, outsideWordIdx, outsideVectors, dataset, K=10):
+    negSampleWordIndices = getNegativeSamples(outsideWordIdx, dataset, K)
+    indices = [outsideWordIdx] + negSampleWordIndices
 
+    uniq, idx, n_reps = np.unique(indices, return_index=True, return_counts=True)
+    U = outsideVectors[uniq]
+    n_reps[idx==0] *= -1 # u_o, n_reps=1
+    U[idx!=0] *= -1 # u_w
+    S = sigmoid(centerWordVec @ U.T) # sigmoid((u_w, u_o)*v_c)
+
+    # Find loss and derivatives w.r.t. v_c, U
+    loss = -np.sum(np.abs(n_reps) * np.log(S))
+    gradCenterVec = np.abs(n_reps) * (1 - S) @ -U
+    gradOutsideVecs = np.zeros_like(outsideVectors)
+    gradOutsideVecs[uniq] = n_reps[:, None] * np.outer(1 - S, centerWordVec)
+
+    return loss, gradCenterVec, gradOutsideVecs
 ```
 (4) Implement the skip-gram model in the `skipgram` method.
+
+```python
+def skipgram(currentCenterWord, windowSize, outsideWords, word2Ind,
+             centerWordVectors, outsideVectors, dataset,
+             word2vecLossAndGradient=naiveSoftmaxLossAndGradient):
+    loss = 0.0
+    gradCenterVecs = np.zeros(centerWordVectors.shape)
+    gradOutsideVectors = np.zeros(outsideVectors.shape)
+
+    ### YOUR CODE HERE (~8 Lines)
+    centerWordIdx = word2Ind[currentCenterWord]
+    centerWordVec = centerWordVectors[centerWordIdx]
+
+    for outsideWord in outsideWords:
+        outsideWordIdx = word2Ind[outsideWord]
+        l, gradVc, gradOutsideVecs = word2vecLossAndGradient(centerWordVec, outsideWordIdx, outsideVectors, dataset)
+        loss += l
+        gradCenterVecs[centerWordIdx] += gradVc
+        gradOutsideVectors += gradOutsideVecs
+    
+    return loss, gradCenterVecs, gradOutsideVectors
+```
+
+2. Complete the implementation for your SGD optimizer in the `sgd` method of `sgd.py`. Test your implementation by running `python sgd.py`.
+
+```python
+def sgd(f, x0, step, iterations, postprocessing=None, useSaved=False,
+        PRINT_EVERY=10):
+    # Anneal learning rate every several iterations
+    ANNEAL_EVERY = 20000
+
+    if useSaved:
+        start_iter, oldx, state = load_saved_params()
+        if start_iter > 0:
+            x0 = oldx
+            step *= 0.5 ** (start_iter / ANNEAL_EVERY)
+
+        if state:
+            random.setstate(state)
+    else:
+        start_iter = 0
+
+    x = x0
+
+    if not postprocessing:
+        postprocessing = lambda x: x
+
+    exploss = None
+
+    for iter in range(start_iter + 1, iterations + 1):
+        # You might want to print the progress every few iterations.
+
+        loss = None
+        ### YOUR CODE HERE (~2 lines)
+        loss, dx = f(x)
+        x -= step * dx
+        ### END YOUR CODE
+
+        x = postprocessing(x)
+        if iter % PRINT_EVERY == 0:
+            if not exploss:
+                exploss = loss
+            else:
+                exploss = .95 * exploss + .05 * loss
+            print("iter %d: %f" % (iter, exploss))
+
+        if iter % SAVE_PARAMS_EVERY == 0 and useSaved:
+            save_params(iter, x)
+
+        if iter % ANNEAL_EVERY == 0:
+            step *= 0.5
+
+    return x
+```
+
+3. Now we are going to load some real data and train word vectors with everything you just implemented! We are going to use the Stanford Sentiment Treebank (SST) dataset to train word vectors, and later apply them to a simple sentiment analysis task. You will need to fetch the datasets first. To do this, run `sh get_datasets.sh`. There is no additional code to write for this part, just run `python run.py`.
+
+> [!NOTE]
+> The training process may take a long time depending on the efficiency of your implementation and the compute power of your machine (**an efficient implementation takes one to two hours**).
+> After 40,000 iterations, the script will finish and a visualization of your word vectors will appear. It will also be saved as `word_vectors.png` in your project directory.
+
+[!The result of my sentiment analysis training](./word_vectors.png)
