@@ -248,4 +248,4 @@ def sgd(f, x0, step, iterations, postprocessing=None, useSaved=False,
 > The training process may take a long time depending on the efficiency of your implementation and the compute power of your machine (**an efficient implementation takes one to two hours**).
 > After 40,000 iterations, the script will finish and a visualization of your word vectors will appear. It will also be saved as `word_vectors.png` in your project directory.
 
-[!The result of my sentiment analysis training](./word_vectors.png)
+![The result of my sentiment analysis training](./word_vectors.png)

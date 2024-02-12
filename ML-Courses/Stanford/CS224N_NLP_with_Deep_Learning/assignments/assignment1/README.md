@@ -1,3 +1,5 @@
+# CS224n Assignment #1: Exploring Word Vectors
+
 > Before you start, make sure you read the `README.txt` in the same directory as this notebook for important setup information.
 
 # Part 1: Count-Based Word Vectors
