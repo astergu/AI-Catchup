@@ -114,3 +114,197 @@ class PartialParse(object):
 ```
 
 4. Our network will predict which transition should be applied next to a partial parse. We could use it to parse a single sentence by applying predicted transitions until the parse is complete. However, neural networks run much more efficiently when making predictions about batches of data at a time (i.e., predicting the next transition for any different partial parses simultaneously). We can parse sentences in minibatches with the following algorithm.
+
+Implement this algorithm in the `minibatch_parse` function in `parser_transitions.py`. You can run basic (non-exhaustive) tests by running `python parser_transitions.py part_d`. 
+
+```python
+def minibatch_parse(sentences, model, batch_size):
+    dependencies = []
+
+    partial_parses = [PartialParse(sentence) for sentence in sentences]
+    unfinished_parses = partial_parses[:]
+    while unfinished_parses:
+        batch = unfinished_parses[:batch_size]
+        transitions = model.predict(batch)
+        for i, transition in enumerate(transitions):
+            batch[i].parse_step(transition)
+            if len(batch[i].buffer) == 0 and len(batch[i].stack) == 1:
+                unfinished_parses.remove(batch[i])
+    
+    dependencies = [partial_parse.dependencies for partial_parse in partial_parses]
+
+    return dependencies
+```
+
+5. We are now going to train a neural network to predict, given the state of the stack, buffer, and dependencies, which transition should be applied next.
+
+In `parser_model.py` you will find skeleton code to implement this simple neural network using PyTorch. Complete the `__init__`, `embedding_lookup` and `forward` functions to implement the model. Then complete the `train_for_epoch` and `train` functions within the `run.py` file.
+
+```python
+class ParserModel(nn.Module):
+    def __init__(self, embeddings, n_features=36,
+        hidden_size=200, n_classes=3, dropout_prob=0.5):
+        """ Initialize the parser model.
+
+        @param embeddings (ndarray): word embeddings (num_words, embedding_size)
+        @param n_features (int): number of input features
+        @param hidden_size (int): number of hidden units
+        @param n_classes (int): number of output classes
+        @param dropout_prob (float): dropout probability
+        """
+        super(ParserModel, self).__init__()
+        self.n_features = n_features
+        self.n_classes = n_classes
+        self.dropout_prob = dropout_prob
+        self.embed_size = embeddings.shape[1]
+        self.hidden_size = hidden_size
+        self.embeddings = nn.Parameter(torch.tensor(embeddings))
+
+        self.embed_to_hidden_weight = nn.Parameter(torch.empty(self.n_features * self.embed_size, self.hidden_size))
+        nn.init.xavier_uniform_(self.embed_to_hidden_weight)
+        self.embed_to_hidden_bias = nn.Parameter(torch.empty(self.hidden_size))
+        nn.init.uniform_(self.embed_to_hidden_bias)
+
+        self.dropout = nn.Dropout(self.dropout_prob)
+        self.hidden_to_logits_weight = nn.Parameter(torch.empty(self.hidden_size, self.n_classes))
+        nn.init.xavier_uniform_(self.hidden_to_logits_weight)
+        self.hidden_logits_bias = nn.Parameter(torch.empty(self.n_classes))
+        nn.init.uniform_(self.hidden_logits_bias)
+    
+    def embedding_lookup(self, w):
+        """ Utilize `w` to select embeddings from embedding matrix `self.embeddings`
+            @param w (Tensor): input tensor of word indices (batch_size, n_features)
+
+            @return x (Tensor): tensor of embeddings for words represented in w
+                                (batch_size, n_features * embed_size)
+        """
+        x = torch.index_select(self.embeddings, 0, w.flatten()).view(w.size(0), -1)
+
+        return x
+    
+    def forward(self, w):
+        """ Run the model forward.
+
+            Note that we will not apply the softmax function here because it is included in the loss function nn.CrossEntropyLoss
+
+            PyTorch Notes:
+                - Every nn.Module object (PyTorch model) has a `forward` function.
+                - When you apply your nn.Module to an input tensor `w` this function is applied to the tensor.
+                    For example, if you created an instance of your ParserModel and applied it to some `w` as follows,
+                    the `forward` function would called on `w` and the result would be stored in the `output` variable:
+                        model = ParserModel()
+                        output = model(w) # this calls the forward function
+                - For more details checkout: https://pytorch.org/docs/stable/nn.html#torch.nn.Module.forward
+
+        @param w (Tensor): input tensor of tokens (batch_size, n_features)
+
+        @return logits (Tensor): tensor of predictions (output after applying the layers of the network)
+                                 without applying softmax (batch_size, n_classes)
+        """
+        x = self.embedding_lookup(w)
+        x = F.relu(torch.matmul(x, self.embed_to_hidden_weight) + self.embed_to_hidden_bias)
+        x = self.dropout(x)
+        logits = torch.matmul(x, self.hidden_to_logits_weight) + self.hidden_logits_bias
+
+        return logits
+```
+
+Finally execute `python run.py` to train your model and compute predictions on test data from Penn Treebank.
+
+```python
+def train_for_epoch(parser, train_data, dev_data, optimizer, loss_func, batch_size):
+    """ Train the neural dependency parser for single epoch.
+
+    Note: In PyTorch we can signify train versus test and automatically have
+    the Dropout Layer applied and removed, accordingly, by specifying
+    whether we are training, `model.train()`, or evaluating, `model.eval()`
+
+    @param parser (Parser): Neural Dependency Parser
+    @param train_data ():
+    @param dev_data ():
+    @param optimizer (nn.Optimizer): Adam Optimizer
+    @param loss_func (nn.CrossEntropyLoss): Cross Entropy Loss Function
+    @param batch_size (int): batch size
+
+    @return dev_UAS (float): Unlabeled Attachment Score (UAS) for dev data
+    """
+    parser.model.train() # Places model in "train" mode, i.e. apply dropout layer
+    n_minibatches = math.ceil(len(train_data) / batch_size)
+    loss_meter = AverageMeter()
+
+    with tqdm(total=(n_minibatches)) as prog:
+        for i, (train_x, train_y) in enumerate(minibatches(train_data, batch_size)):
+            optimizer.zero_grad()   # remove any baggage in the optimizer
+            loss = 0. # store loss for this batch here
+            train_x = torch.from_numpy(train_x).long()
+            train_y = torch.from_numpy(train_y.nonzero()[1]).long()
+
+            ### YOUR CODE HERE (~4-10 lines)
+            ### TODO:
+            ###      1) Run train_x forward through model to produce `logits`
+            ###      2) Use the `loss_func` parameter to apply the PyTorch CrossEntropyLoss function.
+            ###         This will take `logits` and `train_y` as inputs. It will output the CrossEntropyLoss
+            ###         between softmax(`logits`) and `train_y`. Remember that softmax(`logits`)
+            ###         are the predictions (y^ from the PDF).
+            ###      3) Backprop losses
+            ###      4) Take step with the optimizer
+            ### Please see the following docs for support:
+            ###     Optimizer Step: https://pytorch.org/docs/stable/optim.html#optimizer-step
+            outputs = parser.model(train_x)
+            loss = loss_func(outputs, train_y)
+            loss.backward()
+            optimizer.step()
+
+            ### END YOUR CODE
+            prog.update(1)
+            loss_meter.update(loss.item())
+
+    print ("Average Train Loss: {}".format(loss_meter.avg))
+
+    print("Evaluating on dev set",)
+    parser.model.eval() # Places model in "eval" mode, i.e. don't apply dropout layer
+    dev_UAS, _ = parser.parse(dev_data)
+    print("- dev UAS: {:.2f}".format(dev_UAS * 100.0))
+    return dev_UAS
+
+def train(parser, train_data, dev_data, output_path, batch_size=1024, n_epochs=10, lr=0.0005):
+    """ Train the neural dependency parser.
+
+    @param parser (Parser): Neural Dependency Parser
+    @param train_data ():
+    @param dev_data ():
+    @param output_path (str): Path to which model weights and results are written.
+    @param batch_size (int): Number of examples in a single batch
+    @param n_epochs (int): Number of training epochs
+    @param lr (float): Learning rate
+    """
+    best_dev_UAS = 0
+
+
+    ### YOUR CODE HERE (~2-7 lines)
+    ### TODO:
+    ###      1) Construct Adam Optimizer in variable `optimizer`
+    ###      2) Construct the Cross Entropy Loss Function in variable `loss_func` with `mean`
+    ###         reduction (default)
+    ###
+    ### Hint: Use `parser.model.parameters()` to pass optimizer
+    ###       necessary parameters to tune.
+    ### Please see the following docs for support:
+    ###     Adam Optimizer: https://pytorch.org/docs/stable/optim.html
+    ###     Cross Entropy Loss: https://pytorch.org/docs/stable/nn.html#crossentropyloss
+    optimizer = optim.Adam(parser.model.parameters())
+    loss_func = nn.CrossEntropyLoss(reduction='mean') # mean reduction is default
+
+    ### END YOUR CODE
+
+    for epoch in range(n_epochs):
+        print("Epoch {:} out of {:}".format(epoch + 1, n_epochs))
+        dev_UAS = train_for_epoch(parser, train_data, dev_data, optimizer, loss_func, batch_size)
+        if dev_UAS > best_dev_UAS:
+            best_dev_UAS = dev_UAS
+            print("New best dev UAS! Saving model.")
+            torch.save(parser.model.state_dict(), output_path)
+        print("")
+```
+
+> After training, my test UAS hit `89.09`.
