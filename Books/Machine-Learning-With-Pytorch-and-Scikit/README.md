@@ -28,3 +28,13 @@
 ## Chapter 13: Going Deeper - The Mechanics of PyTorch
 
 ## Chapter 14: CLassifying Images with Deep COnvolutional Neural Networks
+
+## Chapter 15: Modeling Sequential Data Using Recurrent Neural Networks
+
+## Chapter 16: Transformers
+
+## Chapter 17: Generative Adversarial Networks for Synthesizing New Data
+
+## Chapter 18: Graph Neural Networks for Capturing Dependencies in Graph Structured Data
+
+## Chapter 19: Reinforcement Learning for Decision Making in Complex Environments

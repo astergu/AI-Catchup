@@ -308,3 +308,6 @@ def train(parser, train_data, dev_data, output_path, batch_size=1024, n_epochs=1
 ```
 
 > After training, my test UAS hit `89.09`.
+
+
+6. We'd like to look at example dependency parses and understand where parsers like ours might be wrong. 
