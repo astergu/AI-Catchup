@@ -1,4 +1,4 @@
-# ML 2023 Courses
+# Machine Learning 2023 Spring: 生成式AI
 
 | Topic  | Course | Optional Materials | Homework | Prerequisite |
 | ------------- | ------------- | ------------- | ------------- | ------------ | 

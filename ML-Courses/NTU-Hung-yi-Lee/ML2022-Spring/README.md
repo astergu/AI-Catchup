@@ -1,4 +1,4 @@
-# ML 2022 Courses
+# Machine Learning 2022 Spring
 
 | Topic  | Course | Optional Materials | Homework | 
 | ------------- | ------------- | ------------- | ------------- | 
