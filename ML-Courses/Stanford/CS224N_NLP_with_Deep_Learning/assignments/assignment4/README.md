@@ -141,7 +141,7 @@ class NMT(nn.Module):
         ### END YOUR CODE
 ```
 
-4. (coding) Implement the `encode` function in `nmt_model.py`. This function converts the padded source sentences into the tensor $\mathbf{X}$, generates $h_1^{enc}, ..., h_m^{enc}$, and computes the initial state $h_0^{dec}$ and initial cell $c_0^{dec}$ for the Decoder. YOu can run a non-comprehensive sanity check by executing: `python sanity_check.py 1d`
+4. (coding) Implement the `encode` function in `nmt_model.py`. This function converts the padded source sentences into the tensor $\mathbf{X}$, generates $h_1^{enc}, ..., h_m^{enc}$, and computes the initial state $h_0^{dec}$ and initial cell $c_0^{dec}$ for the Decoder. You can run a non-comprehensive sanity check by executing: `python sanity_check.py 1d`
 
 ```python
 def encode(self, source_padded: torch.Tensor, source_lengths: List[int]) -> Tuple[
