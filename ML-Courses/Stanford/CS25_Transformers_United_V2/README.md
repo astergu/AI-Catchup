@@ -17,3 +17,4 @@ In this seminar, we examine the details of how Transformers work, and dive deep 
 - **Transformers United V3**
   - [[homepage]](https://web.stanford.edu/class/cs25/)
   - [[video]](https://www.youtube.com/playlist?list=PLoROMvodv4rNiJRchCzutFw5ItR_Z27CM) (all of V1, V2, V3)
+
