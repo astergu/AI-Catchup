@@ -18,6 +18,8 @@
 
 > 参考[113学年度学科能力测验试题：国语文写作能力测验 第二部分](chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://www.ceec.edu.tw/files/file_pool/1/0O021612121259980745/07-113%E5%AD%B8%E6%B8%AC%E5%9C%8B%E5%AF%AB%E8%A9%A6%E9%A1%8C.pdf)所附的文章，请以【缝隙的联想】为题，撰写一篇约五百字的繁体中文文章，并结合生活经验或见闻，书写你的感思与体悟。
 
+- [113学年度学科能力测验试题：国语文写作能力测验 第二部分](chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://www.ceec.edu.tw/files/file_pool/1/0O021612121259980745/07-113%E5%AD%B8%E6%B8%AC%E5%9C%8B%E5%AF%AB%E8%A9%A6%E9%A1%8C.pdf)
+
 ### 生成prompt示例
 
 - Directly use the task description

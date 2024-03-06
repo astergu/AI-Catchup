@@ -44,7 +44,7 @@ Lecture | Topics | Course Materials | Assignments |
 | **Lecture 3** | **Backprop and Neural Networks** <br> [[slides]](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/slides/cs224n-2023-lecture03-neuralnets.pdf) [[notes]](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/readings/cs224n-2019-notes03-neuralnets.pdf) | Suggested Readings: <br> 1. [matrix calculus notes](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/readings/gradient-notes.pdf) <br> 2. [Review of differential calculus](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/readings/review-differential-calculus.pdf) <br> 3. [CS231n notes on network architectures](http://cs231n.github.io/neural-networks-1/) :thumbsup: <br> 4. [CS231n notes on backprop](http://cs231n.github.io/optimization-2/) :thumbsup: <br> 5. [Derivatives, Backpropagation, and Vectorization](http://cs231n.stanford.edu/handouts/derivatives.pdf) <br> 6. [Learning Representations by Backpropagating Errors](http://www.iro.umontreal.ca/~vincentp/ift3395/lectures/backprop_old.pdf) (seminal Rumelhart et al. backpropagation paper) <br><br> Additional Readings: <br> 1. [Yes you should understand backprop](https://medium.com/@karpathy/yes-you-should-understand-backprop-e2f06eab496b) <br> 2. [Natural Language Processing (Almost) from Scratch](http://www.jmlr.org/papers/volume12/collobert11a/collobert11a.pdf) | Assignment 2 <br> [[code]](./assignments/assignment2/) [[handout]](./assignments/assignment2/assignment2.pdf) |
 | **Lecture 4** | **Dependency Parsing** <br> [[slides](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/slides/cs224n-2023-lecture04-dep-parsing.pdf)] [[notes]](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/readings/cs224n-2019-notes04-dependencyparsing.pdf) <br> [[slides (annotated)]](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/slides/cs224n-2021-lecture04-dep-parsing-annotated.pdf) | Suggested Readings: <br> 1. [Incrementality in Deterministic Dependency Parsing](https://www.aclweb.org/anthology/W/W04/W04-0308.pdf) <br> 2. [A Fast and Accurate Dependency Parser using Neural Networks](https://www.emnlp2014.org/papers/pdf/EMNLP2014082.pdf) <br> 3. [Dependency Parsing](http://www.morganclaypool.com/doi/abs/10.2200/S00169ED1V01Y200901HLT002) <br> 4. [Globally Normalized Transition-Based Neural Networks](https://arxiv.org/pdf/1603.06042.pdf) <br> 5. [Universal Stanford Dependencies: A cross-linguistic typology](http://nlp.stanford.edu/~manning/papers/USD_LREC14_UD_revision.pdf) <br> 6. [Universal Dependencies website](http://universaldependencies.org/) <br> 7. [Jurafsky & Martin Chapter 14](https://web.stanford.edu/~jurafsky/slp3/14.pdf)|  | 
 | **Lecture 5** | **Recurrent Neural Networks and Language Models** <br> [[slides]](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/slides/cs224n-2023-lecture05-rnnlm.pdf) [[notes]](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/readings/cs224n-2019-notes05-LM_RNN.pdf) | Suggested Readings: <br> 1. [N-gram Language Models](https://web.stanford.edu/~jurafsky/slp3/3.pdf) (textbook chapter) <br> 2. [The Unreasonable Effectiveness of Recurrent Neural Networks](http://karpathy.github.io/2015/05/21/rnn-effectiveness/) (blog post overview) <br> 3. [Sequence Modeling: Recurrent and Recursive Neural Nets](http://www.deeplearningbook.org/contents/rnn.html) (Sections 10.1 and 10.2) <br> 4. [On Chomsky and the Two Cultures of Statistical Learning](http://norvig.com/chomsky.html) <br> 5. [Sequence Modeling: Recurrent and Recursive Neural Nets](http://www.deeplearningbook.org/contents/rnn.html) (Sections 10.3, 10.5, 10.7-10.12) <br>  6. [Learning long-term dependencies with gradient descent is difficult](http://ai.dinfo.unifi.it/paolo//ps/tnn-94-gradient.pdf) (one of the original vanishing gradient papers) <br> 7. [On the difficulty of training Recurrent Neural Networks](https://arxiv.org/pdf/1211.5063.pdf)(proof of vanishing gradient problem) <br> 8. [Vanishing Gradients Jupyter Notebook](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1174/lectures/vanishing_grad_example.html) (demo for feedforward networks) <br> 9. [Understanding LSTM Networks](http://colah.github.io/posts/2015-08-Understanding-LSTMs/) (blog post overview) | Assignment 3 <br> [[code]](./assignments/assignment3/) [[handout]](./assignments/assignment3/a3_handout.pdf) |
-| **Lecture 6** | **Seq2Seq, MT, Subword Models** <br> [[slides]](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/slides/cs224n-2023-lecture06-fancy-rnn.pdf) [[notes]](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/readings/cs224n-2019-notes05-LM_RNN.pdf) | Suggested Readings: <br> 1. [Statistical Machine Translation Slides, CS224n 2015](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1162/syllabus.shtml) (lectures 2/3/4) <br> 2. [Statistical Machine Translation](https://www.cambridge.org/core/books/statistical-machine-translation/94EADF9F680558E13BE759997553CDE5) (book by Philipp Koehn) <br> 3. [BLEU](https://www.aclweb.org/anthology/P02-1040.pdf) (original paper) <br> 4. [Sequence to Sequence Learning with Neural Networks](https://arxiv.org/pdf/1409.3215.pdf) (original seq2seq NMT paper) <br> 5. [Sequence Transduction with Recurrent Neural Networks](https://arxiv.org/pdf/1211.3711.pdf) (early seq2seq speech recognition paper) <br> 6. [Neural Machine Translation by Jointly Learning to Align and Translate](https://arxiv.org/pdf/1409.0473.pdf) (original seq2seq+attention paper) <br> 7. [Attention and Augmented Recurrent Neural Networks](https://distill.pub/2016/augmented-rnns/) (blog post overview) <br> 8. [Massive Exploration of Neural Machine Translation Architectures](https://arxiv.org/pdf/1703.03906.pdf) (practical advice for hyperparameter choices) <br> 9. [Achieving Open Vocabulary Neural Machine Translation with Hybrid Word-Character Models](https://arxiv.org/abs/1604.00788.pdf) <br> 10. [Revisiting Character-Based Neural Machine Translation with Capacity and Compression](https://arxiv.org/pdf/1808.09943.pdf) | |
+| **Lecture 6** | **Seq2Seq, MT, Subword Models** <br> [[slides]](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/slides/cs224n-2023-lecture06-fancy-rnn.pdf) [[notes]](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/readings/cs224n-2019-notes05-LM_RNN.pdf) | Suggested Readings: <br> 1. [Statistical Machine Translation Slides, CS224n 2015](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1162/syllabus.shtml) (lectures 2/3/4) <br> 2. [Statistical Machine Translation](https://www.cambridge.org/core/books/statistical-machine-translation/94EADF9F680558E13BE759997553CDE5) (book by Philipp Koehn) <br> 3. [BLEU](https://www.aclweb.org/anthology/P02-1040.pdf) (original paper) <br> 4. [Sequence to Sequence Learning with Neural Networks](https://arxiv.org/pdf/1409.3215.pdf) (original seq2seq NMT paper) <br> 5. [Sequence Transduction with Recurrent Neural Networks](https://arxiv.org/pdf/1211.3711.pdf) (early seq2seq speech recognition paper) <br> 6. [Neural Machine Translation by Jointly Learning to Align and Translate](https://arxiv.org/pdf/1409.0473.pdf) (original seq2seq+attention paper) <br> 7. [Attention and Augmented Recurrent Neural Networks](https://distill.pub/2016/augmented-rnns/) (blog post overview) <br> 8. [Massive Exploration of Neural Machine Translation Architectures](https://arxiv.org/pdf/1703.03906.pdf) (practical advice for hyperparameter choices) <br> 9. [Achieving Open Vocabulary Neural Machine Translation with Hybrid Word-Character Models](https://arxiv.org/abs/1604.00788.pdf) <br> 10. [Revisiting Character-Based Neural Machine Translation with Capacity and Compression](https://arxiv.org/pdf/1808.09943.pdf) <br> 11. [From vanilla RNNs to Transformers: a history of seq2seq learning](https://github.com/christianversloot/machine-learning-articles/blob/main/from-vanilla-rnns-to-transformers-a-history-of-seq2seq-learning.md) :thumbsup: | |
 | **Lecture 7** | **Final Projects: Custom and Default; Practical Tips** <br> [[slides]](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/slides/cs224n-2023-lecture07-final-project.pdf) [[notes]](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/readings/cs224n-2019-notes06-NMT_seq2seq_attention.pdf) | Suggested Readings: <br> 1. [Practical Methodology](https://www.deeplearningbook.org/contents/guidelines.html) (Deep Learning book chapter) | Assignment 4 <br> [[code]](./assignments/assignment4/) [[handout]](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/assignments/a4.pdf)|
 | **Lecture 8** | **Self-Attention and Transformers** <br> [[slides]](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/slides/cs224n-2023-lecture08-transformers.pdf) [[notes]](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/readings/cs224n-self-attention-transformers-2023_draft.pdf) | Suggested Readings: <br> 1. [Default Project Handout](http://web.stanford.edu/class/cs224n/project/default-final-project-bert-handout.pdf) <br> 2. [Attention Is All You Need](https://arxiv.org/abs/1706.03762.pdf) <br> 3. [The Illustrated Transformer](https://jalammar.github.io/illustrated-transformer/) <br> 4. [Transformer (Google AI blog post)](https://ai.googleblog.com/2017/08/transformer-novel-neural-network.html) <br> 5. [Layer Normalization](https://arxiv.org/pdf/1607.06450.pdf) <br> 6. [Image Transformer](https://arxiv.org/pdf/1802.05751.pdf) <br> 7. [Music Transformer: Generating music with long-term structure](https://arxiv.org/pdf/1809.04281.pdf)  | Project Proposal <br> [[instructions]](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/project/project-proposal-instructions-2023.pdf) <br><br> Default Final Project <br> [[handout]](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/project/default-final-project-bert-handout.pdf) |
 | **Lecture 9** | **Pretraining** <br> [[slides]](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/slides/cs224n-2023-lecture9-pretraining.pdf) | Suggested Readings: <br> 1. [BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding](https://arxiv.org/pdf/1810.04805.pdf) <br> 2. [Contextual Word Representations: A Contextual Introduction](https://arxiv.org/abs/1902.06006.pdf) <br> 3. [The Illustrated BERT, ELMo, and co.](http://jalammar.github.io/illustrated-bert/) <br> 4. [Martin & Jurafsky Chapter on Transfer Learning](https://web.stanford.edu/~jurafsky/slp3/11.pdf)  | |
@@ -217,3 +217,87 @@ Language modeling is the task of predicting what word comes next. More formally,
   - question answering, machine translation
 - generate text
   - speech recognition, machine translation, summarization
+
+
+## Lecture 6: LSTM RNNs and Neural Machine Translation
+
+#### Long Short-Term Memory RNNs (LSTMs)
+
+- a solution to the problem of `vanishing gradients`, became well-known after Hinton brought it to Google in 2013.
+  - Long short-term memory [[Hochreiter and Schmidhuber, 1997]](https://www.bioinf.jku.at/publications/older/2604.pdf)
+  - Learning to Forget: Continual Prediction with LSTM. [[Gers, 2000]](https://dl.acm.org/doi/10.1162/089976600300015015)
+  - Connectionist temporal classification: Labelling unsegmented sequence data with recurrent neural nets. [[Graves, 2006]](https://www.cs.toronto.edu/~graves/icml_2006.pdf)
+- Idea
+  - on step $t$, there is a `hidden state` $h^{(t)}$ and a `cell state` $c^{(t)}$
+    - Both are vectors length $n$
+    - The cell stores `long-term information`
+    - The LSTM can `read`, `erase`, and `write` information from the cell
+  - The selection of which information is erased/written/read is controlled by three corresponding `gates`
+    - The gates are also vectors of length $n$
+    - On each timestep, each element of the gates can be `open(1)`, `closed(0)`, or somewhere in-between
+    - The gates are `dynamic`: their value is computed based on the current context
+- How does LSTM solve vanishing gradients?
+  - The LSTM architecture makes it much easier for an RNN to `preserve information over many timesteps`
+  - In practice, you get about 100 timesteps rather than about 7
+  
+![LSTM](./image/lstm.png)
+![LSTM equations](./image/lstm_equations.png)
+
+> Is vanishing/exploding gradient just an RNN problem?
+
+- No! It can be a problem for all neural architectures (including `feed-forward` and `convolutional`), especially `very deep` ones.
+- Another solution: lots of new deep feedforward/convolutional architectures `add direct connections`
+  - `Residual connections` aka "ResNet" [[Deep Residual Learning for Image Recognition]](https://arxiv.org/pdf/1512.03385.pdf)
+    - Also known as `skip-connections`
+    - The `identity connection preserves information` by default
+    - This makes `deep` networks much `easier to train`
+  - `Dense connections` aka "DenseNet" [[Densely Connected Convolutional Networks]](https://arxiv.org/pdf/1608.06993.pdf)
+    - `Highway connections` aka "HighwayNet" [[Highway Networks]](https://arxiv.org/pdf/1505.00387.pdf)
+- Conclusion: Through vanishing/exploding gradients are a general problem, `RNNs are particularly unstable` due to the repeated multiplication by the `same` weight matrix. [[Learning Long-Term Dependencies with Gradient Descent is Difficult, Bengio et al. 1994]](http://ai.dinfo.unifi.it/paolo//ps/tnn-94-gradient.pdf)
+
+#### Bidirectional and Multi-layer RNNs
+
+- On timestep $t$
+  - Forward RNN $\overrightarrow{h}^{(t)}=RNN_{FW}(\overrightarrow{h}^{(t-1)}), x^{(t)})$
+  - Backward RNN $\overleftarrow{h}^{(t)}=RNN_{BW}(\overleftarrow{h}^{(t+1)}, x^{(t)})$
+  - Generally, these twoo RNNs have separate weights
+  - the hidden state of a `Bidirectional RNN`: $h^{(t)}=[\overrightarrow{h}^{(t)};\overleftarrow{h}^{(t)}]$
+- Bidirectional RNNs are only applicable if you have access to the `entire input sequence`, so they are not applicable to Language Modeling
+- If you do have entire input sequence, `bidirectionality is powerful` (you should use it by default).
+- For example, `BERT` (Bidirectional Encoder Representations from Transformers) is a powerful pretrained contextual representation system `built on bidirectionality`.
+
+#### Multi-layer RNNs
+
+- Multi-layer RNNs are also called `stacked RNNs`.
+- `High-performing RNNs are usually multi-layer`. `2 to 4 layers` is best for the encoder RNN, and `4 layers` is best for the decoder RNN.
+- Usually, `skip-connections`/`dense-connections` are needed to train deeper RNNs (e.g., `8 layers`).
+- `Transformer`-based networks (e.g., BERT) are usually deeper, like `12 or 24 layers`.
+
+#### Machine Translation
+
+- **Machine Translation (MT)** is the task of translating a sentence x from one language (the source language) to a sentence y in another language (the target language).
+- **Statistical Machine Translation** (1990s-2010s)
+  - Learn a `probabilistic model` from data
+  - Find `best English sentence` y, given `French sentence` x: $argmax_y P(y|x)$
+  - Use Bayes Rule to break this down into two components to be learned separately $argmax_yP(x|y)P(y)$
+  - Lots of `feature engineering`
+- **Neural Machine Translation (NMT)**
+  - Machine Translation with a `single end-to-end neural network`
+  - The neural network architecture is called a `sequence-to-sequence` model (aka `seq2seq`) and it involves `two RNNs`.
+  - The general notion here is an `encoder-decoder` model
+  - Sequence-to-sequence is useful for `more than just MT`
+  - Many NLP tasks can be phrased as sequence-to-sequence
+    - `Summarization` (long text $\rightarrow$ short text)
+    - `Dialogue` (previous utterances $\rightarrow$ next utterance)
+    - `Parsing` (input text $\rightarrow$ output parse as sequence)
+    - `Code generation` (natural language $\rightarrow$ code)
+  - NMT directly calculates $P(y|x)$: $P(y|x)=P(y_1|x)P(y_2|y_1,x)...P(y_T|y_1,...,y_{T-1},x)$
+- **Machine Translation Evaluation**
+  - [BLEU (Bilingual Evaluation Understudy)](http://aclweb.org/anthology/P02-1040)
+    - BLEU compares the `machine-written translation` to one or several `human-written translation`, and computes a `similarity score` based on:
+      - `n-gram precision`
+      - Plus a penalty for too-short system translations
+    - BLEU is useful but imperfect
+      - a good translation can get a poor BLEU score because it has low n-gram overlap with the human translation
+
+![Neural Machine Translation](./image/nmt.png) 
