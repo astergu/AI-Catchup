@@ -120,6 +120,11 @@ Final issue is whether arrows can cross (be non-projective) or not.
 3. Constraint Satisfaction
 4. Transition-based parsing or deterministic dependency parsing
 
+### Dependency Parsing Evaluations
+
+- UAS (Unlabeled attachment score): `head`
+- LAS (Labeled attachment score): `head and label`
+
 ### A neural dependency parse [Chen and Manning 2014]
 
 - **[First Win]**: Distributed Representations
@@ -129,3 +134,74 @@ Final issue is whether arrows can cross (be non-projective) or not.
    -  A `softmax classifier` assigns classes $y \in C$ based on inputs $x \in \mathbb{R}^d$ via the probability: $p(y|x)=\frac{exp(w_yx)}{\sum exp(w_cx)}$. We train the weight matrix $W \in \mathbb{R}^{c\times d}$ to minimize the neg.log loss: $\sum_i{-logp(y_i|x_i)}$
    -  Traditional ML classifiers (including Na$\dot{i}$ve Bayes, SVMs, logistic regression and softmax classifier) are not very powerful classifiers, they only give linear decision boundaries.
    -  Neural networks can learn much more complex functions with nonlinear decision boundaries.
+
+Further developments in transition-based neural dependency parser: [The World's Most Accurate Parser](https://blog.research.google/2016/05/announcing-syntaxnet-worlds-most.html)
+
+## Lecture 5: Language Models and Recurrent Neural Networks
+
+### Language Modeling
+
+Language modeling is the task of predicting what word comes next. More formally, given a sequence of words $x^{(1)},xT{(2)},...,x^{(t)}$, compute the probability distribution of the next word $x^{(t+1)}$: $P(x^{(t+1)|x^{(t),...,x^{(1)}}})$, where $x^{(t+1)}$ can be any word in the vocabulary $V={w_1,...,w_{|V|}}$.
+
+#### N-gram Language Models
+
+- Definition: An `n-gram` is a chunk of n consecutive words.
+- Idea: Collect statistics about how frequent different n-grams are and use these to predict next word.
+- **Markov Assumption**: $x^{(t+1)}$ depends only on the preceding `n-1` words.
+  - $P(x^{(t+1)}|x^{(t)},...,x^{(1)})=P(x^{(t+1)|x^{(t)},...,x^{(t-n+2)}})$
+  - Question: How do we get these `n-gram` and `(n-1)-gram` probabilities?
+  - Answer: By counting them in some large corpus of text, which is statistical approximation.
+    - $\approx \frac{count(x^{(t+1),x^{(t),...x^{(t-n+2)}}})}{count(x^{(t),...,x^{(t-n+2)}})}$
+- Sparsity Problems (take 4-grams as an example)
+  - n-gram `~ ~ ~ w` never occur: add small $\delta$ to the count for every $w\in V$. This is called `smoothing`.
+  - n-gram `~ ~ ~` never occur: Just condition on `~ ~` instead. This is called `backoff`.
+  - Increasing `n` makes sparsity problems worse. Typically, we can't have n bigger than 5.
+- Storage Problems
+  - Need to store count for all n-grams you saw in the corpus.
+- [Y.Bengio, et.al: A Neural Probabilistic Language Model](https://www.jmlr.org/papers/volume3/bengio03a/bengio03a.pdf)
+  - Fixed window is too small.
+  - $X^{(1)}$ and $x^{(2)}$ are multiplied by completely different weights in $W. No symmetry in how the inputs are processed.
+
+#### Recurrent Neural Networks (RNN)
+
+- Idea: Apply the same weights $W$ repeatedly.
+- A Simple RNN Language Model
+  - hidden states: $h^{(t)}=\sigma(W_hh^{(t-1)}+W_ee^{(t)}+b_1)$, where $h^{(0)}$ is the initial hidden state.
+- RNN Advantages:
+  - Can process any length input
+  - Computation for step *t* can (in theory) use information from many steps back
+  - Model size doesn't increase for longer input context
+  - Same weights applied on every timestep, so there is symmetry in how inputs are processed.
+- RNN Disadvantages:
+  - Recurrent computation is slow.
+  - In practice, difficult to access information from many steps back.
+- Train an RNN Language Model
+  - Feed `a big corpus of text` into RNN-LM, compute output distribution $\hat{y}^{(t)}$ for `every step t`.
+  - `Loss function` on step t is `cross-entropy` between predicted probability distribution $\hat{y}^{(t)}$, and the true next word $y^{(t)}$ (one-hot for $x^{(t+1)}$): $J^{(t)}_{(\theta)}=CE(y^{(t)},\hat{y}^{(t)})=-\sum\limits_{w\in V}y_w^{(t)}log\hat{y}_w^{(t)}=-log\hat{y}_{x_{t+1}}^{(t)}$
+  - Average this above loss to get `overall loss` for entire training set: $J(\theta)=\frac{1}{T}\sum\limits_{t=1}^T J^{(t)}(\theta)=\frac{1}{T}\sum\limits_{t=1}^{T}-log\hat{y}_{x_{t+1}}^{(t)}$
+  - Computing loss and gradients across `entire corpus` $x^{(1)},...,x^{(T)}$ at once is `too expensive` (memory-wise)!
+  - Recall **SGD (Stochastic Gradient Descent)**: compute loss $J(\theta)$ for a batch of sentences, compute gradients and update weights. 
+
+![Train RNN Language Model](./image/train_rnn_lm.png) 
+
+
+#### Evaluating Language Models
+
+- The standard `evaluation metric` for language models is `perplexity`.
+- perplexity=$\prod\limits_{t=1}^{T}(\frac{1}{P_{LM}(x^{(t+1)}|x^{(t),...,x^{(1)}})})^{1/T}$
+- This is equal to the exponential of the cross-entropy loss $J(\theta)=\prod\limits_{t=1}^{T}(\frac{1}{\hat{y_{x_{t+1}}^{(t)}}})^{1/T}=exp(\frac{1}{T}\sum\limits_{t=1}^{T}-log\hat{y}_{x_{(t=1)}^{(t)}})=exp(J(\theta))$
+- Lower perplexity is better!
+
+#### Problems with RNNs
+
+- **Vanishing gradient problem**
+  - Model weights are updated only with respect to near effects, not long-term effects.
+  - Solution
+    - How about an RNN with separate memory which is added to? `LSTMS`
+    - Creating more direct and linear pass-through connections in model: `Attention`, `residual connections`, etc.
+- **Exploding gradient problem**
+  - If the gradient becomes too big, then the SGD update step becomes too big.
+  - Solution:
+    - `Gradient clipping`: if the norm of the gradient is greater than some threshold, scale it down before applying SGD update. 
+      - `Intuition`: take a step in the same direction, but a smaller step.
+  - In practice, rembering to clip gradients is important, but exploding gradients are an easy problem to solve.
