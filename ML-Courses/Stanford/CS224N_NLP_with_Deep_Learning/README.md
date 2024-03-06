@@ -205,3 +205,15 @@ Language modeling is the task of predicting what word comes next. More formally,
     - `Gradient clipping`: if the norm of the gradient is greater than some threshold, scale it down before applying SGD update. 
       - `Intuition`: take a step in the same direction, but a smaller step.
   - In practice, rembering to clip gradients is important, but exploding gradients are an easy problem to solve.
+
+#### Other RNN uses
+
+- sequence tagging
+  - part-of-speech tagging
+  - named entity recognition
+- sentence classification
+  - sentiment classification
+- as an encoder module
+  - question answering, machine translation
+- generate text
+  - speech recognition, machine translation, summarization
