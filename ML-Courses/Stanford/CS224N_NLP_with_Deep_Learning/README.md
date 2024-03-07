@@ -166,7 +166,7 @@ Language modeling is the task of predicting what word comes next. More formally,
 
 - Idea: Apply the same weights $W$ repeatedly.
 - A Simple RNN Language Model
-  - hidden states: $h^{(t)}=\sigma(W_hh^{(t-1)}+W_ee^{(t)}+b_1)$, where $h^{(0)}$ is the initial hidden state.
+  - hidden states: $h^{(t)}=\sigma(W_hh^{(t-1)}+W_xx^{(t)}+b_1)$, where $h^{(0)}$ is the initial hidden state.
 - RNN Advantages:
   - Can process any length input
   - Computation for step *t* can (in theory) use information from many steps back
@@ -300,4 +300,86 @@ Language modeling is the task of predicting what word comes next. More formally,
     - BLEU is useful but imperfect
       - a good translation can get a poor BLEU score because it has low n-gram overlap with the human translation
 
-![Neural Machine Translation](./image/nmt.png) 
+![Neural Machine Translation](./image/nmt.png)
+
+
+## Lecture 7: NMT and Final Projects, Practical Tips
+
+### Multi-layer deep encoder-decoder machine translation
+
+- The hidden states from RNN layer `i` are the input to RNN layer `i+1`
+- **Greedy decoding**
+  - Generate the target sentence by taking argmax on each step of the decoder (take the most probable word on each step)
+  - `no way to undo decisions!`
+  - decode until the model produces an `<END>` token
+- **Exhaustive search decoding**
+  - try computing `all possible sequences` y
+  - on each step $t$ of the decoder, track $V^t$ possible partial translations, where $V$ is vocab size ($O(V^T)$ complexity is far too expensive!)
+- **Beam search decoding**
+  - On each step of decoder, keep track of the $k$ most probable partial translations (also called `hypotheses`)
+  - `k` is the `beam size` (in practice around 5 to 10, in NMT)
+  - A hypothesis $y_1,...,y_t$ has a `score` which is its log probability $score(y_1,...,y_t)=logP_{LM}(y_1,...,y_t|x)=\sum\limits_{i=1}^{t}logP_{LM}(y_i|y_1,...,y_{i-1},x)$
+  - search for high-scoring hypotheses, tracking `top k` on each step
+  - Beam search is `not guaranteed` to find optimal solution, but much more efficient than exhaustive search
+  - Search until:
+    - reach timestamp T
+    - have at least n completed hypotheses (end with `<END>` token)
+  - Problem:
+    - longer hypotheses have lower scores
+  - Fix:
+    - Normalize by length. $\frac{1}{t}\sum\limits_{i=1}^{t}logP_{LM}(y_i|y_1,...,y_{i-1},x)$
+- **Neural Machine Learning in industries**
+  - 2014: First seq2seq paper published [[Sutskever et al. 2014]](https://arxiv.org/abs/1409.3215)
+  - 2016: Google Translate switches from SMT to NMT, and by 2018 everyoen has NMT
+
+### Attention: solve the bottleneck problem
+
+![NMT bottleneck](./image/nmt_bottleneck.png)
+
+- `Attention` provides a solution to the bottleneck problem.
+- On each step of the decoder, `use direct connection to the encoder` to `focus on a particular part` of the source sequence.
+  - Use the `attention distribution` ($\alpha^t=softmax(e^t) \in \mathbb{R}^N$) to take a `weighted sum` ($\alpha_t=\sum\limits_{i=1}^N\alpha_i^t h_i \in \mathbb{R}^h$) of the `encoder hidden states` ($e^t=[s_t^Th_1,...,s_t^Th_N] \in \mathbb{R}^N$)
+  - The `attention output` mostly contains information from the `hidden states` that received `high attention`.
+  - Concatenate `attention output` with `decoder hidden state`, then use to compute $\hat{y}_1$ as before.
+
+> **Steps**
+> 1. Computing the `attention scores` $e \in \mathbb{R}^N$ (**multiple variants**)
+> 2. Taking softmax to get `attention distribution` $\alpha$: $\alpha=softmax(e) \in \mathbb{R}^N$
+> 3. Using attention to take `weighted sum` of values: $a=\sum\limits_{i=1}^{N}\alpha_i h_i \in \mathbb{R}^{d_1}$, thus obtaining the `attention output` $a$ (sometimes called the *content vector*)
+
+#### Attention Variants
+
+There are several ways you can compute $e\in \mathbb{R}^N$ from $h_1,...,h_N \in \mathbb{R}^{d_1}$ and $s\in \mathbb{R}^{d_2}$:
+- *Basic dot-product attention*: $e_i=s^Th_i \in \mathbb{R}$
+  - Note: this assumes $d_1=d_2$.
+- *Multiplicative attention*: $e_i=s^TWh_i \in \mathbb{R}$
+  - where $W\in \mathbb{R}^{d_2\times d_1}$ is a weight matrix.
+- *Reduced-rank multiplicative attention*: $e_i=s^T(U^TV)h_i=(Us)^(Vh_i)$
+  - For low rank matrices $U\in \mathbb{R}^{k\times d_2}$, $V\in \mathbb{R}^{k\times d_1}$, $k \ll d_1,d_2$
+- *Addictive attention*: $e_i=v^Ttanh(W_1h_i+W_2s) \in \mathbb{R}$
+  - where $W_1\in \mathbb{R}^{d_3\times d_1}$, $W_2 \in \mathbb{R}^{d_3\times d_2}$ are weight matrices and $v\in \mathbb{R}^{d_3}$ is a weight vector.
+  - $d_3$ (the attention dimensionality) is a hyperparameter.
+
+> **Attention is a general Deep Learning technique, not just seq2seq, not just Machine Translation**
+> - General Definition: Given a set of vector `values`, and a vector `query`, `attention` is a technique to compute a weighted sum of the values, dependent on the query.
+> - For example, in the `seq2seq + attention` model, each decoder hidden state (query) attends to all the encoder hidden states (values).
+
+
+### Final Project
+
+- **Default Project**
+  - miniBERT and Downstream Tasks
+    - Finish writing an implementation of BERT
+    - Fine-tune it for Sentiment analysis
+    - Extend and improve it in various ways of your choice
+      - Contrastive learning
+      - Paraphrasing
+      - Regularized optimization
+- **Custom Project** 
+
+### Project Proposal
+
+- Find a relevant (key) research paper for your topic
+- Write a summary of that research paper and what you took away from it as key ideas that you hope to use
+- Write what you plan to work on and how you can innovate in your final project work
+- Describe as needed, especially for custom projects
