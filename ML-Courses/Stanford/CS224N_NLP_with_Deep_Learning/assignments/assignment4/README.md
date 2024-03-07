@@ -79,7 +79,7 @@ class ModelEmbeddings(nn.Module):
         ### END YOUR CODE
 ```
 
-3. (coding) Implement the `__init__` function in `nmt_model.py` to initialize the necessary model layers (LSTM, CNN, projection, and dropout) for the NMT system.
+3. (coding) Implement the `__init__` function in `nmt_model.py` to initialize the necessary model layers (LSTM, CNN, projection, and dropout) for the NMT system. [[Effective Approaches to Attention-based Neural Machine Translation]](https://arxiv.org/abs/1508.04025)
 
 ```python
 class NMT(nn.Module):
@@ -186,13 +186,114 @@ def encode(self, source_padded: torch.Tensor, source_lengths: List[int]) -> Tupl
         ###             Concatenate the forwards and backwards tensors to obtain a tensor shape (b, 2*h).
         ###             Apply the c_projection layer to this in order to compute init_decoder_cell.
         ###             This is c_0^{dec} in the PDF. Here b = batch size, h = hidden size
+        X = self.model_embeddings.source(source_padded.T).permute(1, 0, 2) # src_len, b, emb_size
+        X = pack_padded_sequence(X, source_lengths)
 
+        # Compute the encoder hidden states, last hidden and cell states
+        enc_hiddens, (last_hidden, last_cell) = self.encoder(X)
+        enc_hiddens = pad_packed_sequence(enc_hiddens)[0].permute(1, 0, 2)
 
+        # Compute the concatenated and projected last hidden and cell states
+        state = torch.cat([*last_hidden], dim=1), torch.cat([*last_cell], dim=1)
+        dec_init_state = self.h_projection(state[0]), self.c_projection(state[1])
         ### END YOUR CODE
 ```
 
 5. (coding) Implement the `decode` function in `nmt_model.py`. This function constructs $\bar{y}$ and runs the step function over every timestep for the input. You can run a non-comprehensive sanity check by executing: `python sanity_check.py 1e`
+
+```python
+def decode(self, enc_hiddens: torch.Tensor, enc_masks: torch.Tensor,
+               dec_init_state: Tuple[torch.Tensor, torch.Tensor], target_padded: torch.Tensor) -> torch.Tensor:
+        """Compute combined output vectors for a batch.
+
+        @param enc_hiddens (Tensor): Hidden states (b, src_len, h*2), where
+                                     b = batch size, src_len = maximum source sentence length, h = hidden size.
+        @param enc_masks (Tensor): Tensor of sentence masks (b, src_len), where
+                                     b = batch size, src_len = maximum source sentence length.
+        @param dec_init_state (tuple(Tensor, Tensor)): Initial state and cell for decoder
+        @param target_padded (Tensor): Gold-standard padded target sentences (tgt_len, b), where
+                                       tgt_len = maximum target sentence length, b = batch size.
+
+        @returns combined_outputs (Tensor): combined output tensor  (tgt_len, b,  h), where
+                                        tgt_len = maximum target sentence length, b = batch_size,  h = hidden size
+        """
+        # Chop off the <END> token for max length sentences.
+        target_padded = target_padded[:-1]
+
+        # Initialize the decoder state (hidden and cell)
+        dec_state = dec_init_state
+
+        # Initialize previous combined output vector o_{t-1} as zero
+        batch_size = enc_hiddens.size(0)
+        o_prev = torch.zeros(batch_size, self.hidden_size, device=self.device)
+
+        # Initialize a list we will use to collect the combined output o_t on each step
+        combined_outputs = []
+
+        # YOUR CODE
+        enc_hiddens_proj = self.att_projection(enc_hiddens) # (b, src_len, h)
+        Y = self.model_embeddings.target(target_padded.T).permute(1, 0, 2)
+
+        for Y_t in torch.split(Y, 1):
+            # perform time-steps
+            Y_t = Y_t.squeeze()
+            Ybar_t = torch.cat([Y_t, o_prev], dim=1)
+            dec_state, o_t, _ = self.step(Ybar_t, dec_state, enc_hiddens, enc_hiddens_proj, enc_masks)
+            combined_outputs.append(o_t)
+            o_prev = o_t
+        
+        # Stack combined outputs
+        combined_outputs = torch.stack(combined_outputs)
+
+        ### END YOUR CODE
+
+        return combined_outputs
+```
+
 6. (coding) Implement the step function in `nmt_model.py`. This function applies the Decoder' LSTM cell for a single timestep, computing the encoding of the target subword $h_t^{dec}$, the attention score $e_t$, attention distribution $\alpha_t$, the attention output $a_t$, and finally the combined output $o_t$. You can run a non-comprehensive sanity check by executing: `python sanity_check.py 1f`
+
+```python
+def step(self, Ybar_t: torch.Tensor,
+             dec_state: Tuple[torch.Tensor, torch.Tensor],
+             enc_hiddens: torch.Tensor,
+             enc_hiddens_proj: torch.Tensor,
+             enc_masks: torch.Tensor) -> Tuple[Tuple, torch.Tensor, torch.Tensor]:
+    """ Compute one forward step of the LSTM decoder, including the attention computation.
+
+        @param Ybar_t (Tensor): Concatenated Tensor of [Y_t o_prev], with shape (b, e + h). The input for the decoder,
+                                where b = batch size, e = embedding size, h = hidden size.
+        @param dec_state (tuple(Tensor, Tensor)): Tuple of tensors both with shape (b, h), where b = batch size, h = hidden size.
+                First tensor is decoder's prev hidden state, second tensor is decoder's prev cell.
+        @param enc_hiddens (Tensor): Encoder hidden states Tensor, with shape (b, src_len, h * 2), where b = batch size,
+                                    src_len = maximum source length, h = hidden size.
+        @param enc_hiddens_proj (Tensor): Encoder hidden states Tensor, projected from (h * 2) to h. Tensor is with shape (b, src_len, h),
+                                    where b = batch size, src_len = maximum source length, h = hidden size.
+        @param enc_masks (Tensor): Tensor of sentence masks shape (b, src_len),
+                                    where b = batch size, src_len is maximum source length.
+
+        @returns dec_state (tuple (Tensor, Tensor)): Tuple of tensors both shape (b, h), where b = batch size, h = hidden size.
+                First tensor is decoder's new hidden state, second tensor is decoder's new cell.
+        @returns combined_output (Tensor): Combined output Tensor at timestep t, shape (b, h), where b = batch size, h = hidden size.
+        @returns e_t (Tensor): Tensor of shape (b, src_len). It is attention scores distribution.
+                                Note: You will not use this outside of this function.
+                                      We are simply returning this value so that we can sanity check
+                                      your implementation.
+        """
+    combined_output = None
+    ### YOUR CODE HERE (~3 Lines)
+    ### END YOUR CODE
+
+    # Set e_t to -inf where enc_masks has 1
+    if enc_masks is not None:
+        e_t.data.masked_fill_(enc_masks.bool(), -float('inf'))
+    
+    ### YOUR CODE HERE (~6 Lines)
+    ### END YOUR CODE
+
+    combined_output = O_t
+    return dec_state, combined_output, e_t
+```
+
 7. (written) The `generate_sent_masks()` function in `nmt_model.py` produces a tensor called `enc_masks`. It has shape (batch_size, max source sentence length) and contains 1s in positions corresponding to 'pad' tokens in the input, and 0s for non-pad tokens. Look at how the masks are used during the attention computation in the step() function (lines 311-312).
 <br>
 First explain (in around three sentences) what effect the masks have on the entire attention computation. Then explain (in one or two sentences) why it is necessary to use the masks in this way.

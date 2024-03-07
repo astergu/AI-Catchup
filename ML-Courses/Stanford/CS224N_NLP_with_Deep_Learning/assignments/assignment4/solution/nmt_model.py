@@ -82,6 +82,15 @@ class NMT(nn.Module):
         ###         https://pytorch.org/docs/stable/nn.html#torch.nn.Dropout
         ###     Conv1D Layer:
         ###         https://pytorch.org/docs/stable/generated/torch.nn.Conv1d.html
+        self.post_embed_cnn = nn.Conv1d(embed_size, embed_size, 2)
+        self.encoder = nn.LSTM(embed_size, hidden_size, bidirectional=True)
+        self.decoder = nn.LSTMCell(embed_size, hidden_size)
+        self.h_projection = nn.Linear(2 * hidden_size, hidden_size, bias=False)
+        self.c_projection = nn.Linear(2 * hidden_size, hidden_size, bias=False)
+        self.att_projection = nn.Linear(2 * hidden_size, hidden_size, bias=False)
+        self.combined_output_projection = nn.Linear(3 * hidden_size, hidden_size, bias=False)
+        self.target_vocab_projection = nn.Linear(hidden_size, len(vocab.tgt), bias=False)
+        self.dropout = nn.Dropout(dropout_rate)
 
         ### END YOUR CODE
 
@@ -178,7 +187,16 @@ class NMT(nn.Module):
         ###         https://pytorch.org/docs/stable/generated/torch.permute.html
         ###     Tensor Reshape (a possible alternative to permute):
         ###         https://pytorch.org/docs/stable/generated/torch.Tensor.reshape.html
+        X = self.model_embeddings.source(source_padded.T).permute(1, 0, 2) # src_len, b, emb_size
+        X = pack_padded_sequence(X, source_lengths)
 
+        # Compute the encoder hidden states, last hidden and cell states
+        enc_hiddens, (last_hidden, last_cell) = self.encoder(X)
+        enc_hiddens = pad_packed_sequence(enc_hiddens)[0].permute(1, 0, 2)
+
+        # Compute the concatenated and projected last hidden and cell states
+        state = torch.cat([*last_hidden], dim=1), torch.cat([*last_cell], dim=1)
+        dec_init_state = self.h_projection(state[0]), self.c_projection(state[1])
 
         ### END YOUR CODE
 
@@ -247,8 +265,19 @@ class NMT(nn.Module):
         ###         https://pytorch.org/docs/stable/torch.html#torch.cat
         ###     Tensor Stacking:
         ###         https://pytorch.org/docs/stable/torch.html#torch.stack
+        enc_hiddens_proj = self.att_projection(enc_hiddens) # (b, src_len, h)
+        Y = self.model_embeddings.target(target_padded.T).permute(1, 0, 2)
 
-
+        for Y_t in torch.split(Y, 1):
+            # perform time-steps
+            Y_t = Y_t.squeeze()
+            Ybar_t = torch.cat([Y_t, o_prev], dim=1)
+            dec_state, o_t, _ = self.step(Ybar_t, dec_state, enc_hiddens, enc_hiddens_proj, enc_masks)
+            combined_outputs.append(o_t)
+            o_prev = o_t
+        
+        # Stack combined outputs
+        combined_outputs = torch.stack(combined_outputs)
 
         ### END YOUR CODE
 
