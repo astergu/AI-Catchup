@@ -288,6 +288,16 @@ def step(self, Ybar_t: torch.Tensor,
         e_t.data.masked_fill_(enc_masks.bool(), -float('inf'))
     
     ### YOUR CODE HERE (~6 Lines)
+    # Compute the attention impact
+    alpha_t = F.softmax(e_t, dim=1) # (b, src_len)
+    a_t = torch.bmm(alpha_t.unsqueeze(1), enc_hiddens).squeeze(1) 
+
+    # Combine with dec_hidden and project
+    U_t = torch.cat([dec_hidden, a_t])
+    V_t = self.combined_output_projection(U_t)
+    
+    # Compute the output
+    O_t = self.dropout(torch.tanh(V_t))
     ### END YOUR CODE
 
     combined_output = O_t
@@ -298,8 +308,28 @@ def step(self, Ybar_t: torch.Tensor,
 <br>
 First explain (in around three sentences) what effect the masks have on the entire attention computation. Then explain (in one or two sentences) why it is necessary to use the masks in this way.
 
+> - For every batch, those attention scores which have corresponding zero-padded embeddings are set to $-\infty$. This way, during the calculation of attention distribution $\alpha_t$, the probabilities are calculated over scores with corresponding non-padded words whereas the scores with corresponding padded words are negligible. Finally, during the calculation of attention outputs $A_t$, for every batch only the addition of those hidden states matter which are not multiplied by a probability close to 0.
+> - Using masks in this way is an efficient way to determine the true attention distribution that only involves the non-padded entries. Involving padded entries would result in false attention representation.
+
 ### Training
 
-8. (written) In class, we learnt about dot product attention, multiplicative attention, and additive attention. As a reminder, dot product attention is $e_{t,i}=s_t^Th_i$ , and additive attention is $e_{t,i}=v^Ttanh(W_1h_i+W_2s_t)$.
+8. (written) Once your model is done training (this should take under 2 hours on the VM), execute the following command to test the model:
+
+```bash
+sh run.sh test
+(Windows) run.bat test
+```
+Please report the model's corpus BLEU score. It should be larger than 18.
+
+9.  (written) In class, we learnt about dot product attention, multiplicative attention, and additive attention. As a reminder, dot product attention is $e_{t,i}=s_t^Th_i$ , and additive attention is $e_{t,i}=v^Ttanh(W_1h_i+W_2s_t)$.
     - Explain one advantage and one disadvantage of *dot product attention* compared to multiplicative attention.
     - Explain one advantage and one disadvantage of *additive attention* compared to multiplicative attention.
+
+## Analyzing NMT SYstems
+
+1. Look at the `src.vocab` file for some examples of phrases and words in the source language vocabulary. When encoding an input Mandarin Chinese sequence into "pieces" in the vocabulary, the tokenizer maps the sequence to a series of vocabulary items, each consisting of one or more characters (thanks to the `sentencepiece` tokenizer, we can perform this segmentation even when the original text has no white space). Given this information, how could adding a 1D Convolutional layer after the embedding layer and before passing the embeddings into the bidirectional encoder help our NMT system? 
+
+2. Here we present a series of errors we found in the outputs of our NMT model (which is the same as the one you just trained). For each example of a reference (i.e., 'gold') English translation, and NMT (i.e., 'model') English translation, please:
+   1. Identify the error in the NMT translation.
+   2. Provide possible reasons(s) why the model may have made the error (either due to a specific linguistic construct or a specific model limitation).
+   3. Describe one possible way we might alter the NMT system to fix the observed error. There are more than one possible fixes for an error. For example, it could be tweaking the size of the hidden layers or changing the attention mechanism.

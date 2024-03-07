@@ -334,8 +334,9 @@ class NMT(nn.Module):
         ###         https://pytorch.org/docs/stable/torch.html#torch.unsqueeze
         ###     Tensor Squeeze:
         ###         https://pytorch.org/docs/stable/torch.html#torch.squeeze
-
-
+        dec_state = self.decoder(Ybar_t, dec_state)
+        dec_hidden, dec_cell = dec_state
+        e_t = torch.bmm(enc_hiddens_proj, dec_hidden.unsqueeze(-1)).squeeze(-1)
         ### END YOUR CODE
 
         # Set e_t to -inf where enc_masks has 1
@@ -369,8 +370,16 @@ class NMT(nn.Module):
         ###         https://pytorch.org/docs/stable/torch.html#torch.cat
         ###     Tanh:
         ###         https://pytorch.org/docs/stable/torch.html#torch.tanh
+        # Compute the attention impact
+        alpha_t = F.softmax(e_t, dim=1) # (b, src_len)
+        a_t = torch.bmm(alpha_t.unsqueeze(1), enc_hiddens).squeeze(1) 
 
-
+        # Combine with dec_hidden and project
+        U_t = torch.cat([dec_hidden, a_t])
+        V_t = self.combined_output_projection(U_t)
+        
+        # Compute the output
+        O_t = self.dropout(torch.tanh(V_t))
         ### END YOUR CODE
 
         combined_output = O_t

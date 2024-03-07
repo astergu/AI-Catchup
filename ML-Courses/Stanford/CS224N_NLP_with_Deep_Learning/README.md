@@ -330,7 +330,7 @@ Language modeling is the task of predicting what word comes next. More formally,
     - Normalize by length. $\frac{1}{t}\sum\limits_{i=1}^{t}logP_{LM}(y_i|y_1,...,y_{i-1},x)$
 - **Neural Machine Learning in industries**
   - 2014: First seq2seq paper published [[Sutskever et al. 2014]](https://arxiv.org/abs/1409.3215)
-  - 2016: Google Translate switches from SMT to NMT, and by 2018 everyoen has NMT
+  - 2016: Google Translate switches from SMT to NMT, and by 2018 everyone has NMT
 
 ### Attention: solve the bottleneck problem
 
