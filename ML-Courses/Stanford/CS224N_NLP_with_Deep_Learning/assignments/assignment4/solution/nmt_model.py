@@ -374,8 +374,8 @@ class NMT(nn.Module):
         alpha_t = F.softmax(e_t, dim=1) # (b, src_len)
         a_t = torch.bmm(alpha_t.unsqueeze(1), enc_hiddens).squeeze(1) 
 
-        # Combine with dec_hidden and project
-        U_t = torch.cat([dec_hidden, a_t])
+        # Combine dec_hidden and project
+        U_t = torch.cat([dec_hidden, a_t], dim=1)
         V_t = self.combined_output_projection(U_t)
         
         # Compute the output

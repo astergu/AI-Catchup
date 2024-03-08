@@ -250,7 +250,7 @@ def decode(self, enc_hiddens: torch.Tensor, enc_masks: torch.Tensor,
         return combined_outputs
 ```
 
-6. (coding) Implement the step function in `nmt_model.py`. This function applies the Decoder' LSTM cell for a single timestep, computing the encoding of the target subword $h_t^{dec}$, the attention score $e_t$, attention distribution $\alpha_t$, the attention output $a_t$, and finally the combined output $o_t$. You can run a non-comprehensive sanity check by executing: `python sanity_check.py 1f`
+6. (coding) Implement the `step` function in `nmt_model.py`. This function applies the Decoder' LSTM cell for a single timestep, computing the encoding of the target subword $h_t^{dec}$, the attention score $e_t$, attention distribution $\alpha_t$, the attention output $a_t$, and finally the combined output $o_t$. You can run a non-comprehensive sanity check by executing: `python sanity_check.py 1f`
 
 ```python
 def step(self, Ybar_t: torch.Tensor,
@@ -279,29 +279,29 @@ def step(self, Ybar_t: torch.Tensor,
                                       We are simply returning this value so that we can sanity check
                                       your implementation.
         """
-    combined_output = None
-    ### YOUR CODE HERE (~3 Lines)
-    ### END YOUR CODE
+        combined_output = None
+        ### YOUR CODE HERE (~3 Lines)
+        ### END YOUR CODE
 
-    # Set e_t to -inf where enc_masks has 1
-    if enc_masks is not None:
-        e_t.data.masked_fill_(enc_masks.bool(), -float('inf'))
-    
-    ### YOUR CODE HERE (~6 Lines)
-    # Compute the attention impact
-    alpha_t = F.softmax(e_t, dim=1) # (b, src_len)
-    a_t = torch.bmm(alpha_t.unsqueeze(1), enc_hiddens).squeeze(1) 
+        # Set e_t to -inf where enc_masks has 1
+        if enc_masks is not None:
+            e_t.data.masked_fill_(enc_masks.bool(), -float('inf'))
+        
+        ### YOUR CODE HERE (~6 Lines)
+        # Compute the attention impact
+        alpha_t = F.softmax(e_t, dim=1) # (b, src_len)
+        a_t = torch.bmm(alpha_t.unsqueeze(1), enc_hiddens).squeeze(1) 
 
-    # Combine with dec_hidden and project
-    U_t = torch.cat([dec_hidden, a_t])
-    V_t = self.combined_output_projection(U_t)
-    
-    # Compute the output
-    O_t = self.dropout(torch.tanh(V_t))
-    ### END YOUR CODE
+        # Combine with dec_hidden and project
+        U_t = torch.cat([dec_hidden, a_t], dim=1)
+        V_t = self.combined_output_projection(U_t)
+        
+        # Compute the output
+        O_t = self.dropout(torch.tanh(V_t))
+        ### END YOUR CODE
 
-    combined_output = O_t
-    return dec_state, combined_output, e_t
+        combined_output = O_t
+        return dec_state, combined_output, e_t
 ```
 
 7. (written) The `generate_sent_masks()` function in `nmt_model.py` produces a tensor called `enc_masks`. It has shape (batch_size, max source sentence length) and contains 1s in positions corresponding to 'pad' tokens in the input, and 0s for non-pad tokens. Look at how the masks are used during the attention computation in the step() function (lines 311-312).
