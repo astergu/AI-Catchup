@@ -82,9 +82,9 @@ class NMT(nn.Module):
         ###         https://pytorch.org/docs/stable/nn.html#torch.nn.Dropout
         ###     Conv1D Layer:
         ###         https://pytorch.org/docs/stable/generated/torch.nn.Conv1d.html
-        self.post_embed_cnn = nn.Conv1d(embed_size, embed_size, 2)
+        self.post_embed_cnn = nn.Conv1d(embed_size, embed_size, 2, padding='same')
         self.encoder = nn.LSTM(embed_size, hidden_size, bidirectional=True)
-        self.decoder = nn.LSTMCell(embed_size, hidden_size)
+        self.decoder = nn.LSTMCell(embed_size + hidden_size, hidden_size)
         self.h_projection = nn.Linear(2 * hidden_size, hidden_size, bias=False)
         self.c_projection = nn.Linear(2 * hidden_size, hidden_size, bias=False)
         self.att_projection = nn.Linear(2 * hidden_size, hidden_size, bias=False)
@@ -188,6 +188,7 @@ class NMT(nn.Module):
         ###     Tensor Reshape (a possible alternative to permute):
         ###         https://pytorch.org/docs/stable/generated/torch.Tensor.reshape.html
         X = self.model_embeddings.source(source_padded.T).permute(1, 0, 2) # src_len, b, emb_size
+        X = self.post_embed_cnn(X.permute(1, 2, 0)).permute(2, 0, 1) # convolutional layer
         X = pack_padded_sequence(X, source_lengths)
 
         # Compute the encoder hidden states, last hidden and cell states

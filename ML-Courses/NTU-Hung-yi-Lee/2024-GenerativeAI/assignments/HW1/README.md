@@ -63,3 +63,12 @@
 | Q38 | 视频 | :ballot_box_with_check: | |
 | Q39 | 视频 | :negative_squared_cross_mark: | |
 | Q40 | 视频 | :ballot_box_with_check: | |
+
+
+## 课程公布使用模型
+
+1. Speech: [https://huggingface.co/spaces/coqui/xtts](https://huggingface.co/spaces/coqui/xtts)
+2. Singing Voice: [https://huggingface.co/spaces/Voicemod/Text-to-Sing](https://huggingface.co/spaces/Voicemod/Text-to-Sing)
+3. Text: ChatGPT (GPT-3.5)
+4. Image: [https://huggingface.co/spaces/prodia/fast-stable-diffusion](https://huggingface.co/spaces/prodia/fast-stable-diffusion)
+5. Video: [https://mobius.any-vision.com/](https://mobius.any-vision.com/), [https://research.runwayml.com/gen2](https://research.runwayml.com/gen2)
