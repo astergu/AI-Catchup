@@ -383,3 +383,5 @@ There are several ways you can compute $e\in \mathbb{R}^N$ from $h_1,...,h_N \in
 - Write a summary of that research paper and what you took away from it as key ideas that you hope to use
 - Write what you plan to work on and how you can innovate in your final project work
 - Describe as needed, especially for custom projects
+
+## Lecture 8: Self-Attention and Transformers

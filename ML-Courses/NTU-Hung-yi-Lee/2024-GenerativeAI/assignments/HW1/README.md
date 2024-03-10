@@ -23,46 +23,48 @@
 
 | No. | Category | My Answer | Standard Answer | 
 | ---- | ---- | ---- | ---- |
-| Q1 | 语音 | :ballot_box_with_check: | |
-| Q2 | 语音 | :ballot_box_with_check: | |
-| Q3 | 语音 | :negative_squared_cross_mark: | |
-| Q4 | 语音 | :negative_squared_cross_mark: | |
-| Q5 | 语音 | :ballot_box_with_check: | |
-| Q6 | 语音 | :ballot_box_with_check: | |
-| Q7 | 歌声 | :negative_squared_cross_mark: | |
-| Q8 | 歌声 | :ballot_box_with_check: | |
-| Q9 | 歌声 | :negative_squared_cross_mark: | |
-| Q10 | 图片 | :ballot_box_with_check:  | |
-| Q11 | 图片 | :ballot_box_with_check:  | |
-| Q12 | 图片 | :negative_squared_cross_mark: | |
-| Q13 | 图片 | :negative_squared_cross_mark: | |
-| Q14 | 图片 | :negative_squared_cross_mark: | |
-| Q15 | 图片 | :ballot_box_with_check: | |
-| Q16 | 图片 | :negative_squared_cross_mark: | |
-| Q17 | 图片 | :ballot_box_with_check: | |
-| Q18 | 图片 | :ballot_box_with_check: | |
-| Q19 | 图片 | :ballot_box_with_check: | |
-| Q20 | 图片 | :ballot_box_with_check: | |
-| Q21 | 文本 | :ballot_box_with_check: | |
-| Q22 | 文本 | :ballot_box_with_check: | |
-| Q23 | 文本 | :ballot_box_with_check: | |
-| Q24 | 文本 | :ballot_box_with_check: | |
-| Q25 | 文本 | :ballot_box_with_check: | |
-| Q26 | 文本 | :negative_squared_cross_mark: | |
-| Q27 | 文本 | :ballot_box_with_check: | |
-| Q28 | 文本 | :negative_squared_cross_mark: | |
-| Q29 | 文本 | :ballot_box_with_check: | |
-| Q30 | 文本 | :negative_squared_cross_mark: | |
-| Q31 | 文本 | :ballot_box_with_check: | |
-| Q32 | 文本 | :negative_squared_cross_mark: | |
-| Q33 | 文本 | :ballot_box_with_check: | |
-| Q34 | 视频 | :ballot_box_with_check: | |
-| Q35 | 视频 | :negative_squared_cross_mark: | |
-| Q36 | 视频 | :negative_squared_cross_mark: | |
-| Q37 | 视频 | :negative_squared_cross_mark: | |
-| Q38 | 视频 | :ballot_box_with_check: | |
-| Q39 | 视频 | :negative_squared_cross_mark: | |
-| Q40 | 视频 | :ballot_box_with_check: | |
+| Q1 | 语音 | :ballot_box_with_check: | :ballot_box_with_check: |
+| Q2 | 语音 | :ballot_box_with_check: | :ballot_box_with_check: |
+| Q3 | 语音 | :negative_squared_cross_mark: | :negative_squared_cross_mark: |
+| Q4 | 语音 | :negative_squared_cross_mark: | :negative_squared_cross_mark:|
+| Q5 | 语音 | :ballot_box_with_check: | :negative_squared_cross_mark: |
+| Q6 | 语音 | :ballot_box_with_check: | :negative_squared_cross_mark: |
+| Q7 | 歌声 | :negative_squared_cross_mark: | :negative_squared_cross_mark: |
+| Q8 | 歌声 | :ballot_box_with_check: | :negative_squared_cross_mark: |
+| Q9 | 歌声 | :negative_squared_cross_mark: | :negative_squared_cross_mark: |
+| Q10 | 图片 | :ballot_box_with_check:  | :ballot_box_with_check: |
+| Q11 | 图片 | :ballot_box_with_check:  | :negative_squared_cross_mark: |
+| Q12 | 图片 | :negative_squared_cross_mark: | :ballot_box_with_check: |
+| Q13 | 图片 | :negative_squared_cross_mark: | :negative_squared_cross_mark: |
+| Q14 | 图片 | :negative_squared_cross_mark: | :ballot_box_with_check: |
+| Q15 | 图片 | :ballot_box_with_check: | :negative_squared_cross_mark: |
+| Q16 | 图片 | :negative_squared_cross_mark: | :ballot_box_with_check: |
+| Q17 | 图片 | :ballot_box_with_check: | :negative_squared_cross_mark: |
+| Q18 | 图片 | :ballot_box_with_check: | :ballot_box_with_check: |
+| Q19 | 图片 | :ballot_box_with_check: | :ballot_box_with_check: |
+| Q20 | 图片 | :ballot_box_with_check: | :ballot_box_with_check: |
+| Q21 | 文本 | :ballot_box_with_check: | :ballot_box_with_check: |
+| Q22 | 文本 | :ballot_box_with_check: | :negative_squared_cross_mark: |
+| Q23 | 文本 | :ballot_box_with_check: | :negative_squared_cross_mark: |
+| Q24 | 文本 | :ballot_box_with_check: | :negative_squared_cross_mark: |
+| Q25 | 文本 | :ballot_box_with_check: | :negative_squared_cross_mark: |
+| Q26 | 文本 | :negative_squared_cross_mark: | :ballot_box_with_check: |
+| Q27 | 文本 | :ballot_box_with_check: | :negative_squared_cross_mark: |
+| Q28 | 文本 | :negative_squared_cross_mark: | :negative_squared_cross_mark: |
+| Q29 | 文本 | :ballot_box_with_check: | :negative_squared_cross_mark: |
+| Q30 | 文本 | :negative_squared_cross_mark: | :negative_squared_cross_mark: |
+| Q31 | 文本 | :ballot_box_with_check: | :negative_squared_cross_mark: |
+| Q32 | 文本 | :negative_squared_cross_mark: | :negative_squared_cross_mark: |
+| Q33 | 文本 | :ballot_box_with_check: | :negative_squared_cross_mark: |
+| Q34 | 视频 | :ballot_box_with_check: | :negative_squared_cross_mark: |
+| Q35 | 视频 | :negative_squared_cross_mark: | :negative_squared_cross_mark: |
+| Q36 | 视频 | :negative_squared_cross_mark: | :negative_squared_cross_mark: |
+| Q37 | 视频 | :negative_squared_cross_mark: | :negative_squared_cross_mark: |
+| Q38 | 视频 | :ballot_box_with_check: | :negative_squared_cross_mark: |
+| Q39 | 视频 | :negative_squared_cross_mark: | :negative_squared_cross_mark: |
+| Q40 | 视频 | :ballot_box_with_check: | :negative_squared_cross_mark: |
+
+> 正确率：19/40=47.5%
 
 
 ## 课程公布使用模型
