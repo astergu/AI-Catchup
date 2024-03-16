@@ -92,7 +92,13 @@
         - [[Language Models are Few-Shot Learners]](https://arxiv.org/abs/2005.14165)
         - [[Rethinking the Role of Demonstrations: What Makes In-Context Learning Work?]](https://arxiv.org/abs/2202.12837)
         - [[Larger language models do in-context learning differently]](https://arxiv.org/abs/2303.03846) 最强的模型真的部分读懂了范例
-      - 把任务分成多步骤来解
+    - 把任务分成多步骤来解 [[Re3: Generating Longer Stories With Recursive Reprompting and Revision]](https://arxiv.org/abs/2210.06774)
+      - 让模型检查自己的答案 [[Constitutional AI: Harmlessness from AI Feedback]](https://arxiv.org/abs/2212.08073)
+      - 同一个答案每次答案都不同 [[Self-Consistency Improves Chain of Thought Reasoning in Language Models]](https://arxiv.org/abs/2203.11171)
+      - 打一套组合拳
+        - [[Tree of Thoughts: Deliberate Problem Solving with Large Language Models]](https://arxiv.org/abs/2305.10601)
+        - [[Algorithm of Thoughts: Enhancing Exploration of Ideas in Large Language Models]](https://arxiv.org/abs/2308.10379)
+        - [[Graph of Thoughts: Solving Elaborate Problems with Large Language Models]](https://arxiv.org/abs/2308.09687)
   - 训练自己的模型：使用开源模型（e.g., LLaMA），微调 [[Examining Forgetting in Continual Pre-training of Aligned Large Language Models]](https://arxiv.org/abs/2401.03129)
 
 # References
