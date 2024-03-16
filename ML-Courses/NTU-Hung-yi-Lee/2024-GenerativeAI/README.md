@@ -3,6 +3,7 @@
 - [Key Takeaways](#key-takeaways)
   - [Lecture 1：课程概述](#lecture-1课程概述)
     - [80分钟快速了解大型语言模型](#80分钟快速了解大型语言模型)
+  - [Lecture 2: 提示工程\&AI代理人](#lecture-2-提示工程ai代理人)
 - [References](#references)
 
 
@@ -24,7 +25,7 @@
 | -------- | ------- | -------- | ------- | -------- | -------- |
 | 02/23 | **课程概述** <br> [[课程说明]](https://youtu.be/AVIKFXLCPY8) <br> [[课程规则]](https://youtu.be/vCxyd_S4R24)  <br> [[第1讲：生成式AI是什么？]](https://youtu.be/JGtqpQXfJis) |  1. [[课程内容说明]](./slides/01/0223_course.pdf) <br> 2. [[什么是生成式人工智能？]](./slides/01/0223_universal.pdf) <br> 3. [[今日的生成式人工智能厉害在哪里]](./slides/01/0223_intro_gai.pdf) | [80分钟快速了解大型语言模型](https://youtu.be/wG8-IUtqu-s?si=-YWWLqbeX7wiRQ4M) <br> [[slide]](./slides/01/LLM_80min%20(v5).pdf) |  | 真假难辨的世界 :white_check_mark: <br> [[video]](https://www.youtube.com/watch?v=QOrtPUxaIG8) [[pdf]](./assignments/HW1/GenAI%20HW1%20slides.pdf) |
 | 03/01 | **提示工程&AI代理人** <br> [[第2讲：今日的生成式人工智能厉害在哪里？]](https://youtu.be/glBhOQ1_RkE) <br> [[第3讲：训练不了人工智能吗？你可以训练你自己（上）]](https://youtu.be/A3Yx35KrSN0) | 1. [今日的生成式人工智能](./slides/02/0301_universal.pdf) <br> 2. [prompt engineering](./slides/02/0301_prompt_part1.pdf) | [Prompt Engineering Guide](https://www.promptingguide.ai/) | | 都是AI的作文比赛 :white_check_mark: <br> [[video]](https://www.youtube.com/watch?v=MLvfqvEuINk) [[pdf]](./assignments/HW2/GenAI2024%20HW2.pdf) | 
-| 03/08 | **生成策略&从专才到通才** <br> [第4讲：训练不了人工智能？你可以训练你自己（中）](https://youtu.be/lwe3_x50_uw) | [prompt part 2](./slides/03/0308_prompt_part2.pdf) | [语言模型如何学习使用工具](https://youtu.be/ZID220t_MpI) <br> [[pdf]](./slides/03/NewBing%20(v4).pdf) | | 以AI搭建自己的应用 :heavy_exclamation_mark: <br> [[video]](https://youtu.be/mQb5Zbbm_T8?si=8M8YOuV7QY1vojig) [[pdf]](./assignments/HW3/GenAI%20HW3.pdf) | 
+| 03/08 | **生成策略&从专才到通才** <br> [第4讲：训练不了人工智能？你可以训练你自己（中）](https://youtu.be/lwe3_x50_uw) | [prompt part 2](./slides/03/0308_prompt_part2.pdf) | [语言模型如何学习使用工具](https://youtu.be/ZID220t_MpI) <br> [[pdf]](./slides/03/NewBing%20(v4).pdf) | | 以AI搭建自己的应用 :heavy_exclamation_mark: <br> [[video]](https://youtu.be/mQb5Zbbm_T8?si=8M8YOuV7QY1vojig) [[pdf]](./assignments/HW3/GenAI_HW3.pdf) | 
 | 03/15 | 生成策略&从专才到通才 | ||  MTK团队演讲 |  |
 | 03/22 | 深度学习&Transformer | | |  | 成为AI催眠大师 :heavy_exclamation_mark:  |
 | 03/29 | 深度学习&Transformer | | | NVIDIA团队演讲 | 训练自己的语言模型 :bangbang: |
@@ -69,6 +70,30 @@
   - 引导ChatGPT自主进行规划，把任务拆解成小任务
   - ChatGPT其实是会反省的，e.g.，`请检查上述资讯是否正确`
   - 跟真实环境互动
+
+## Lecture 2: 提示工程&AI代理人
+
+- 今日的生成式人工智能
+  - 不是`专才`（专用工具，比如翻译软件等），而是`通才`，即不限定能力，由使用者提出问题或要求。
+  - 但是如何评估模型的能力并不容易，因为使用者的要求千奇百怪，同一种要求可以有截然不同的解法。
+- 如何适应生成式人工智能时代？
+  - 给更清楚的指令，提供额外资讯（`Prompt Engineering`）
+    - 神奇咒语
+      - 让模型思考 Chain of Thought：`Let's think step by step` [[Large Language Models Are Human-Level Prompt Engineers]](https://arxiv.org/abs/2211.01910)
+      - 对模型进行情绪勒索 `This is very important to me` [[Large Language Models Understand and Can be Enhanced by Emotional Stimuli]](https://arxiv.org/abs/2307.11760)
+      - 其他 [[Principled Instructions Are All You Need for Questioning LLaMA-1/2, GPT-3.5/4]](https://arxiv.org/abs/2312.16171)
+      - 用AI来找神奇咒语 Reinforcement Learning
+        - [[Learning to Generate Prompts for Dialogue Generation through Reinforcement Learning]](https://arxiv.org/abs/2206.03931)
+        - [[Large Language Models Are Human-Level Prompt Engineers]](https://arxiv.org/abs/2211.01910)
+    - 提供额外资讯
+      - 把前提讲清楚
+      - 提供生成式AI不清楚的资讯
+      - 提供范例 
+        - [[Language Models are Few-Shot Learners]](https://arxiv.org/abs/2005.14165)
+        - [[Rethinking the Role of Demonstrations: What Makes In-Context Learning Work?]](https://arxiv.org/abs/2202.12837)
+        - [[Larger language models do in-context learning differently]](https://arxiv.org/abs/2303.03846) 最强的模型真的部分读懂了范例
+      - 把任务分成多步骤来解
+  - 训练自己的模型：使用开源模型（e.g., LLaMA），微调 [[Examining Forgetting in Continual Pre-training of Aligned Large Language Models]](https://arxiv.org/abs/2401.03129)
 
 # References
 
