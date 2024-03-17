@@ -1,3 +1,13 @@
+- [GenAI HW2：都是AI的作文比赛](#genai-hw2都是ai的作文比赛)
+  - [任务](#任务)
+  - [Part 1: 用AI模型来生成文章](#part-1-用ai模型来生成文章)
+    - [生成英文文章](#生成英文文章)
+      - [回答一：原始prompt](#回答一原始prompt)
+    - [生成中文文章](#生成中文文章)
+      - [回答一：原始prompt](#回答一原始prompt-1)
+    - [生成prompt示例](#生成prompt示例)
+  - [Part 2: 用AI模型来评估文章](#part-2-用ai模型来评估文章)
+
 # GenAI HW2：都是AI的作文比赛
 
 ## 任务
@@ -14,6 +24,8 @@
 > Write an English essay with around 300 words to express your instance with specific reasons and examples to support your answer.
 
 #### 回答一：原始prompt
+
+> 以下文字由ChatGPT 3.5生成
 
 As an AI language model, I don't have personal opinions or beliefs. However, I can provide arguments on both sides of the statement.
 
@@ -34,6 +46,8 @@ In conclusion, while AI undoubtedly has the potential to transform the future of
 - [113学年度学科能力测验试题：国语文写作能力测验 第二部分](chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://www.ceec.edu.tw/files/file_pool/1/0O021612121259980745/07-113%E5%AD%B8%E6%B8%AC%E5%9C%8B%E5%AF%AB%E8%A9%A6%E9%A1%8C.pdf)
 
 #### 回答一：原始prompt
+
+> 以下文字由ChatGPT 3.5生成
 
 根据上文所述，森林需要缝隙是因为在激烈的生存竞争中，树木需要空间和光线来生长。密集的树木会阻碍阳光到达地面，导致新生命无法萌发，使得森林逐渐变得无生机。而缝隙提供了空间，让阳光穿透并滋养地面，为新生命的孕育创造了条件。
 
