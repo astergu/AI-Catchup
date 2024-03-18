@@ -119,6 +119,15 @@
   - 文字生图AI（DALL-E）
   - 其他ChatGPT Plugins
 - 各种技巧加起来打一套组合拳 [[AnyTool: Self-Reflective, Hierarchical Agents for Large-Scale API Calls]](https://arxiv.org/abs/2402.04253) 
+- [能够使用工具的AI](https://www.youtube.com/watch?v=ZID220t_MpI)
+  - 即使是使用搜索引擎，AI也可能会犯错 （NewBing）
+  - [WebGPT: Browser-assisted question-answering with human feedback](https://arxiv.org/abs/2112.09332)
+    - 使用搜索引擎也是文字接龙
+    - 请人类老师示范
+  - [Toolformer](https://arxiv.org/pdf/2302.04761.pdf)
+    - 用另一个语言模型来产生资料
+    - 验证语言模型生成的结果
+
 
 # References
 
