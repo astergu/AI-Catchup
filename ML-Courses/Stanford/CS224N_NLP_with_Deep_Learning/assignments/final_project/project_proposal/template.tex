@@ -1,0 +1,146 @@
+\documentclass{article}
+
+\usepackage[final]{neurips_2019}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{amsfonts}
+\usepackage{nicefrac}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{lipsum}
+
+\newcommand{\note}[1]{\textcolor{blue}{{#1}}}
+
+\title{
+  Title of your project \\
+  \vspace{1em}
+  \small{\normalfont Stanford CS224N \{Custom, Default\} Project}  % Select one and delete the other
+}
+
+\author{
+  Name \\
+  Department of Computer Science \\
+  Stanford University \\
+  \texttt{name@stanford.edu} \\
+  % Examples of more authors
+%   \And
+%   Name \\
+%   Department of Computer Science \\
+%   Stanford University \\
+%   \texttt{name@stanford.edu} \\
+%   \And
+%   Name \\
+%   Department of Computer Science \\
+%   Stanford University \\
+%   \texttt{name@stanford.edu}
+}
+
+\begin{document}
+
+\maketitle
+
+% \begin{abstract}
+%   Required for final report
+% \end{abstract}
+
+
+\note{This template is built on NeurIPS 2019 template\footnote{\url{https://www.overleaf.com/latex/templates/neurips-2019/tprktwxmqmgk}} and provided for your convenience.}
+
+
+\section{Key Information to include}
+
+\begin{itemize}
+    \item External collaborators (if you have any):
+    \item Mentor (custom project only):
+    \item Sharing project:
+\end{itemize}
+
+
+\section{Research paper summary (max 2 pages)}
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{ll}
+        \toprule
+        \textbf{Title} & Know What You Don't Know: Unanswerable Questions for SQuAD \\
+        \midrule
+        \textbf{Venue} & Association for Computational Linguistics (ACL) \\
+        \textbf{Year}  & 2018 \\
+        \textbf{URL}   & \url{https://www.aclweb.org/anthology/P18-2124/} \\
+        \bottomrule
+    \end{tabular}
+    \vspace{1em}
+    \caption{Sample table for bibliographical information~\cite{rajpurkar2018know}.}
+\end{table}
+
+\paragraph{Background.}
+Set the scene for the paper, looking to the introduction section, as well as the related work or background sections, if they exist.
+What motivations and problems do the authors cite when explaining why they think this work is important? 
+What problems are they attempting to solve, or what knowledge are they hoping to discover?
+
+\paragraph{Summary of contributions.}
+Each paper is published because it adds something to the ongoing research conversation. It teaches us something we didn't know before, or provides us with a tool we didn't have, etc.
+Summarize what contributions this paper makes, whether they be in new algorithms, new experimental results and analysis, new meta-analysis of old papers, new datasets, or otherwise.
+
+\paragraph{Limitations and discussion.}
+Every research paper has limitations and flaws.
+Using the discussion and conclusion sections if they exist, critically identify interesting experiments, methodology, or methods that might have made this paper stronger.
+For example, did the authors only evaluate on English, or only on Wikipedia text, and claim that their results generalize to all of language?
+Did the authors not characterize the errors their model makes compared to previous models?
+Discuss how these limitations contextualize the findings of the paper -- do you still find the paper convincing?
+
+\paragraph{Why this paper?}
+There are infinite papers you could read, and you chose to read this one.
+Maybe it came up first on Google Scholar, or a TA suggested it\dots regardless, discuss your motivation for choosing this paper or the topic that the paper it addressed.
+What interested you about the topic?
+Having read it in depth, do you feel like you've gained from it what you were hoping? (``No'' is an okay answer here.)
+
+\paragraph{Wider research context.}
+Each research paper is a focused contribution, targeting a very specific problem setting.
+However, each paper also fits into the broader story of NLP research -- designing systems that process human languages.
+In this course, we cover some fundamental concepts: how to represent language, what structure language has, why language is hard for computers to model, what problems tend to occur when applying deep learning methods to language.
+Connect the paper to these broad topics.
+Does the paper help us build better representations of language?
+If it helps us solve a particular task (like automatic translation or question answering,) do the methods have any promise for being more broadly applicable to other tasks (e.g., a new type of regularization in LSTMs applied in language modeling might be applicable to other NLP tasks!)
+It may be useful to do a cursory read of one or more of the papers cited in the paper you're reviewing, and cite them.
+
+
+\section{Project description (1-2 pages)}
+
+\paragraph{Goal.} 
+If possible, try to phrase this in terms of a scientific question you are trying to answer -- e.g., your goal may be to investigate whether a particular model or technique performs well at a certain task, or whether you can improve a particular model by adding some new variant, or (for theoretical/analytical projects), you might have some particular hypothesis that you seek to confirm or disprove.
+Otherwise, your goal may be simply to successfully implement a complex neural model, and show that it performs well on a given task.
+Briefly motivate why you chose this goal -- why do you think it is important, interesting, challenging and/or likely to succeed?
+If you have any secondary or stretch goals (i.e. things you will do if you have time), please also describe them.
+In this section, you should also make it clear how your project relates to your chosen paper.
+
+\paragraph{Task.} 
+This could be the same task as addressed by your chosen paper, but it doesn't have to be. Describe the task clearly (i.e. give an example of an input and an output, if applicable) -- though if you already did this in the paper summary, there's no need to repeat. 
+
+\paragraph{Data.}
+Specify the dataset(s) you will use (including its size), and describe any preprocessing you plan to do. If you plan to collect your own data, describe how you will do that and how long you expect it to take.
+
+\paragraph{Methods.}
+Describe the models and/or techniques you plan to use.
+If it's already described in the paper summary, no need to repeat.
+If you plan to explore a variant to a published method, focus on describing how your method will be different.
+Make it clear which parts you plan to implement yourself, and which parts you will download from elsewhere. 
+If there is any part of your planned method that is original, make it clear.
+
+\paragraph{Baselines.}
+Describe what methods you will use as baselines. Make it clear if these will be implemented by you, downloaded from elsewhere, or if you will just compare with previously published scores.
+
+\paragraph{Evaluation.}
+Specify at least one well-defined, numerical, automatic evaluation metric you will use for quantitative evaluation. 
+What existing scores will you be comparing against for this metric? For example, if you're reimplementing or extending a method, state what score(s) the original method achieved; if you're applying an existing method to a new task, mention the state-of-the-art performance on the new task, and say something about how you expect your method to perform compared to other approaches.
+If you have any particular ideas about the qualitative evaluation you will do, you can describe that too.
+
+\bibliographystyle{unsrt}
+\bibliography{references}
+
+\end{document}

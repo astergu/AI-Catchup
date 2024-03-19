@@ -218,6 +218,18 @@ Language modeling is the task of predicting what word comes next. More formally,
 - generate text
   - speech recognition, machine translation, summarization
 
+#### RNN Extensions
+
+In practice, several extensions are to be added to the model to improve RNN's translation accuracy performance.
+
+1. Train different RNN weights for encoding and decoding. This decouples the two units and allows for more accuracy prediction of each of the two RNN modules.
+2. Compute every hidden state in the decoding using three different inputs. Combine the following three inputs transforms the $\sigma$ function in the decoder function $h_t=\sigma(h_{t-1}, c, y_{t-1})$.
+   1. The previous hidden state (standard)
+   2. Last hidden layer of the encoder ($c=h_T$)
+   3. Previous predicted output word $\hat{y}_{t-1}$
+3. Train deep recurrent neural networks using multiple RNN layers.
+4. Train bi-directional encoders to improve accuracy.
+5. Given a word sequence A B C in German whose translation in X Y in English, instead of training the RNN using A B C $\rightarrow$ X Y, train it using C B A $\rightarrow$ X Y. The intuition behind this technique is that A is more likely to be translated to X.
 
 ## Lecture 6: LSTM RNNs and Neural Machine Translation
 
