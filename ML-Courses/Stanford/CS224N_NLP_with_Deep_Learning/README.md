@@ -48,7 +48,7 @@ Lecture | Topics | Course Materials | Assignments |
 | **Lecture 7** | **Final Projects: Custom and Default; Practical Tips** <br> [[slides]](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/slides/cs224n-2023-lecture07-final-project.pdf) [[notes]](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/readings/cs224n-2019-notes06-NMT_seq2seq_attention.pdf) | Suggested Readings: <br> 1. [Practical Methodology](https://www.deeplearningbook.org/contents/guidelines.html) (Deep Learning book chapter) | Assignment 4 <br> [[code]](./assignments/assignment4/) [[handout]](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/assignments/a4.pdf)|
 | **Lecture 8** | **Self-Attention and Transformers** <br> [[slides]](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/slides/cs224n-2023-lecture08-transformers.pdf) [[notes]](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/readings/cs224n-self-attention-transformers-2023_draft.pdf) | Suggested Readings: <br> 1. [Default Project Handout](http://web.stanford.edu/class/cs224n/project/default-final-project-bert-handout.pdf) <br> 2. [Attention Is All You Need](https://arxiv.org/abs/1706.03762.pdf) <br> 3. [The Illustrated Transformer](https://jalammar.github.io/illustrated-transformer/) <br> 4. [Transformer (Google AI blog post)](https://ai.googleblog.com/2017/08/transformer-novel-neural-network.html) <br> 5. [Layer Normalization](https://arxiv.org/pdf/1607.06450.pdf) <br> 6. [Image Transformer](https://arxiv.org/pdf/1802.05751.pdf) <br> 7. [Music Transformer: Generating music with long-term structure](https://arxiv.org/pdf/1809.04281.pdf)  | Project Proposal <br> [[instructions]](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/project/project-proposal-instructions-2023.pdf) <br><br> Default Final Project <br> [[handout]](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/project/default-final-project-bert-handout.pdf) |
 | **Lecture 9** | **Pretraining** <br> [[slides]](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/slides/cs224n-2023-lecture9-pretraining.pdf) | Suggested Readings: <br> 1. [BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding](https://arxiv.org/pdf/1810.04805.pdf) <br> 2. [Contextual Word Representations: A Contextual Introduction](https://arxiv.org/abs/1902.06006.pdf) <br> 3. [The Illustrated BERT, ELMo, and co.](http://jalammar.github.io/illustrated-bert/) <br> 4. [Martin & Jurafsky Chapter on Transfer Learning](https://web.stanford.edu/~jurafsky/slp3/11.pdf)  | |
-| **Lecture 10** | **Natural Language Generation** <br> [[slides]](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/slides/cs224n-2023-lecture10-nlg.pdf) | Suggested Readings: <br> 1. [The Curious Case of Neural Text Degeneration](https://arxiv.org/abs/1904.09751.pdf) <br> 2. [Get To The Point: Summarization with Pointer-Generator Networks](https://arxiv.org/abs/1704.04368.pdf) <br> 3. [Hierarchical Neural Story Generation](https://arxiv.org/abs/1805.04833.pdf) <br> 4. [How NOT To Evaluate Your Dialogue System](https://arxiv.org/abs/1603.08023.pdf) | Assignment 5 <br> [[code]](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/assignments/a5.zip) [[handout]](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/assignments/a5.pdf) |
+| **Lecture 10** | **Natural Language Generation** <br> [[slides]](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/slides/cs224n-2023-lecture10-nlg.pdf) | Suggested Readings: <br> 1. [The Curious Case of Neural Text Degeneration](https://arxiv.org/abs/1904.09751.pdf) <br> 2. [Get To The Point: Summarization with Pointer-Generator Networks](https://arxiv.org/abs/1704.04368.pdf) <br> 3. [Hierarchical Neural Story Generation](https://arxiv.org/abs/1805.04833.pdf) <br> 4. [How NOT To Evaluate Your Dialogue System](https://arxiv.org/abs/1603.08023.pdf) | Assignment 5 <br> [[code]](./assignments/assignment5/) [[handout]](./assignments/assignment5/a5.pdf) |
 | **Lecture 11** | **Prompting, Reinforcement Learning from Human Feedback** <br> [[slides]](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/slides/cs224n-2023-lecture11-prompting-rlhf.pdf)  | Suggested Readings: <br> 1. [Language Models are Few-Shot Learners](https://arxiv.org/abs/2005.14165) <br> 2. [Chain-of-Thought Prompting Elicits Reasoning in Large Language Models](https://arxiv.org/abs/2201.11903) <br> 3. [Finetuned Language Models Are Zero-Shot Learners](https://arxiv.org/abs/2109.01652) <br> 4. [Learning to summarize from human feedback](https://arxiv.org/abs/2009.01325) | |
 | **Lecture 12** | **Question Answering** <br> [[slides]](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/slides/cs224n-2023-lecture12-QA.pdf) | Suggested Readings: <br> 1. [SQuAD: 100,000+ Questions for Machine Comprehension of Text](https://arxiv.org/pdf/1606.05250.pdf) <br> 2. [Bidirectional Attention Flow for Machine Comprehension](https://arxiv.org/pdf/1611.01603.pdf) <br> 3. [Reading Wikipedia to Answer Open-Domain Questions](https://arxiv.org/pdf/1704.00051.pdf) <br> 4. [Latent Retrieval for Weakly Supervised Open Domain Question Answering](https://arxiv.org/pdf/1906.00300.pdf) <br> 5. [Dense Passage Retrieval for Open-Domain Question Answering](https://arxiv.org/pdf/2004.04906.pdf) <br> 6. [Learning Dense Representations of Phrases at Scale](https://arxiv.org/pdf/2012.12624.pdf) | Project Milestone <br> [[Instructions]](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/project/CS224N_Final_Project_Milestone_Instructions.pdf) |
 | **Lecture 13** | **ConvNets, Tree Recursive Neural Networks and Constituency Parsing** <br> [[slides]](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/slides/cs224n-2023-lecture13-CNN-TreeRNN.pdf) | Suggested Readings: <br> 1. [Convolutional Neural Networks for Sentence Classification](https://arxiv.org/abs/1408.5882.pdf) <br> 2. [Improving neural networks by preventing co-adaptation of feature detectors](https://arxiv.org/abs/1207.0580) <br> 3. [A Convolutional Neural Network for Modelling Sentences](https://arxiv.org/pdf/1404.2188.pdf) <br> 4. [Parsing with Compositional Vector Grammars](http://www.aclweb.org/anthology/P13-1045) <br> 5. [Constituency Parsing with a Self-Attentive Encoder](https://arxiv.org/pdf/1805.01052.pdf)| |
@@ -397,3 +397,126 @@ There are several ways you can compute $e\in \mathbb{R}^N$ from $h_1,...,h_N \in
 - Describe as needed, especially for custom projects
 
 ## Lecture 8: Self-Attention and Transformers
+
+### Issues with recurrent models
+
+- **Linear interaction distance**
+  - RNNs are unrolled "left-to-right": this encodes linear locality, a useful heuristic
+  - **Problem**: RNNs take `O(sequence length)` steps for distant word pairs to interact.
+- **Lack of parallelizability**
+  - Forward and backward passes have `O(sequence length)` unparallelizable operations
+
+### How about attention?
+
+- **Attention** treats each word's representation as a **query** to access and incorporate information from **a set of values**.
+- **Attention within a single sentence**
+  - All words attend to all words in previous layer
+  - Maximum interaction distance `O(1)`, since all words interact at every layer
+- **Attention as a soft, averaging lookup table**
+  - In attention, the query matches all keys softly, to a weight between 0 and 1. The key's values are multiplied by the weights and summed.
+
+### Self-Attention
+
+#### Idea
+
+- Transform each word embedding with weight matrics $\mathbf{Q}$, $\mathbf{K}$, $\mathbf{V}$, each in $\mathbb{R}^{d\times d}$.
+- Compute pairwise similarities between keys and queries, normalize with softmax. `Why Q and K: to have a low-rank approximation of QK transpose`
+- Compute output for each words as weighted sum of values.
+
+#### Barriers and Solutions
+
+- **Doesn't consider sequence order** $\rightarrow$ Add position representation to the inputs
+  - since self-attention doesn't build in order information, we need to encode the order of the sence in our keys, queries, and values.
+  - consider representing each sequence index as a vector $p_i\in \mathbb{R}^d$, for $i \in {1,2,...,n}$ are position vectors
+  - Add position embedding: $\~{x}_i=x_i+p_i$
+  - In deep self-attention networks, we do this at the first layer. YOu could concatenate them as well, but people mostly just add.
+  - **Position representation**
+    - **position representations through sinusoids**
+      - pros
+        - periodicity indicates that maybe "absolute position" isn't as important
+        - maybe can extrapolate to longer sequences as periods restart
+      - cons
+        - not learnable, also extrapolation doesn't really work
+    - **posititon representation learned from scratch**
+      - pros
+        - flexibility: each position gets to be learned to fit the data
+      - cons
+        - definitely can't extrapolate to indices outside 1,...,n.
+      - **most system use this**
+- **No nonlinearities for deep learning, just weighted averages** $\rightarrow$ apply the same feedforward network to each self-attention output
+  - Stacking more self-attention layers just re-average **value** vectors
+  - Easy fix: add a **feed-forward network** to post-process each output vector $m_i=MLP(output_i)=W_2 * ReLU(W_1 output_i + b_1) + b_2$.
+- **Need to ensure we don't "look at the future" when predicting a sequence** $\rightarrow$ Mask out the future by artificially setting attention weights to 0 
+  - To use self-attention in **decoders**, we need to ensure we can't peek at the future.
+  - To enable parallelization, we *mask out attention* to future words by setting attention scores to $-\infty$ (softmax($-\infty$)$\approx$=0).
+
+### The Transformer Model
+
+- Replace self-attention with **multi-head self-attention**.
+- **Multi-headed attention**
+  - Let $Q_{\mathcal{l}}, K_{\mathcal{l}}, V_{\mathcal{l}} \in \mathbb{R}^{d\times \frac{d}{h}}$, where $h$ is the number of attention heads, and $\mathcal{l}$ ranges from 1 to $h$.
+  - Each attention head performs attention independently:
+    - output_$\mathcal{l}=softmax(XQ_{\mathcal{l}}K_{\mathcal{l}}^TX^T)*XV_{\mathcal{l}}$, where output_$\mathcal{l} \in \mathbb{R}^{d/h}$
+  - Then the outputs of all the heads are combined.
+  - Even though we comput $h$ many attention heads, it's not really more costly.
+
+#### Scaled Dot Product
+
+- "Scaled Dot Product" attention aids in training.
+- When dimensionality $d$ becomes large, dot products between vectors tend to become large.
+  - Because of this, inputs to the softmax function can be large, making the gradients small.
+- We divide the attention scores by $\sqrt{d/h}$, to stop the scores from becoming large just as a function of $d/h$ (The dimensionality divided by the number of heads).
+  - $output_\mathcal{l}=softmax(\frac{XQ_{\mathcal{l}}K_{\mathcal{l}}^TX^T}{\sqrt{d/h}})*XV_{\mathcal{l}}$
+
+#### The Transformer Decoder
+
+Two **optimization tricks** that end up being:
+
+- **Residual Connections**
+  - `Residual connections` are a trick to help models train better.
+  - Instead of $X^{(i)}=Layer(X^{(i-1)})$ (where $i$ represents the layer)
+  - We let $X^{(i)}=X^{(i-1)}+Layer(X^{(i-1)})$ (so we only have to learn the "residual" from the previous layer)
+  - Gradient is great through the residual connection, it's 1.
+  - Bias towards the identity function!
+- **Layer Normalization**
+  - `Layer normalization` is a trick to help models train faster.
+  - Idea: cut down on uninformative variation in hidden vector values by normalizing to unit mean and standard deviation **within each layer**.
+    - Let $x \in \mathbb{R}^d$ be an individual (word) vector in the model.
+    - Let $\mu=\frac{1}{d}\sum_{j=1}^d x_j$, this is the mean, $\mu \in \mathbb{R}$.
+    - Let $\sigma=\sqrt{\frac{1}{d}\sum_{j=1}^d (x_j-\mu)^2}$, this is the standard deviation, $\sigma \in \mathbb{R}$.
+    - Let $\gamma \in \mathbb{R}^d$ and $\beta \in \mathbb{R}^d$ be learnted "gain" and "bias" parameters. (Can omit!)
+    - Then layer normalization computes $output=\frac{x-\mu}{\sqrt{\sigma}+\epsilon}*\gamma+\beta$ 
+
+In most Transformer diagrams, these are often written together as `Add & Norm`.
+
+
+**The Transformer Decoder** is a stack of Transformer Decoder **Blocks**.
+
+- Each Block consists of:
+  - Self-attention
+  - Add & Norm
+  - Feed-Forward
+  - Add & Norm
+
+![The Transformer Decoder](./image/transformer_decoder.png)
+
+- What if we want **bidirectional context**, like in a bidirectional RNN?
+  - This is the `Transformer Encoder`. The only difference is that we **remove the masking** in the self-attention.
+- Recall that in machine translation, we proceeded the source sentence with a **bidirectional** model and generated the target with a **unidirectional model**.
+  - Let $h_1,...,h_n$ be **output** vectors **from** the Transformer **encoder**, $h_i\in \mathbb{R}^d$
+  - Let $z_1,...,z_n$ be input vectors from the Transformer **deocder**, $z_i\in \mathbb{R}^d$
+  - Then keys and values are drawn from the **encoder** (like a memory):
+    - $k_i=Kh_i$, $v_i=Vh_i$.
+  - And the queries are drawn from the **decoder**, $q_i=Qz_i$.
+
+![Transformer Encoder & Decoder](./image/transformer_encoder_decoder.png)
+
+#### What would we like to fix about the Transformer?
+
+- **Quadratic compute in self-attention**
+  - Computing all pairs of interactions means our computation grows **quadratically** with the sequence length.
+  - For recurrent models, it only grew linearly
+- **Position representations**
+  - Are simple absolute indices the best we can do to represent position?
+  - Relative linear position attention [[Shaw et al.,2018]](https://arxiv.org/abs/1803.02155)
+  - Dependency syntax-based position [[Wang et al.,2019]](https://arxiv.org/pdf/1909.00383.pdf)
