@@ -5,6 +5,7 @@
     - [80分钟快速了解大型语言模型](#80分钟快速了解大型语言模型)
   - [Lecture 2: 提示工程\&AI代理人](#lecture-2-提示工程ai代理人)
   - [Lecture 3: 生成策略\&从专才到通才](#lecture-3-生成策略从专才到通才)
+  - [Lecture 4: 深度学习\&Transformer](#lecture-4-深度学习transformer)
 - [References](#references)
 
 
@@ -26,10 +27,9 @@
 | -------- | ------- | -------- | ------- | -------- | -------- |
 | 02/23 | **课程概述** <br> [[课程说明]](https://youtu.be/AVIKFXLCPY8) <br> [[课程规则]](https://youtu.be/vCxyd_S4R24)  <br> [[第1讲：生成式AI是什么？]](https://youtu.be/JGtqpQXfJis) |  1. [课程内容说明](./slides/01/0223_course.pdf) <br> 2. [什么是生成式人工智能？](./slides/01/0223_universal.pdf) <br> 3. [今日的生成式人工智能厉害在哪里](./slides/01/0223_intro_gai.pdf) | [80分钟快速了解大型语言模型](https://youtu.be/wG8-IUtqu-s?si=-YWWLqbeX7wiRQ4M) <br> [[slide]](./slides/01/LLM_80min%20(v5).pdf) |  | 真假难辨的世界 :white_check_mark: <br> [[video]](https://www.youtube.com/watch?v=QOrtPUxaIG8) [[pdf]](./assignments/HW1/GenAI%20HW1%20slides.pdf) |
 | 03/01 | **提示工程&AI代理人** <br> [[第2讲：今日的生成式人工智能厉害在哪里？]](https://youtu.be/glBhOQ1_RkE) <br> [[第3讲：训练不了人工智能吗？你可以训练你自己（上）]](https://youtu.be/A3Yx35KrSN0) | 1. [今日的生成式人工智能](./slides/02/0301_universal.pdf) <br> 2. [prompt engineering](./slides/02/0301_prompt_part1.pdf) | [Prompt Engineering Guide](https://www.promptingguide.ai/) | | 都是AI的作文比赛 :white_check_mark: <br> [[video]](https://www.youtube.com/watch?v=MLvfqvEuINk) [[pdf]](./assignments/HW2/GenAI2024%20HW2.pdf) | 
-| 03/08 | **生成策略&从专才到通才** <br> [[第4讲：训练不了人工智能？你可以训练你自己（中）]](https://youtu.be/lwe3_x50_uw) | [prompt part 2](./slides/03/0308_prompt_part2.pdf) | [语言模型如何学习使用工具](https://youtu.be/ZID220t_MpI) <br> [[pdf]](./slides/03/NewBing%20(v4).pdf) | | 以AI搭建自己的应用 :heavy_exclamation_mark: <br> [[video]](https://youtu.be/mQb5Zbbm_T8?si=8M8YOuV7QY1vojig) [[pdf]](./assignments/HW3/GenAI_HW3.pdf) | 
-| 03/15 | 生成策略&从专才到通才 | ||  MTK团队演讲 |  |
-| 03/22 | 深度学习&Transformer | | |  | 成为AI催眠大师 :heavy_exclamation_mark:  |
-| 03/29 | 深度学习&Transformer | | | NVIDIA团队演讲 | 训练自己的语言模型 :bangbang: |
+| 03/08 | **生成策略&从专才到通才** <br> [[第4讲：训练不了人工智能？你可以训练你自己（中）]](https://youtu.be/lwe3_x50_uw) | [prompt part 2](./slides/03/0308_prompt_part2.pdf) | [语言模型如何学习使用工具](https://youtu.be/ZID220t_MpI) <br> [[pdf]](./slides/03/NewBing%20(v4).pdf) | | 以AI搭建自己的应用 :heavy_exclamation_mark: <br> [[video]](https://youtu.be/mQb5Zbbm_T8?si=8M8YOuV7QY1vojig) [[pdf]](./assignments/HW3/GenAI_HW3.pdf) [[code]](https://colab.research.google.com/drive/15jh4v_TBPsTyIBhi0Fz46gEkjvhzGaBR?usp=sharing) | 
+| 03/22 | 深度学习&Transformer <br> [[第5讲：训练不了人工智能？你可以训练你自己（下）]](https://www.youtube.com/watch?v=inebiWdQW-4) <br> [[第6讲：大型语言模型修炼史]]() | [多模型协作](./slides/04/prompt_part3.pdf) <br> [LLM training part 1](./slides/04/0322_LLMtraining_part1.pdf) <br> [LLM training part 2](./slides/04/0322_LLMtraining_part2.pdf) | |  | 成为AI催眠大师 :heavy_exclamation_mark: <br> [[video]](https://youtu.be/igCtvqfZhms?si=e9HL_ZJKsWJD4r1i) [[pdf]](./assignments/HW4/GenAI_HW_4.pdf) [[code]](https://colab.research.google.com/drive/16JzVN_Mu4mJfyHQpQEuDx1q6jI-cAnEl?hl=zh-tw#scrollTo=dk-L0dvg9Q-y&uniqifier=1) |
+| 03/29 | 深度学习&Transformer <br>  | | | NVIDIA团队演讲 | 训练自己的语言模型 :bangbang: |
 | 04/12 | 评估生成式AI&道德议题 | | | | AI透过人类的回馈学习 :heavy_exclamation_mark: | 
 | 04/26 | 打造生成式AI经验谈 | | | TAIDE团队演讲 | |
 | 05/03 | 生成式AI的可解释性 | | | | 了解生成式AI在想什么 :heavy_exclamation_mark: |
@@ -128,6 +128,23 @@
     - 用另一个语言模型来产生资料
     - 验证语言模型生成的结果
 
+## Lecture 4: 深度学习&Transformer
+
+- **多模型合作**
+  - 多模型如何讨论 [Exchange-of-Thought](https://arxiv.org/abs/2312.01823)
+  - 讨论要怎么停下来？$\rightarrow$ 引入裁判模型
+  - 避免太快结束讨论 $\rightarrow$ [Encourage divergent thinking](https://arxiv.org/abs/2305.19118)
+  - 引入不同的角色
+    - [CAMEL: Communicate Agents](https://arxiv.org/abs/2303.17760) 不同语言模型承担不同任务
+    - [Dynamic LLM Agent Network](https://arxiv.org/abs/2310.02170) 分数太低的模型会被剔除
+  - Applications
+    - [MetaGPT](https://arxiv.org/abs/2308.00352)
+    - [ChatDev](https://github.com/OpenBMB/ChatDev)
+    - [Interactive Simulacra](https://arxiv.org/abs/2304.03442)
+- **大型语言模型修炼史**
+  - `自我学习，累积实力`：资料很多，但不知道使用方法
+  - `名师指点，发挥潜力`：
+  - `参与实战，打磨技巧`：
 
 # References
 
