@@ -539,8 +539,46 @@ In most Transformer diagrams, these are often written together as `Add & Norm`.
   - **Encoders**
     - Get bidirectional context $\rightarrow$ can condition on future!
     - How do we train them to build strong representations?
+    - Idea
+      - Replace some fraction of words in the input with a special `[MASK]` token, predict these words $h_1,...,h_T=Encoder(w_1.,,,w_T)$, $y_i\thicksim Ah_i+b$.
+      - Only add loss terms from words that are "masked out". If $\tilde{x}$ is the masked version of $x$, we're learning $p_{\theta}(x|\tilde{x})$, called **Masked LM**.
+    - [BERT: Bidirectional Encoder Representations from Transformers](https://arxiv.org/abs/1810.04805)
+      -  Predict a random 15% of (sub)word tokens.
+         -  Replace input word with [MASK] 80% of the time
+         -  Replace input word with a random token 10% of the time
+         -  Leave input word unchanged 10% of the time (but still predict it!)
+     -  [RoBERTa: A Robustly Optimized BERT Pretraining Approach](https://arxiv.org/abs/1907.11692)
+     -  **Limitations of pretrained encoders**
+        -  If y our task involves generating sequences, consider using a pretrained decoder; BERT and other pretrained encoders don't naturally lead to nice autoregressive (1-word-at-a-time) generation methods.
+     -  Full Finetuning vs. Parameter-Efficient Finetuning
+        -  Parameter-Efficient Finetuning
+           -  Prefix-tuning
+           -  Low-Rank Adaptation
   - **Encoder-Decoders**
-    - Good parts of decoders and encoders?
     - What's the best way to pretrain them?
+    - Just like **language modeling**, but where a prefix of every input is provided to the encoder and is not predicted.
+      - $h_1,...,h_T=Encoder(w_1,...,w_T)$
+      - $h_{T+1},...,h_2=Decoder(w_1,...,w_T,h_1,...,h_T)$
+      - $y_i \thicksim Ah_i+b, i>T$
+    - **span corruption** [[Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer]](https://arxiv.org/pdf/1910.10683.pdf)
+      - Replace different-length spans from the inputs with unique placeholders, decode out the spans that were removed.
   - **Decoders**
     - Nice to generate from, can't condition on future words
+    - We can ignore that there were trained to model $p(w_t|w_{1:t-1})$.
+    - We can finetune them by training a classifier on the last word's hidden state.
+      - $h_1,...,h_T=Decoder(w_1,...,w_T)$
+      - $y \thicksim Ah_T+b$
+      - where $A$ and $b$ are randomly initialized and specified by the downstream task.
+    - This is helpful in tasks **where the output is a sequence** with a vocabulary like that at pretraining time
+      - Dialogue (context=dialogue history)
+      - Summarization (context=document)
+- **Generate Pretrained Transformer (GPT)** [[Radford et.al, 2018]](https://www.cs.ubc.ca/~amuham01/LING530/papers/radford2018improving.pdf)
+  - Transformer decoder with 12 layers, 117M parameters.
+  - 768-dimensional hidden states, 3072-dimensional feed-forward hidden layers.
+  - Byte-pair encoding with 40,000 merges.
+  - Trained on BooksCorpus: over 7000 unique books.
+- **Increasing convincing generations (GPT2)** [[Radford et.al, 2018]](https://www.cs.ubc.ca/~amuham01/LING530/papers/radford2018improving.pdf)
+  - **GPT-2**, a larger version (1.5B) of GPT trained on more data, was shown to produce relatively convincing samples of natural language.
+- **GPT-3**, In-context learning, and very large models
+  - very large language models seem to perform some kind of learning **without gradient steps** simply from examples you provide within their contexts.
+  - 175 billion parameters, 300B tokens of text.
