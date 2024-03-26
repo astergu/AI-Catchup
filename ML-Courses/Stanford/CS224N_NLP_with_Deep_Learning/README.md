@@ -520,3 +520,27 @@ In most Transformer diagrams, these are often written together as `Add & Norm`.
   - Are simple absolute indices the best we can do to represent position?
   - Relative linear position attention [[Shaw et al.,2018]](https://arxiv.org/abs/1803.02155)
   - Dependency syntax-based position [[Wang et al.,2019]](https://arxiv.org/pdf/1909.00383.pdf)
+
+
+## Lecture 9: Pretraining
+
+- All (almost all) parameters in NLP networks are initialized via **pretraining**.
+- This has been exceptionally effective at building strong
+  - **representations of language**
+  - **parameter initializations** for strong NLP models
+  - **probability distributions** over language that we can sample from
+- **The Pretraining/Fintuning Paradigm**
+  - serve as parameter initialization
+  - Why should pretraining and fintuning help?
+    - `pretraining loss`: pretraining provides parameters $\hat{\theta}$ by approximating $min_{\theta}\mathcal{L}_{pretrain}(\theta)$.
+    - `finetuning loss`: finetuning approximates $min_{\theta}\mathcal{L}_{finetune}(\theta)$, starting at $\hat{\theta}$.
+    - The pretraining may matter because stochastic gradient descent sticks (relatively) close to $\hat{\theta}$ during finetuning.
+- **Pretraining for three types of architectures**
+  - **Encoders**
+    - Get bidirectional context $\rightarrow$ can condition on future!
+    - How do we train them to build strong representations?
+  - **Encoder-Decoders**
+    - Good parts of decoders and encoders?
+    - What's the best way to pretrain them?
+  - **Decoders**
+    - Nice to generate from, can't condition on future words
