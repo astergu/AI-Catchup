@@ -6,13 +6,35 @@ This assignment is an investigation into Transformer self-attention building blo
 
 Multi-head self-attention is the core modeling component of Transformers. 
 
+Recall that attention can be viewed as an operation on a *query* vector $q \in \mathbb{R}^d$, a set of *value* vectors $\{v_1,...,v_n\}$, $v_i \in \mathbb{R}^d$, and a set of *key* vectors $\{k_1,...,k_n\}$, $k_i \in \mathbb{R}^d$, specified as follows:
+
+$c=\sum_{i=1}^n v_i \alpha_i$
+
+$\alpha_i=\frac{exp(k_i^T q)}{\sum_{j=1}^n exp(k_j^Tq)}$
+
+with $alpha=\{\alpha_1,...,\alpha_n\}$ termed the "attention weights". Observe that the output $c \in \mathbb{R}^d$ is an average over the value vectors weighted with respect to $\alpha$.
+
 1. **Copying in attention**. One advantage of attention is that it's particularly easy to "copy" a value vector to the output *c*. In this problem, we'll motivate why this is the case.
-   1. **Explain** why $\alpha$ can be interpreted as a categorical probability distribution.
-   2. The distribution $\alpha$ is typically relatively "diffuse"; the probability mass is spread out between many different $\alpha_i$. However, this is not always the case. **Describe** (in onr sentence) under what conditions the categorical distribution $\alpha$ puts almost all of its weight on some $\alpha_j$, where $j \in {1,...,n}$ (i.e. $\alpha_j \gg \sum_{i\neq j} \alpha_i$). What must be true about the query *q* and/or the keys ${k_1,...,k_n}$?
-   3. Under the conditions you gave in (ii), **describe** the output *c*.
-   4. **Explain** (in two sentences or fewer) what your answer to (ii) and (iii) means intuitively.
+   
+a. **Explain** why $\alpha$ can be interpreted as a categorical probability distribution.
+   
+> There are $n$ $\alpha$ scores corresponding to each term in the sequence. Each score is between 0 and 1 and can be interpreted as a proability. It is a distribution because all scores are normalized, i.e., they sum up to 1.
+
+b. The distribution $\alpha$ is typically relatively "diffuse"; the probability mass is spread out between many different $\alpha_i$. However, this is not always the case. **Describe** (in onr sentence) under what conditions the categorical distribution $\alpha$ puts almost all of its weight on some $\alpha_j$, where $j \in {1,...,n}$ (i.e. $\alpha_j \gg \sum_{i\neq j} \alpha_i$). What must be true about the query *q* and/or the keys ${k_1,...,k_n}$?
+
+> If the key values $k_j$ compared to other key values $k_{i\neq j}$ are large, then the dot product between the key and the query will be large. This will cause softmax to put most of its probability mass onto this large value.
+
+c. Under the conditions you gave in (ii), **describe** the output *c*.
+
+> $j^{th}$ value will have the most weight thus $c$ will be similar to $v_j$, i.e., $c \approx v_j$.
+
+d. **Explain** (in two sentences or fewer) what your answer to (ii) and (iii) means intuitively.
+
+> If the dot product between some $j_{th}$ word's *key* and *query* is very large compared to other word's *keys* and the same *query*, then the *attention output* for that $j^{th}$ word will approach its *value*. It's as if the *value* is "coppied" to the output.
+
 2. **An average of two**. Instead of focusing on just one vector $v_j$, a Transformer model might want to incorporate information from *multiple* source vectors. Consider the case where we instead want to incorporate information from **two** vectors $v_a$ and $v_b$, with corresponding key vectors $k_a$ and $k_b$.
-   1. How should we combine two $d$-dimensional vectors $v_a$, $v_b$ into one output vector $c$ in a way that preserves information from both vectors? In machine learning, one common way to do so is to take the average: $c=\frac{1}{2}(v_a+v_b)$. It might seem hard to extract information about the original vectors $v_a$ and $v_b$ from the resulting $c$, but under certain conditions one can do so. <br> Suppose that although we don't know $v_a$ or $v_b$, we do know that $v_a$ lies in a subspace $A$ formed by the $m$ basis vectors $\{a_1,a_2,...,a_m\}$, while $v_b$ lies in a subspace $B$ formed by the $p$ basis vectors $\{b_1,b_2,...,b_p\}$. <br> Using the basis vectors $\{a_1,a_2,...,a_m\}$, construct a matrix $M$ such that for arbitrary vectors $v_a\in A$ and $v_b \in B$, we can use $M$ to extract $v_a$ from the sum vector $s=v_a+v_b$. In other words, we want to construct $M$ such that for any $v_a$, $v_b$, $M_s=v_a$ holds for your $M$.
+
+a. How should we combine two $d$-dimensional vectors $v_a$, $v_b$ into one output vector $c$ in a way that preserves information from both vectors? In machine learning, one common way to do so is to take the average: $c=\frac{1}{2}(v_a+v_b)$. It might seem hard to extract information about the original vectors $v_a$ and $v_b$ from the resulting $c$, but under certain conditions one can do so. <br> Suppose that although we don't know $v_a$ or $v_b$, we do know that $v_a$ lies in a subspace $A$ formed by the $m$ basis vectors $\{a_1,a_2,...,a_m\}$, while $v_b$ lies in a subspace $B$ formed by the $p$ basis vectors $\{b_1,b_2,...,b_p\}$. <br> Using the basis vectors $\{a_1,a_2,...,a_m\}$, construct a matrix $M$ such that for arbitrary vectors $v_a\in A$ and $v_b \in B$, we can use $M$ to extract $v_a$ from the sum vector $s=v_a+v_b$. In other words, we want to construct $M$ such that for any $v_a$, $v_b$, $M_s=v_a$ holds for your $M$.
 
 
 ## Pretrained Transformer models and knowledge access

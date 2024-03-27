@@ -582,3 +582,4 @@ In most Transformer diagrams, these are often written together as `Add & Norm`.
 - **GPT-3**, In-context learning, and very large models
   - very large language models seem to perform some kind of learning **without gradient steps** simply from examples you provide within their contexts.
   - 175 billion parameters, 300B tokens of text.
+  - Roughly, the cost of training a large transformer scales as **parameters** $\times$ **tokens**
