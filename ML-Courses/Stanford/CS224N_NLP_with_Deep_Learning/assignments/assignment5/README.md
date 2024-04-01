@@ -213,6 +213,9 @@ python src/run.py evaluate vanilla wiki.txt \
 
 Training will take less than 10 minutes (on Azure). Report your model's accuracy on the dev set. Similiar to assignment 4, we also have Tensorboard logging in assignment 5 for debugging. It can be launch using `tensorboard --logdir expt/`. Don't be surprised if it is welll below 10%; we will be digging into why in Part 3. As a reference point, we wanto to also calculate the accuracy the model would have achieved if it had just predicted "London" as the birth place for everyone in the dev set. Fill in `london_baseline.py` to calculate the accuracy of that approach and report your result in your write-up. You should be able to leverage existing code such that the file is only a few lines long.
 
+> [Dev set]: Correct: 0.0 out of 500.0: 0.0% <br>
+> [London]: Correct: 25.0 out of 500.0: 5.0%
+
 5. **Define a *span corruption* function for pretraining**
 
 In the file `src/dataset.py`, implement the `__getitem__()` function for the dataset class `CharCOrruptionDataset`. Follow the instructions provided in the comments in `dataset.py`. Span corruption is explored in the [T5 paper](https://arxiv.org/pdf/1910.10683.pdf). It randomly selects spans of text in a document and replaces them with unique tokens (noising). Model taks this noised text, and are required to output a patten of each unique sentinel followed by the tokens that were replaced by that sentinel in the input. In this question, you'll implement a simplification that only masks out a single sequence of characters.
