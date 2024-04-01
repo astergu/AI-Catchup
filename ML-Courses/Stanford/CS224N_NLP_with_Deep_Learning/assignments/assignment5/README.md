@@ -135,3 +135,83 @@ python src/dataset.py namedata
 Note that you do not have to write any code or submit written answers for this part.
 
 3. **Implement finetuning (without pretraining).** <br> 
+
+Take a look at `run.py`. In particular, you might want to `pretrain`, `finetune`, or `evaluate` a model with this code.
+
+Takeing inspiration from the training code in the `play_char.ipynb`, write code to finetune a Transformer model on the namebirthplace dataset, via examples from the `nameDataset` class. For now, implement the case without pretraining (i.e. create a model from scratch and train it on the birthplace prediction task from part (2)). You'll have to modify two sections, marked `[part c]` in the code: one to initialize the model, and one to finetune it. Note that you only need to initialize the model in the case labeled "vanilla" for now. Use the hyperparameters for the `Trainer` specified in the `run.py` code.
+
+Also take a look at the `evaluation` code which has been implemented for you. It samples predictions from the trained model and calls `evaluate_places()` to get the total percentage of correct place predictions. You will run this code in part (4) to evaluate your trained models. 
+
+No written answer is required for this part.
+
+4. **Make predictions (without pretraining)**
+
+Train your model on `birth_places_train.tsv`, and evaluate on `birth_dev.tsv`. Specifically, you should now be able to run the following three commands:
+
+```bash
+# Train on the names dataset
+python src/run.py finetune vanilla wiki.txt \
+        --writing_params_path vanilla.model.params \
+        --finetune_corpus_path birth_places_train.tsv
+        
+# Evaluate on the dev set, writing out predictions
+python src/run.py evaluate vanilla wiki.txt \
+        --reading_params_path vanilla.model.params \
+        --eval_corpus_path birth_dev.tsv \
+        --outputs_path vanilla.nopretrain.dev.predictions
+
+# Evaluate on the test set, writing out predictions
+python src/run.py evaluate vanilla wiki.txt \
+        --readining_params_path vanilla.model.params \
+        --eval_corpus_path birth_test_inputs.tsv \
+        --outputs_path vanilla.nopretrain.test.predictions
+```
+
+Training will take less than 10 minutes (on Azure). Report your model's accuracy on the dev set. Similiar to assignment 4, we also have Tensorboard logging in assignment 5 for debugging. It can be launch using `tensorboard --logdir expt/`. Don't be surprised if it is welll below 10%; we will be digging into why in Part 3. As a reference point, we wanto to also calculate the accuracy the model would have achieved if it had just predicted "London" as the birth place for everyone in the dev set. Fill in `london_baseline.py` to calculate the accuracy of that approach and report your result in your write-up. You should be able to leverage existing code such that the file is only a few lines long.
+
+5. **Define a *span corruption* function for pretraining**
+
+In the file `src/dataset.py`, implement the `__getitem__()` function for the dataset class `CharCOrruptionDataset`. Follow the instructions provided in the comments in `dataset.py`. Span corruption is explored in the [T5 paper](https://arxiv.org/pdf/1910.10683.pdf). It randomly selects spans of text in a document and replaces them with unique tokens (noising). Model taks this noised text, and are required to output a patten of each unique sentinel followed by the tokens that were replaced by that sentinel in the input. In this question, you'll implement a simplification that only masks out a single sequence of characters.
+
+This question will be graded via autograder based on whether your span corruption function implements some basic properties of your spec. We'll instantiate the `CharCorruptionDataset` with our own data, and draw examples from it.
+
+To help you debug, if you run the follow code, it'll sample a few examples from your `CharCorruptionDataset` on the pretraining dataset `wiki.txt` and print them out for you.
+
+```bash
+python src/dataset.py charcorruption
+```
+
+No written answer is required for this part.
+
+6. **Pretrain, finetune, and make predictions. Budget 2 hours for training.**
+
+Now fill in the `pretrain` portion of `run.py`, which will pretrain a model on the span corruption task. Additionally, modify your `finetune` portion to handle finetuning in the case *with* pretraining. In particular, if a path to a pretrained model is provided in the bash command, load this model before finetuning it on the birthplace prediction task. Pretrain your model on `wiki.txt` (which should take approximately two hours), finetune it on `NameDataset` and evaluate it. Specifically, you should be able to run the following four commands: (Don't be concerned if the loss appears to plateau in the middle of pretraining; it will eventually go back down).
+
+```bash
+# Pretrain the model
+python src/run.py pretrain vanilla wiki.txt \
+        --writing_params_path vanilla.pretrain.params
+
+# Finetune the model
+python src/run.py finetune vanilla wiki.txt \
+        --reading_params_path vanilla.pretrain.params \
+        --writing_params_path vanilla.finetune.params \
+        --finetune_corpus_path birth_places_train.tsv
+
+# Evaluate on the dev set; write to disk
+python src/run.py evaluate vanilla wiki.txt \
+        --reading_params_path vanilla.finetune.params \
+        --eval_corpus_path birth_dev.tsv \
+        --outputs_path vanilla.pretrain.dev.predictions
+
+# Evaluate on the test set; write to disk
+python src/run.py evaluate vanilla wiki.txt \
+        --readining_params_path vanilla.finetune.params \
+        --eval_corpus_path birth_test_inputs.tsv \
+        --outputs_path vanilla.pretrain.test.predictions
+```
+
+Report the accuracy on the dev set. We expect the dev accuracy will be at least 10%, and will expect a similar accuracy on the held out test set.
+
+7. **Research! Write and try out a more efficient variant of Attention (Budget 2 hours for pretraining)**
+
