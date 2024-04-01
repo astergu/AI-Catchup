@@ -144,6 +144,12 @@ Also take a look at the `evaluation` code which has been implemented for you. It
 
 No written answer is required for this part.
 
+```python
+if args.variant == 'vanilla':
+    # [part c] Make some model here
+    model = model.GPT(mconf).to(device)
+```
+
 4. **Make predictions (without pretraining)**
 
 Train your model on `birth_places_train.tsv`, and evaluate on `birth_dev.tsv`. Specifically, you should now be able to run the following three commands:
