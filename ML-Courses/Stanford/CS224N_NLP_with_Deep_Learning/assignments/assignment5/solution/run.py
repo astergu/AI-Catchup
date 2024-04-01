@@ -151,7 +151,7 @@ elif args.function == 'finetune':
     if args.eval_corpus_path is not None:
         # Init the name dataset from corpus for evaluation
         eval_corpus = open(args.eval_corpus_path).read()
-        eval_dataset = dataset.NameDataset(pretrain_dataset, finetune_corpus)
+        eval_dataset = dataset.NameDataset(pretrain_dataset, eval_corpus)
     else:
         eval_dataset = None
     

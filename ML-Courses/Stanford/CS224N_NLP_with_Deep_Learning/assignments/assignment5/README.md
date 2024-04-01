@@ -150,6 +150,44 @@ if args.variant == 'vanilla':
     model = model.GPT(mconf).to(device)
 ```
 
+```python
+elif args.function == 'finetune':
+    assert args.writing_params_path is not None
+    assert args.finetune_corpus_path is not None
+
+    hyperparameters = {
+        "max_epoches": 75,
+        "batch_size": 256,
+        "learning_rate": args.finetune_lr,
+        "lr_decay": True,
+        "warmup_tokens": 512 * 20,
+        "final_tokens": 200*len(pretrain_dataset)*block_size,
+        "num_workers": 4,
+        "writer": writer
+    }
+    if args.reading_params_path is not None: # finetune with a pretrained model
+        hyperparameters["max_epoches"] = 10
+        model.load_state_dict(torch.load(args.reading_params_path))
+
+    # Initialize the name dataset for corpus for finetuning
+    finetune_corpus = open(args.finetune_corpus_path).read()
+    finetune_dataset = dataset.NameDataset(pretrain_dataset, finetune_corpus)
+
+    if args.eval_corpus_path is not None:
+        # Init the name dataset from corpus for evaluation
+        eval_corpus = open(args.eval_corpus_path).read()
+        eval_dataset = dataset.NameDataset(pretrain_dataset, eval_corpus)
+    else:
+        eval_dataset = None
+    
+    # Initializing training config & run train
+    tconf = trainer.TrainerConfig(**hyperparameters)
+    trainer.Trainer(model, finetune_dataset, eval_dataset, tconf).train()
+
+    # Save the finetuned model parameters to specified path
+    torch.save(model.state_dict(), args.writing_params_path)
+```
+
 4. **Make predictions (without pretraining)**
 
 Train your model on `birth_places_train.tsv`, and evaluate on `birth_dev.tsv`. Specifically, you should now be able to run the following three commands:
@@ -168,7 +206,7 @@ python src/run.py evaluate vanilla wiki.txt \
 
 # Evaluate on the test set, writing out predictions
 python src/run.py evaluate vanilla wiki.txt \
-        --readining_params_path vanilla.model.params \
+        --reading_params_path vanilla.model.params \
         --eval_corpus_path birth_test_inputs.tsv \
         --outputs_path vanilla.nopretrain.test.predictions
 ```
