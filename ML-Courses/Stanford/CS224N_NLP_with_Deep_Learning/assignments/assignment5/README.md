@@ -230,6 +230,39 @@ python src/dataset.py charcorruption
 
 No written answer is required for this part.
 
+```python
+def __getitem__(self, idx):
+        # TODO [part e]: see spec above
+        # Step 0 & 1: Randomly truncate the document to a length no less than 4 characters,
+        # and no more than int(self.block_size*7/8) characters.
+        doc = self.data[idx]
+        doc = doc[:random.randint(4, int(self.block_size * 7 / 8))]
+
+        # Step 2: break the truncated document into three substrings [prefix] [masked_content] [suffix]
+        mean_len = round(len(doc) / 4)
+        mask_len = mean_len + random.randint(-mean_len, mean_len)
+        clip_idx = random.randint(0, mask_len)
+        prefix = doc[:clip_idx]
+        suffix = doc[clip_idx + mask_len:]
+        masked_content = doc[clip_idx:clip_idx + mask_len]
+
+        # Step 3: Rearrange these substrings into the following form:
+        # [prefix] MASK_CHAR [suffix] MASK_CHAR [masked_content] [pads]
+        masked_string = prefix + self.MASK_CHAR + suffix + self.MASK_CHAR + masked_content
+        masked_string += self.PAD_CHAR * (self.block_size - len(masked_string))
+
+        # Step 4: We now use masked_string to construct the input and output example pair.
+        input = masked_string[:-1]
+        output = masked_string[1:]
+
+        # Step 5: Making use of the vocabulary that you defined, encode the resulting input
+        # and output strings as Long tensors and return the resulting data point.
+        x = torch.tensor([*map(self.stoi.get, input)], dtype=torch.long)
+        y = torch.tensor([*map(self.stoi.get, output)], dtype=torch.long)
+
+        return x, y
+```
+
 6. **Pretrain, finetune, and make predictions. Budget 2 hours for training.**
 
 Now fill in the `pretrain` portion of `run.py`, which will pretrain a model on the span corruption task. Additionally, modify your `finetune` portion to handle finetuning in the case *with* pretraining. In particular, if a path to a pretrained model is provided in the bash command, load this model before finetuning it on the birthplace prediction task. Pretrain your model on `wiki.txt` (which should take approximately two hours), finetune it on `NameDataset` and evaluate it. Specifically, you should be able to run the following four commands: (Don't be concerned if the loss appears to plateau in the middle of pretraining; it will eventually go back down).
@@ -257,6 +290,31 @@ python src/run.py evaluate vanilla wiki.txt \
         --eval_corpus_path birth_test_inputs.tsv \
         --outputs_path vanilla.pretrain.test.predictions
 ```
+
+```python
+# Perform pretraining, finetuning, or evaluation
+if args.function == 'pretrain':
+    assert args.writing_params_path is not None
+    # TODO [part f]:
+    hyperparameters = {
+        "max_epoches": 650,
+        "batch_size": 128,
+        "learning_rate": args.pretrain_lr,
+        "lr_decay": True,
+        "warmup_tokens": 512*20,
+        "final_tokens": 200*len(pretrain_dataset)*block_size,
+        "num_workers": 4,
+        "writer": writer
+    } 
+    # Initialize training configuration & train
+    tconf = trainer.TrainerConfig(**hyperparameters)
+    trainer.Trainer(model, pretrain_dataset, None, tconf).train()
+
+    # Save the pretrained model parameters
+    torch.save(model.state_dict(), args.writing_params_path)
+```
+
+> [Accuracy on the dev set]: 
 
 Report the accuracy on the dev set. We expect the dev accuracy will be at least 10%, and will expect a similar accuracy on the held out test set.
 

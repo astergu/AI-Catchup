@@ -92,8 +92,24 @@ if args.function == 'pretrain':
     # warmup_tokens=512*20
     # final_tokens=200*len(pretrain_dataset)*block_size
     # num_workers=4
-    # writer=writer 
-    raise NotImplementedError
+    # writer=writer
+    hyperparameters = {
+        "max_epoches": 650,
+        "batch_size": 128,
+        "learning_rate": args.pretrain_lr,
+        "lr_decay": True,
+        "warmup_tokens": 512*20,
+        "final_tokens": 200*len(pretrain_dataset)*block_size,
+        "num_workers": 4,
+        "writer": writer
+    } 
+    # Initialize training configuration & train
+    tconf = trainer.TrainerConfig(**hyperparameters)
+    trainer.Trainer(model, pretrain_dataset, None, tconf).train()
+
+    # Save the pretrained model parameters
+    torch.save(model.state_dict(), args.writing_params_path)
+    #raise NotImplementedError
 elif args.function == 'finetune':
     assert args.writing_params_path is not None
     assert args.finetune_corpus_path is not None
