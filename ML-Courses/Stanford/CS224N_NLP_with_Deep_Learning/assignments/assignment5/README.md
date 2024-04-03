@@ -144,6 +144,8 @@ Also take a look at the `evaluation` code which has been implemented for you. It
 
 No written answer is required for this part.
 
+> Answer:
+
 ```python
 if args.variant == 'vanilla':
     # [part c] Make some model here
@@ -156,7 +158,7 @@ elif args.function == 'finetune':
     assert args.finetune_corpus_path is not None
 
     hyperparameters = {
-        "max_epoches": 75,
+        "max_epochs": 75,
         "batch_size": 256,
         "learning_rate": args.finetune_lr,
         "lr_decay": True,
@@ -166,7 +168,7 @@ elif args.function == 'finetune':
         "writer": writer
     }
     if args.reading_params_path is not None: # finetune with a pretrained model
-        hyperparameters["max_epoches"] = 10
+        hyperparameters["max_epochs"] = 10
         model.load_state_dict(torch.load(args.reading_params_path))
 
     # Initialize the name dataset for corpus for finetuning
@@ -213,7 +215,8 @@ python src/run.py evaluate vanilla wiki.txt \
 
 Training will take less than 10 minutes (on Azure). Report your model's accuracy on the dev set. Similiar to assignment 4, we also have Tensorboard logging in assignment 5 for debugging. It can be launch using `tensorboard --logdir expt/`. Don't be surprised if it is welll below 10%; we will be digging into why in Part 3. As a reference point, we wanto to also calculate the accuracy the model would have achieved if it had just predicted "London" as the birth place for everyone in the dev set. Fill in `london_baseline.py` to calculate the accuracy of that approach and report your result in your write-up. You should be able to leverage existing code such that the file is only a few lines long.
 
-> [Dev set]: Correct: 0.0 out of 500.0: 0.0% <br>
+> Answer: <br>
+> [Dev set]: Correct: 4.0 out of 500.0: 0.8% <br>
 > [London]: Correct: 25.0 out of 500.0: 5.0%
 
 5. **Define a *span corruption* function for pretraining**
@@ -229,6 +232,8 @@ python src/dataset.py charcorruption
 ```
 
 No written answer is required for this part.
+
+> Answer:
 
 ```python
 def __getitem__(self, idx):
@@ -286,10 +291,12 @@ python src/run.py evaluate vanilla wiki.txt \
 
 # Evaluate on the test set; write to disk
 python src/run.py evaluate vanilla wiki.txt \
-        --readining_params_path vanilla.finetune.params \
+        --reading_params_path vanilla.finetune.params \
         --eval_corpus_path birth_test_inputs.tsv \
         --outputs_path vanilla.pretrain.test.predictions
 ```
+
+> Answer:
 
 ```python
 # Perform pretraining, finetuning, or evaluation
@@ -297,7 +304,7 @@ if args.function == 'pretrain':
     assert args.writing_params_path is not None
     # TODO [part f]:
     hyperparameters = {
-        "max_epoches": 650,
+        "max_epochs": 650,
         "batch_size": 128,
         "learning_rate": args.pretrain_lr,
         "lr_decay": True,
@@ -314,9 +321,44 @@ if args.function == 'pretrain':
     torch.save(model.state_dict(), args.writing_params_path)
 ```
 
-> [Accuracy on the dev set]: 
+> [Accuracy on the dev set]: Correct: 79.0 out of 500.0: 15.8%
 
 Report the accuracy on the dev set. We expect the dev accuracy will be at least 10%, and will expect a similar accuracy on the held out test set.
 
 7. **Research! Write and try out a more efficient variant of Attention (Budget 2 hours for pretraining)**
 
+We'll now go to changing the Transformer architecture itself - specifically the first and last transformer blocks. The transformer model uses a self-attention scoring function based on dot products, this involves a rather intensive computation that's quadratic in the sequence length. This is because the dot product between $\mathcal{l}^2$ pairs of word vectors is computed in each computation, where $\mathcal{l}$ is the sequence length. If we can reduce the length of the sequence passed on the self-attention module, we should observe significant reduction in compute. For example, if we develop a technique that can reduce the sequence length to half, we can save around 75% of the compute time!
+
+We provide the code to assemble the model using your implemented `DownProjectBlock` and `UpProjectBlock`. The model uses these blocks when the `variant` parameter is specified as `perceiver`. Blow are bash commands that your code should support in order to pretrain the model, finetune it, and make predictions on the dev and test sets. Note that the pretraining process will take approximately 2 hours.
+
+```bash
+# Pretrain the model
+python src/run.py pretrain perceiver wiki.txt --bottleneck_dim 64 \
+        --pretrain_lr 6e-3 --writing_params_path perceiver.pretrain.params
+
+# Finetune the model
+python src/run.py finetune perceiver wiki.txt --bottleneck_dim 64 \
+        --reading_params_path perceiver.pretrain.params \
+        --writing_params_path perceiver.finetune.params \
+        --finetune_corpus_path birth_places_train.tsv
+
+# Evaluate on the dev set; write to disk
+python src/run.py evaluate perceiver wiki.txt --bottleneck_dim 64 \
+        --reading_params_path perceiver.finetune.params \
+        --eval_corpus_path birth_dev.tsv \
+        --outputs_path perceiver.pretrain.dev.predictions
+
+# Evaluate on the test set; write to disk
+python src/run.py evaluate perceiver wiki.txt --bottleneck_dim 64 \
+        --reading_params_path perceiver.finetune.params \
+        --eval_corpus_path birth_test_inputs.tsv \
+        --outputs_path perceiver.pretrain.test.predictions
+```
+
+Report the accuracy of your perceiver attention model on the birthplace prediction on `birth_dev.tsv` after pretraining and fine-tuning.
+
+Save the predictions of the model on `birth_test_inputs.tsv` to `perceiver.pretrain.test.predictions`. For this section, you'll submit: `perceiver.finetune.params`, `perceiver.pretrain.dev.predictions`, and `perceiver.pretrain.test.predictions`. Your model should get at least 6% accuracy on the dev set.
+
+a. We'll score your model as to whether it gets at least 5% accuracy on the test set, which has answers held out.
+
+b. Provide an expression for the time complexity of the Perceiver model and the vanilla model, in terms of number of layers ($\mathcal{L}$), input sequence length ($\mathcal{l}$) and basis bottleneck dimension ($m$). 

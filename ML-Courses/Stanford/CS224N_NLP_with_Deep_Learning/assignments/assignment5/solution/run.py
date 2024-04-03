@@ -94,7 +94,7 @@ if args.function == 'pretrain':
     # num_workers=4
     # writer=writer
     hyperparameters = {
-        "max_epoches": 650,
+        "max_epochs": 650,
         "batch_size": 128,
         "learning_rate": args.pretrain_lr,
         "lr_decay": True,
@@ -147,7 +147,7 @@ elif args.function == 'finetune':
     #     number of epochs for each case.
      
     hyperparameters = {
-        "max_epoches": 75,
+        "max_epochs": 75,
         "batch_size": 256,
         "learning_rate": args.finetune_lr,
         "lr_decay": True,
@@ -157,7 +157,7 @@ elif args.function == 'finetune':
         "writer": writer
     }
     if args.reading_params_path is not None: # finetune with a pretrained model
-        hyperparameters["max_epoches"] = 10
+        hyperparameters["max_epochs"] = 10
         model.load_state_dict(torch.load(args.reading_params_path))
 
     # Initialize the name dataset for corpus for finetuning
