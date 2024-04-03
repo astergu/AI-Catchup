@@ -329,6 +329,14 @@ Report the accuracy on the dev set. We expect the dev accuracy will be at least 
 
 We'll now go to changing the Transformer architecture itself - specifically the first and last transformer blocks. The transformer model uses a self-attention scoring function based on dot products, this involves a rather intensive computation that's quadratic in the sequence length. This is because the dot product between $\mathcal{l}^2$ pairs of word vectors is computed in each computation, where $\mathcal{l}$ is the sequence length. If we can reduce the length of the sequence passed on the self-attention module, we should observe significant reduction in compute. For example, if we develop a technique that can reduce the sequence length to half, we can save around 75% of the compute time!
 
+![Illustration of the transformer block](./transformer_decoder.png)
+
+In the Perceiver model architecture, we replace the first transformer **Block** in the model with the **DownProjectBlock**. This block reduces the length of the sequence from $\mathcal{l}$ to $\mathcal{m}$. This is followed by a series of regular transformer blocks, which would now perform self-attention on the reduced sequence length of *m*. We replace the last block of the model with the **UpProjectBlock**, which takes in the *m* length output of the previous block, and projects it back to the original sequence length of *l*.
+
+You need to implement the **DownProjectBlock** in `model.py` that reduces the dimensionality of the sequence in the first block. To do this, perform cross-attention on the input sequence with a learnable basis $C \in \mathbb{R}^{,\times d}$ as the query, where $m < l$. 
+
+To get back to the original dimensions, the last block in the model is replaced with the **UpProjectBlock**. This block will bring back the output sequence length to be the same as input sequence length by performing cross-attention on the previous layer's output $Y^{L-1}$ with the original input vector $X$.
+
 We provide the code to assemble the model using your implemented `DownProjectBlock` and `UpProjectBlock`. The model uses these blocks when the `variant` parameter is specified as `perceiver`. Blow are bash commands that your code should support in order to pretrain the model, finetune it, and make predictions on the dev and test sets. Note that the pretraining process will take approximately 2 hours.
 
 ```bash
@@ -355,10 +363,102 @@ python src/run.py evaluate perceiver wiki.txt --bottleneck_dim 64 \
         --outputs_path perceiver.pretrain.test.predictions
 ```
 
+> Answer:
+
+```python
+class DownProjectBlock(nn.Module):
+    """Transformer block used for down projection.
+    
+    Initialize similarly to the regular tranformer Block class,
+    while using the CausalCrossAttention layer instead of the regular
+    CausalSelfAttention layer.
+    
+    You also need to initialize the parameter for the basis vectors `self.C` here.
+    Initialize `self.C` with appropriate dimensions and xavier_uniform initalization.
+    
+    self.C should be 1 x bottleneck_dim x n_embd. We need the first dimension 
+    for appropriate broadcasting along the batch_size dimension of the input 
+    sequence.
+    
+    `self.C` will be used to compute the Query vector for the cross attention
+    layer.
+    """
+    def __init__(self, config):
+        super().__init__()
+        ### YOUR CODE HERE
+        ### Hint: Copy over the code from Block and make necessary modifications.
+        self.ln1 = nn.LayerNorm(config.n_embd)
+        self.ln2 = nn.LayerNorm(config.n_embd)
+        self.attn = attention.CausalCrossAttention(config)
+        self.mlp = nn.Sequential(
+            nn.Linear(config.n_embd, 4 * config.n_embd),
+            nn.GELU(),
+            nn.Linear(4 * config.n_embd, config.n_embd),
+            nn.Dropout(config.resid_pdrop),
+        )
+        self.C = nn.Parameter(nn.init.xavier_uniform(torch.empty(1, config.bottleneck_dim, config.n_embd)))
+        ### END YOUR CODE
+
+    def forward(self, x_input):
+        """Hint: perform cross-attention between x_input and self.C.
+        Use the layernorm layers on C, and then on the input to the MLP.
+        """
+        ### YOUR CODE HERE
+        ### Hint: Copy over the code from Block and make necessary modifications.
+        ### Should be around 3-5 lines.
+        x = self.attn(self.ln1(x_input), self.ln1(self.C))
+        x = x + self.mlp(self.ln2(x))
+        return x
+        ### END YOUR CODE
+
+class UpProjectBlock(nn.Module):
+    """Transformer block used for up projection.
+    
+    Initialize similarly to the regular transformer Block class,
+    while using the CausalCrossAttention layer instead of the regular
+    CausalSelfAttention layer.
+    """
+    def __init__(self, config):
+        super().__init__()
+        ### YOUR CODE HERE
+        ### Hint: Copy over the code from Block and make necessary modifications.
+        self.ln1 = nn.LayerNorm(config.n_embd)
+        self.ln2 = nn.LayerNorm(config.n_embd)
+        self.attn = attention.CausalCrossAttention(config)
+        self.mlp = nn.Sequential(
+            nn.Linear(config.n_embd, 4 * config.n_embd),
+            nn.GELU(),
+            nn.Linear(4 * config.n_embd, config.n_embd),
+            nn.Dropout(config.resid_pdrop),
+        )
+        ### END YOUR CODE
+    
+    def forward(self, y, x_input):
+        """Hint: perform cross-attention between previous layer's output y and
+        x_input. 
+        Use the layernorm layers on y, and then on the input to the MLP.
+        """
+        ### YOUR CODE HERE
+        ### Hint: Copy over the code from Block and make necessary modifications.
+        ### Should be around 3-5 lines.
+        x = self.attn(self.ln1(y), x_input)
+        x = x + self.mlp(self.ln2(x))
+        return x
+        ### END YOUR CODE
+```
+
+
+
 Report the accuracy of your perceiver attention model on the birthplace prediction on `birth_dev.tsv` after pretraining and fine-tuning.
 
 Save the predictions of the model on `birth_test_inputs.tsv` to `perceiver.pretrain.test.predictions`. For this section, you'll submit: `perceiver.finetune.params`, `perceiver.pretrain.dev.predictions`, and `perceiver.pretrain.test.predictions`. Your model should get at least 6% accuracy on the dev set.
 
 a. We'll score your model as to whether it gets at least 5% accuracy on the test set, which has answers held out.
 
-b. Provide an expression for the time complexity of the Perceiver model and the vanilla model, in terms of number of layers ($\mathcal{L}$), input sequence length ($\mathcal{l}$) and basis bottleneck dimension ($m$). 
+b. Provide an expression for the time complexity of the Perceiver model and the vanilla model, in terms of number of layers ($\mathcal{L}$), input sequence length ($\mathcal{l}$) and basis bottleneck dimension ($m$).
+
+## Considerations in pretrained knowledge
+
+1. Succinctly explain why the pretrained (vanilla) model was able to achieve an accuracy of above 10%, wheras the non-pretrained model was not.
+2. Take a look at some of the correct predictions of the pretrain+finetuned vanilla model, as well as some of the errors. We think you'll find that it's impossible to tell, just looking at the output, whether the model *retrieved* the correct birth place, or *made up* an incorrect birth place. Consider the implications of this for user-facing systems that involve pretrained NLP components. Come up with two **distinct** reasons why this model behavior (i.e. unable to tell whether it's retrieved or made up) may cause concern for such applications, and an example for each reason.
+3. If your model didn't see a person's name at pretraining time, and that person was not seen at fine-tuning time either, it is not possible for it to have "learned" where they lived. Yet, your model will produce *something* as a predicted birth place for that person's name if asked. Concisely describe a strategy your model might take for predicting a birth place for that person's name, and one reason why this should cause concern for the use of such applications. 
