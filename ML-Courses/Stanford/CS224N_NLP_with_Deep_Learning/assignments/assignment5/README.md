@@ -450,12 +450,18 @@ class UpProjectBlock(nn.Module):
 
 
 Report the accuracy of your perceiver attention model on the birthplace prediction on `birth_dev.tsv` after pretraining and fine-tuning.
-
+ 
 Save the predictions of the model on `birth_test_inputs.tsv` to `perceiver.pretrain.test.predictions`. For this section, you'll submit: `perceiver.finetune.params`, `perceiver.pretrain.dev.predictions`, and `perceiver.pretrain.test.predictions`. Your model should get at least 6% accuracy on the dev set.
 
 a. We'll score your model as to whether it gets at least 5% accuracy on the test set, which has answers held out.
 
+> Answer:
+> [Accuracy on dev set]: Correct: 32.0 out of 500.0: 6.4%32.0 out of 500.0: 6.4%
+
 b. Provide an expression for the time complexity of the Perceiver model and the vanilla model, in terms of number of layers ($\mathcal{L}$), input sequence length ($\mathcal{l}$) and basis bottleneck dimension ($m$).
+
+> Answer:
+> While multi-headed attention has a time complexity of $O()l^2d+ld^2$, the time complexity of the perceiver model is $O(dm+Lm^2)$, where $d$ is the dimensionality of the byte array, $m$ is the dimensionality of the latent array, and $L$ is the depth of the transformer.
 
 ## Considerations in pretrained knowledge
 
