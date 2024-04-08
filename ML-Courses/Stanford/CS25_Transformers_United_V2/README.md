@@ -1,7 +1,9 @@
-# CS25: Transformers United
+# CS25: Transformers United V4
  Since their introduction in 2017, Transformers have revolutionized Natural Language Processing (NLP). Now, Transformers are finding applications all over Deep Learning, be it Computer Vision (CV), Reinforcement Learning (RL), Generative Adversarial Networks (GANs), Speech, or even Biology. Among other things, Transformers have enabled the creation of powerful language models like ChatGPT and GPT-4 and significantly elevated the capabilities and impact of artificial intelligence.
 
 In this seminar, we examine the details of how Transformers work, and dive deep into the different kinds of Transformers and how they're applied in various fields, with a focus on LLMs. We do this through a combination of instructor lectures, guest lectures, and classroom discussions. We will invite people at the forefront of Transformers research across different domains for guest lectures. 
+
+[[course page]](https://web.stanford.edu/class/cs25/)
 
 **Prerequisites**
 - Basic knowledge of Deep Learning (should understand attention)
