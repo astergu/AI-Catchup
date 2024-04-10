@@ -583,3 +583,84 @@ In most Transformer diagrams, these are often written together as `Add & Norm`.
   - very large language models seem to perform some kind of learning **without gradient steps** simply from examples you provide within their contexts.
   - 175 billion parameters, 300B tokens of text.
   - Roughly, the cost of training a large transformer scales as **parameters** $\times$ **tokens**
+
+
+![Natural Language Generation](./image/natural_language_generation.png)
+
+### How can we use repetition?
+
+- Simple Option
+  - Heuristic: Don't repeat n-grams
+- More Complex Option:
+  - Use a different training objective
+    - *Unlikelihood object* penalize generation of already-seen tokens
+    - *Coverage loss* prevents attention mechanism from attending to the same words
+  - Use a different decoding objective
+    - *Contrastive decoding* searches for strings x that maximize $logprob_{largeLM}(x)-logprob_{smallLM}(x)$
+
+### Decoding sampling solutions 
+
+- **Top-k sampling**
+  - Idea: only sample from the top $k$ tokens in the probability distribution
+  - Common values are $k=50$
+  - Increase $k$ yields more **diverse** but **risky** outputs
+  - Decrease $k$ yields more **safe** but **generic** outputs
+- **Top-p (nucleus) sampling**
+  - *Problem*: The probability distributions we sample from are dynamic
+  - When the distribution $p_t$ is flatter, a limited $k$ removes many viable options
+  - When the distribution $p_t$ is peakier, a high $k$ allows for too many options to have a chance of being selected
+  - *Solution*: Top-p sampling
+    - sample from all tokens into the top $p$ cumulative probability mass (i.e., where mass is concentrated)
+    - varies $k$ depending on the uniformity of $p_t$
+- **Typical sampling**
+  - Reweights the score based on the entropy of the distribution
+- **Epsilon sampling**
+  - Set a threshold for lower bounding valid probabilities
+- **Scaling randomness: Temperature**
+  - You can apply a `temperature hyperparameter` $\tau$ to the softmax to rebalance $p_t$:
+    - $P_t(y_t=w)=\frac{exp(S_w/\tau)}{\sum_{w^{'}\in V}exp(S_w^{'}/\tau)}$
+    - Raise the temperature $\tau > 1$: $p_t$ becomes more uniform
+      - More diverse output (probability is spread around vocab)
+    - Lower the temperature $\tau < 1$: $p_t$ becomes more spiky
+      - Less diverse output (probability is concentrated on top words)
+- **Improve Decoding: Re-ranking**
+  - Problem: What if I decode a bad sequence from my model?
+  - Decode a bunch of sequences
+    - 10 candidates is a common number
+  - Define a score to approximate quality of sequences and re-rank by this score
+    - Simplest is to use (low) perplexity
+    - Re-rankers can score a variety of properties
+      - style, discourse, entailment/factuality, logical consistency
+      - Beware poorly-calibrated re-rankers
+    - Can compose multiple re-rankers together
+- **Exposure Bias**
+  - Training with teacher forcing leads to `exposure bias` at generation time 
+  - During training, our model's inputs are gold context tokens from real, human-generated texts
+    - $L_{MLE}=-logP(y_t^*|\{y^*\}_{<t})$
+  - At generation time, our model's inputs are previously-decoded tokens
+    - $L_{dec}=-logP(\hat{y_t}|\{\hat{y}\}_{<t})$
+  - Exposure Bias Solutions
+    - Scheduled sampling
+      - With some probability $p$, decode a token and feed that as the next input, rather than the golden token.
+      - Increase $p$ over the course of training
+      - Leads to improvements in practice, but can lead to strange training objectives
+    - Dataset Aggregation
+      - At various intervals during training, generate sequences from your current model
+      - Add these sequences to your training set as additional examples
+    - Retrieval Augmentation
+      - Learn to retrieve a sequence from an existing corpus of human-written prototypes (e.g., dialogue responses)
+      - Learn to edit the retrieved sequence by adding, removing, and modifying tokens in the prototype
+    - Reinforcement Learning
+      - cast your text generation model as a `Markov decision process`
+
+
+## Lecture 10: Prompting, Instruction Finetuning, and RLHF
+
+### From Language Models to Assistants
+
+- **Zero-Shot/Few-Shot In-Context Learning**
+  - One key emergent ability in [GPT-2](https://d4mucfpksywv.cloudfront.net/better-language-models/language_models_are_unsupervised_multitask_learners.pdf) is `zero-shot learning`: the ability to do many tasks with *no examples*, and *no gradient updates*, by simply:
+    - Specifying the right sequence prediction problem (e.g. question answering)
+    - Comparing probabilities of sequences (e.g. Winograd Schema Challenge)
+- **Instruction Finetuning**
+- **Reinforcement Learning from Human Feedback (RLHF)**
