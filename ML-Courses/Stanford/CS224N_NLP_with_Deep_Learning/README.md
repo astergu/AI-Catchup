@@ -585,6 +585,50 @@ In most Transformer diagrams, these are often written together as `Add & Norm`.
   - Roughly, the cost of training a large transformer scales as **parameters** $\times$ **tokens**
 
 
+
+
+## Lecture 10: Prompting, Instruction Finetuning, and RLHF
+
+### From Language Models to Assistants
+
+- **Zero-Shot/Few-Shot In-Context Learning**
+  - One key emergent ability in [GPT-2](https://d4mucfpksywv.cloudfront.net/better-language-models/language_models_are_unsupervised_multitask_learners.pdf) is `Zero-Shot learning`: the ability to do many tasks with *no examples*, and *no gradient updates*, by simply:
+    - Specifying the right sequence prediction problem (e.g. question answering)
+    - Comparing probabilities of sequences (e.g. Winograd Schema Challenge)
+  - [GPT-3](https://arxiv.org/abs/2005.14165) does `Few-Shot learning`
+    - Specify a task by simply prepending examples of the task before your example
+    - Also called `in-context learning`, *no gradient updates* are performed when learning a new task.
+  - Conclusions: 
+    - No finetuning needed, prompt engineering (e.g. Chain-of-thought) can improve performance
+    - Limits to what you can fit in context
+    - Complex tasks will probably need gradient steps
+- **Instruction Finetuning**
+  - Collect examples of (instruction, output) pairs across many tasks and finetune an LM
+  - Evaluate on unseen tasks
+  - How do we evaluate such a model?
+    - [Massive Multitask Language Understanding](https://arxiv.org/abs/2009.03300)
+    - [BIG-Bench](https://arxiv.org/abs/2206.04615)
+  - Conclusions:
+    - Simple and straightforward, generalize to unseen tasks
+    - Collecting demonstrations for so many tasks is expensive
+    - Mismatch between LM objective and human preferences
+- **Reinforcement Learning from Human Feedback (RLHF)**
+  - For any arbitrary, non-differentiable reward function $R(s)$, we can train our language model to maximize expected reward
+  - Problems:
+    - human-in-the-loop is expensive
+      - Solution: instead of directly asking humans for preferences, model their preferences as a separate (NLP) problem
+  - [InstructGPT](https://arxiv.org/abs/2203.02155)
+  - [ChatGPT](https://openai.com/blog/chatgpt): Instruction Finetuning + RLHF for dialog agents
+  - Conclusions:
+    - Directly model preferences, generalize beyond labeled data
+    - RL is very tricky to get right
+    - Human preferences are fallible, models of human preferences even more so
+
+![InstructGPT](./image/InstructGPT.png)
+
+
+## Lecture 11: Natural Language Generation
+
 ![Natural Language Generation](./image/natural_language_generation.png)
 
 ### How can we use repetition?
@@ -652,15 +696,3 @@ In most Transformer diagrams, these are often written together as `Add & Norm`.
       - Learn to edit the retrieved sequence by adding, removing, and modifying tokens in the prototype
     - Reinforcement Learning
       - cast your text generation model as a `Markov decision process`
-
-
-## Lecture 10: Prompting, Instruction Finetuning, and RLHF
-
-### From Language Models to Assistants
-
-- **Zero-Shot/Few-Shot In-Context Learning**
-  - One key emergent ability in [GPT-2](https://d4mucfpksywv.cloudfront.net/better-language-models/language_models_are_unsupervised_multitask_learners.pdf) is `zero-shot learning`: the ability to do many tasks with *no examples*, and *no gradient updates*, by simply:
-    - Specifying the right sequence prediction problem (e.g. question answering)
-    - Comparing probabilities of sequences (e.g. Winograd Schema Challenge)
-- **Instruction Finetuning**
-- **Reinforcement Learning from Human Feedback (RLHF)**

@@ -18,6 +18,7 @@
   - [Natural Language Processing](#natural-language-processing)
     - [Tutorials](#tutorials)
   - [Recommender Systems](#recommender-systems)
+    - [Ads Recommendation](#ads-recommendation)
   - [Searching](#searching)
   - [Ranking](#ranking)
 - [Alternative Resources](#alternative-resources)
@@ -187,6 +188,8 @@
 - [https://cs231n.github.io/neural-networks-1/](https://cs231n.github.io/neural-networks-1/)
 
 ## Recommender Systems
+
+### Ads Recommendation
 
 
 ## Searching
