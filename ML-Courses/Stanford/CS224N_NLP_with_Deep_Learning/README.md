@@ -629,7 +629,22 @@ In most Transformer diagrams, these are often written together as `Add & Norm`.
 
 ## Lecture 11: Natural Language Generation
 
+NLP = Natural Language Understanding (NLU) + Natural Language Generation (NLG)
+
+- Categorization of NLG tasks
+  - Open-ended generation: the output distribution still has high freedom.
+  - Non-open-ended generation: the input mostly determines the output generation.
+- One way of formalizing categorization this is by `entropy`. 
+- For non-open-ended tasks (e.g. MT), we typically use a `encoder-decoder` system, where this autoregressive model serves as the decoder, and we'd have another bidirectional encoder for encoding the inputs.
+- For open-ended tasks (e.g. story generation), this autoregressive generation model is often the only component.
+
 ![Natural Language Generation](./image/natural_language_generation.png)
+
+
+### Decoding from NLG models
+
+- Decoding: what is it all about?
+  - At each time step $t$, our model computes a vector of scores for each token in our vocabulary, $S\in\mathbb{R}^V$: $S=f({y_{<t}})$, in which $f(.)$ is your model.
 
 ### How can we use repetition?
 
