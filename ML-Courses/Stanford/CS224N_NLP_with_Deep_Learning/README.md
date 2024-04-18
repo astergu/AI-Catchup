@@ -61,6 +61,60 @@ Lecture | Topics | Course Materials | Assignments |
 
 <br>
 
+- [CS224N: Natural Language Processing with Deep Learning](#cs224n-natural-language-processing-with-deep-learning)
+  - [Lecture 1: Introduction and Word Vectors](#lecture-1-introduction-and-word-vectors)
+    - [Representating words by their context](#representating-words-by-their-context)
+  - [Word Vectors](#word-vectors)
+  - [Word2vec](#word2vec)
+    - [Idea](#idea)
+  - [Lecture 2: Word Vectors, Word Senses, and Neural Network Classifiers](#lecture-2-word-vectors-word-senses-and-neural-network-classifiers)
+  - [Lecture 3: Backpropagation](#lecture-3-backpropagation)
+  - [Lecture 4: Syntactic Structure and Dependency Parsing](#lecture-4-syntactic-structure-and-dependency-parsing)
+    - [Dependency Parsing](#dependency-parsing)
+    - [Methods of Dependency Parsing](#methods-of-dependency-parsing)
+    - [Dependency Parsing Evaluations](#dependency-parsing-evaluations)
+    - [A neural dependency parse \[Chen and Manning 2014\]](#a-neural-dependency-parse-chen-and-manning-2014)
+  - [Lecture 5: Language Models and Recurrent Neural Networks](#lecture-5-language-models-and-recurrent-neural-networks)
+    - [Language Modeling](#language-modeling)
+      - [N-gram Language Models](#n-gram-language-models)
+      - [Recurrent Neural Networks (RNN)](#recurrent-neural-networks-rnn)
+      - [Evaluating Language Models](#evaluating-language-models)
+      - [Problems with RNNs](#problems-with-rnns)
+      - [Other RNN uses](#other-rnn-uses)
+      - [RNN Extensions](#rnn-extensions)
+  - [Lecture 6: LSTM RNNs and Neural Machine Translation](#lecture-6-lstm-rnns-and-neural-machine-translation)
+      - [Long Short-Term Memory RNNs (LSTMs)](#long-short-term-memory-rnns-lstms)
+      - [Bidirectional and Multi-layer RNNs](#bidirectional-and-multi-layer-rnns)
+      - [Multi-layer RNNs](#multi-layer-rnns)
+      - [Machine Translation](#machine-translation)
+  - [Lecture 7: NMT and Final Projects, Practical Tips](#lecture-7-nmt-and-final-projects-practical-tips)
+    - [Multi-layer deep encoder-decoder machine translation](#multi-layer-deep-encoder-decoder-machine-translation)
+    - [Attention: solve the bottleneck problem](#attention-solve-the-bottleneck-problem)
+      - [Attention Variants](#attention-variants)
+    - [Final Project](#final-project)
+    - [Project Proposal](#project-proposal)
+  - [Lecture 8: Self-Attention and Transformers](#lecture-8-self-attention-and-transformers)
+    - [Issues with recurrent models](#issues-with-recurrent-models)
+    - [How about attention?](#how-about-attention)
+    - [Self-Attention](#self-attention)
+      - [Idea](#idea-1)
+      - [Barriers and Solutions](#barriers-and-solutions)
+    - [The Transformer Model](#the-transformer-model)
+      - [Scaled Dot Product](#scaled-dot-product)
+      - [The Transformer Decoder](#the-transformer-decoder)
+      - [What would we like to fix about the Transformer?](#what-would-we-like-to-fix-about-the-transformer)
+  - [Lecture 9: Pretraining](#lecture-9-pretraining)
+  - [Lecture 10: Prompting, Instruction Finetuning, and RLHF](#lecture-10-prompting-instruction-finetuning-and-rlhf)
+    - [From Language Models to Assistants](#from-language-models-to-assistants)
+  - [Lecture 11: Natural Language Generation](#lecture-11-natural-language-generation)
+    - [Decoding from NLG models](#decoding-from-nlg-models)
+      - [How can we reduce repetition?](#how-can-we-reduce-repetition)
+      - [Decoding sampling solutions](#decoding-sampling-solutions)
+    - [Training NLG Models](#training-nlg-models)
+    - [Evaluating NLG Systems](#evaluating-nlg-systems)
+  - [Lecture 12: Question Answering](#lecture-12-question-answering)
+
+
 ## Lecture 1: Introduction and Word Vectors
 
 ### Representating words by their context
@@ -645,8 +699,18 @@ NLP = Natural Language Understanding (NLU) + Natural Language Generation (NLG)
 
 - Decoding: what is it all about?
   - At each time step $t$, our model computes a vector of scores for each token in our vocabulary, $S\in\mathbb{R}^V$: $S=f({y_{<t}})$, in which $f(.)$ is your model.
+  - Then, we compute a probability distribution $P$ over these scores with a softmax function: $P(y_t=w|\{y_{<t}\})=\frac{exp(S_w)}{\sum_{w'\in V}exp(S_{w'})}$
+  - Our decoding algorithm defines a function to select a token from this distribution: $\hat{y}_t=g(P(y_t|\{y_{<t}\}))$
+- How to find the most likely string?
+  - Greedy Decoding
+    - selects the highest probability token in $P(y_t|y_{<t})$
+  - Beam Search
+    - aims to find strings that maximize the log-prob, but with wider exploration of candidates
+  - The most likely string is repetitive for open-ended generation
+    - a self-amplification problem
+    - scale doesn't solve this problem
 
-### How can we use repetition?
+#### How can we reduce repetition?
 
 - Simple Option
   - Heuristic: Don't repeat n-grams
@@ -657,7 +721,7 @@ NLP = Natural Language Understanding (NLU) + Natural Language Generation (NLG)
   - Use a different decoding objective
     - *Contrastive decoding* searches for strings x that maximize $logprob_{largeLM}(x)-logprob_{smallLM}(x)$
 
-### Decoding sampling solutions 
+#### Decoding sampling solutions 
 
 - **Top-k sampling**
   - Idea: only sample from the top $k$ tokens in the probability distribution
@@ -665,9 +729,9 @@ NLP = Natural Language Understanding (NLU) + Natural Language Generation (NLG)
   - Increase $k$ yields more **diverse** but **risky** outputs
   - Decrease $k$ yields more **safe** but **generic** outputs
 - **Top-p (nucleus) sampling**
-  - *Problem*: The probability distributions we sample from are dynamic
-  - When the distribution $p_t$ is flatter, a limited $k$ removes many viable options
-  - When the distribution $p_t$ is peakier, a high $k$ allows for too many options to have a chance of being selected
+  - *Problem of Top k sampling*: The probability distributions we sample from are dynamic
+    - When the distribution $p_t$ is flatter, a limited $k$ removes many viable options
+    - When the distribution $p_t$ is peakier, a high $k$ allows for too many options to have a chance of being selected
   - *Solution*: Top-p sampling
     - sample from all tokens into the top $p$ cumulative probability mass (i.e., where mass is concentrated)
     - varies $k$ depending on the uniformity of $p_t$
@@ -692,6 +756,9 @@ NLP = Natural Language Understanding (NLU) + Natural Language Generation (NLG)
       - style, discourse, entailment/factuality, logical consistency
       - Beware poorly-calibrated re-rankers
     - Can compose multiple re-rankers together
+
+### Training NLG Models
+
 - **Exposure Bias**
   - Training with teacher forcing leads to `exposure bias` at generation time 
   - During training, our model's inputs are gold context tokens from real, human-generated texts
@@ -711,3 +778,51 @@ NLP = Natural Language Understanding (NLU) + Natural Language Generation (NLG)
       - Learn to edit the retrieved sequence by adding, removing, and modifying tokens in the prototype
     - Reinforcement Learning
       - cast your text generation model as a `Markov decision process`
+
+### Evaluating NLG Systems
+
+- Types of evaluation methods for text generation
+  - Content Overlap Metrics
+    - Compute a score the indicates the lexical similarity between generated and gold-standard (human-written) text
+    - Fast and efficient and widely used
+    - N-gram overlap metrics (e.g. BLEU, ROUGE, METEOR, CIDEr, etc.)
+      - They're not ideal for machine translation
+      - They get progressively much worse for tasks that are more open-ended than machine translation
+      - n-gram overlap metrics have no ceoncept of semantic relatedness
+  - Model-based Metrics
+    - Use learned representations of words and sentences to compute semantic similarity between generated and references texts
+    - Word Distance functions
+      - Vector Similarity
+      - Word Mover's Distance
+      - BertScore
+      - Sentence Movers Similarity
+      - BLEURT
+    - Evaluating Open-ended Text Generation
+      - MAUVE
+        - MAUVE computes information divergence in a quantized embedding space, between the generated text and the gold reference text
+  - Human Evaluations
+    - Ask humans to evaluate the quality of generated text
+    - Human judgments are regarded as the `gold standard`
+    - But humans are inconsistent
+
+## Lecture 12: Question Answering
+
+- What is question answering?
+  - to build systems that automatically answer questions posed by humans in a natural language
+  - Types
+    - Information source
+      - a text passage, all Web documents, knowledge bases, tables, images
+    - Question type
+      - Factoid vs. non-factoid, open-domain vs. closed-domain, simple vs. compositional, ...
+    - Answer type
+      - A short segment of text, a paragraph, a list, yes/no
+  - Almost all the state-of-the-art question answering systems are built on top of end-to-end training and pre-trained language models (e.g., BERT)
+- Reading comprehension
+  - Definition
+    - comprehend a passage of text and answer questions about its content (P, Q) $\rightarrow$ A
+    - reading comprehension is an important testbed for evaluating how well computer systems understand human language
+    - Many other NLP tasks can be reduced to a reading comprehension problem
+- Open-doman (textual) question answering, e.g., information extraction, semantic role labeling
+
+
+![IBM Watson](./image/ibm_watson.png)
