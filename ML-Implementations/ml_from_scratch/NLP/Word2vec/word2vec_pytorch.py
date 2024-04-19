@@ -76,8 +76,7 @@ class NegativeSamplingLoss(nn.Module):
         return loss
 
 # Training function
-def train_word2vec_model(text, embedding_dim, num_negative_samples, num_epochs, batch_size, learning_rate):
-    dataset = TextDataset(text)
+def train_word2vec_model(dataset, embedding_dim, num_negative_samples, num_epochs, batch_size, learning_rate):
     dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
     model = SkipGram(dataset.vocab_size, embedding_dim)
     criterion = NegativeSamplingLoss(dataset.vocab_size, num_negative_samples)
@@ -121,14 +120,11 @@ print(word2idx)
 similar_words = test_word2vec_model(model, word2idx, idx2word, word="language")
 print("Words similar to 'language':", similar_words)
 
-
-# Use Bigger dataset as test data
+"""
 # Load the hate speech dataset
 dataset = load_dataset("tweets_hate_speech_detection")
-
 # Display dataset information
 print(dataset)
-
 # Access the train split
 train_data = dataset["train"]
 
@@ -140,7 +136,13 @@ print(train_data[0])
 # Use the text from the dataset as test data for Word2Vec
 # Assuming you concatenate all the tweets into one long string
 tweets_text = " ".join(train_data["tweet"])
-model, word2idx, idx2word = train_word2vec_model(tweets_text, embedding_dim, num_negative_samples, num_epochs, batch_size, learning_rate)
+dataset = TextDataset(text)
+"""
+
+import torchtext
+
+text_dataset = torchtext.datasets.WikiText2(root="./data")
+model, word2idx, idx2word = train_word2vec_model(text_dataset, embedding_dim, num_negative_samples, num_epochs, batch_size, learning_rate)
 print(word2idx)
 similar_words = test_word2vec_model(model, word2idx, idx2word, word="father")
 print("Words similar to 'father':", similar_words)
