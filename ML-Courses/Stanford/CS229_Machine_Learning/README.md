@@ -2,10 +2,10 @@
 
 [[Course Homepage]](https://cs229.stanford.edu/) [[Youtube Playlist]](https://www.youtube.com/playlist?list=PLoROMvodv4rMiGQp3WXShtMGgzqpfVfbU)
 
-| Lecture | Topics | Course Materials | Assignments | Implementation
+| Lecture | Topics | Optional Materials | Assignments | Implementation
 | ---- | ---- | ---- | ---- | ---- |
 | Lecture 1 | [Introduction](https://www.youtube.com/watch?v=jGwO_UgTS7I&list=PLoROMvodv4rMiGQp3WXShtMGgzqpfVfbU&index=2) | |  | |
-| Lecture 2 | [Linear Regression and Gradient Descent](https://www.youtube.com/watch?v=4b4MUYve_U8&list=PLoROMvodv4rMiGQp3WXShtMGgzqpfVfbU&index=2) | | | - [Linear Regression](../../../ML-Implementations/ml_from_scratch/supervised_learning/regression.py) <br> - [Linear Regression [torch version]](../../../ML-Implementations/pytorch/supervised_learning/regression.py) |
+| Lecture 2 | [Linear Regression and Gradient Descent](https://www.youtube.com/watch?v=4b4MUYve_U8&list=PLoROMvodv4rMiGQp3WXShtMGgzqpfVfbU&index=2) | - [Perform linear regression with python and scikit](https://github.com/christianversloot/machine-learning-articles/blob/main/performing-linear-regression-with-python-and-scikit-learn.md) | | - [Linear Regression](../../../ML-Implementations/ml_from_scratch/supervised_learning/regression.py) <br> - [Linear Regression [torch version]](../../../ML-Implementations/pytorch/supervised_learning/regression.py) |
 | Lecture 3 | [Locally Weighted & Logistic Regression](https://www.youtube.com/watch?v=het9HFqo1TQ&list=PLoROMvodv4rMiGQp3WXShtMGgzqpfVfbU&index=3) | | | |
 
 ## Lecture 1

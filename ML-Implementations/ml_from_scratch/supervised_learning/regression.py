@@ -20,6 +20,8 @@ class Regression(object):
         pass
 
     def fit(self, X, y):
+        """ Train on training dataset """
+        # add bias X_0 = 1
         X = np.insert(X, 0, 1, axis=1)
         self.initialize_weights(n_features=X.shape[1])
         self.training_errors = []
