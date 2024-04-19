@@ -1,4 +1,8 @@
 import numpy as np
+import math
+from sklearn.model_selection import train_test_split
+from sklearn.datasets import make_regression
+import matplotlib.pyplot as plt
 
 class Regression(object):
     """ 
@@ -17,7 +21,8 @@ class Regression(object):
 
     def initialize_weights(self, n_features):
         """ Initialize weights randomly """
-        pass
+        limit = 1 / math.sqrt(n_features)
+        self.w = np.random.uniform(-limit, limit, (n_features, ))
 
     def fit(self, X, y):
         """ Train on training dataset """
@@ -67,3 +72,23 @@ class LinearRegression(Regression):
             self.w = x_sq_reg_inv.dot(X.T).dot(y)
         else:
             super(LinearRegression, self).fit(X, y)
+
+def test_linear_regression():
+    X, y = make_regression(n_samples=100, n_features=1, noise=20)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4)
+    n_samples, n_features = np.shape(X)
+
+    model = LinearRegression(n_iterations=100)
+    model.fit(X_train, y_train)
+    
+    # Training error plot
+    n = len(model.training_errors)
+    training, = plt.plot(range(n), model.training_errors, label="Training Error")
+    plt.legend(handles=[training])
+    plt.title("Error Plot")
+    plt.ylabel("Mean Squared Error")
+    plt.xlabel("Iterations")
+    plt.show()
+
+if __name__ == '__main__':
+    test_linear_regression()

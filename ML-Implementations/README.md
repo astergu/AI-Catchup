@@ -197,4 +197,6 @@
 
 # Alternative Resources
 
+- [ML from scratch](https://github.com/eriklindernoren/ML-From-Scratch)
+- [minGPT](https://github.com/karpathy/minGPT)
 - [annotated deep learning paper implementations](https://github.com/labmlai/annotated_deep_learning_paper_implementations)
