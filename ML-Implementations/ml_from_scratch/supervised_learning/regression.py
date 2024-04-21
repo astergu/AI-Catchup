@@ -35,7 +35,7 @@ class Regression(object):
             y_pred = X.dot(self.w)
             mse = np.mean(0.5 * (y - y_pred)**2 + self.regularization(self.w))
             self.training_errors.append(mse)
-            grad_w = -(y - y_pred).dot(X) + self.regularization.grad(self.w)
+            grad_w = (y_pred - y).dot(X) + self.regularization.grad(self.w)
             self.w -= self.learning_rate * grad_w
 
     def predict(self, X):
