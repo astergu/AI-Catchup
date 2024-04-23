@@ -113,6 +113,7 @@ Lecture | Topics | Course Materials | Assignments |
     - [Training NLG Models](#training-nlg-models)
     - [Evaluating NLG Systems](#evaluating-nlg-systems)
   - [Lecture 12: Question Answering](#lecture-12-question-answering)
+  - [Lecture 13: Coreference Resolution](#lecture-13-coreference-resolution)
 
 
 ## Lecture 1: Introduction and Word Vectors
@@ -826,3 +827,74 @@ NLP = Natural Language Understanding (NLU) + Natural Language Generation (NLG)
 
 
 ![IBM Watson](./image/ibm_watson.png)
+
+- Stanford question answering dataset (SQuAD)
+  - 100k annotated (passage, question, answer) triples
+  - Passages are selected from English Wikipedia, usually 100~150 words
+  - Questions are crowd-sourced
+  - Evaluation: `exact match` (0 or 1), `F1` (partial credit)
+- Neural models for reading comprehension
+  - Problem formulation
+    - Input: $C=(c_1,c_2,...,C_N)$, $Q=(q_1,q_2,...,q_M)$, $c_i,q_i \in V$
+    - Output: $1 \leq start \leq end \leq N$
+  - Models
+    - A family of LSTM-based models with attention (2016-2018)
+    - Fine-tuning BERT-like models for reading comprehension (2019+) 
+    - Modeling
+      - We don't need an autoregressive decoder to generate the target sentence word-by-word. Instead, we just need to train two classifiers to predict the start and end positions of the answer.
+    - BiDAF: Bidirectional Attention Flow model (2017)
+      - **Encoding**: character embed layer, word embed layer, phrase embed layer
+        - Use a concatenation of word embedding (GloVe) and character embedding (CNNs over character embeddings) for each word in context and query.
+        - Then, use two bidirectional LSTMs separately to produce contextual embeddings for both context and query.
+      - **Attention**
+        - `context-to-query attention`: for each context word, choose the most relevant words from the query words
+        - `query-to-context attention`: choose the context words that are most relevant to one of query words
+
+
+## Lecture 13: Coreference Resolution
+
+- What is Coference Resolution?
+  - Identify all mentions that refer to the same entity in the world
+  - Applications
+    - Full text understanding
+    - Machine translation
+    - Dialogue systems
+  - Traditional solutions
+    - Detect the mentions (easy)
+      - Three kinds of mentions
+        - Pronouns: I, your, it she, him, etc. Use a `part-of-speech tagger`
+        - Named entities: People, places, etc. Use a `Named Entity Recognition system`
+        - Noun phrases: a dog, the big fluffy cat. Use a `parser`
+      - How to deal with these bad mentions?
+        - Could train a classifier to filter out spurious mentions
+        - Much more common: keep all mentions as "candidate mentions"
+          - After your coreference system is done running discard all singleton mentions (i.e., ones that have not been marked as corefernce with anything else)
+      - Avoiding a traditional pipeline system
+        - We could instead train a classifier specifically for mention detection instead of using a POS tagger, NER system, and parser.
+        - Or we can not even try do do mention detection explicitly
+          - We can build a model that begins with all spans and jointly does mention-detection and coreference resolution end-to-end in one model
+    - Cluster the mentions (hard)
+- `Coreference` is when two mentions refer to the same entity in the world
+  - A different-but-related linguistic concept is `anaphora`: when a term (anaphor) refers to another term (antecedent)
+- Four Kinds of Coreference Models
+  - Rule-based (pronominal anaphora resolution)
+    - Hobbs' naive algorithm
+    - Knowledge-based pronominal Coreference
+      - Winograd Schema
+  - Mention Pair
+    - Train a binary classifier that assigns every pair of mentions a probability of being coreferent: $p(m_i, m_j)$
+    - Just train with regular cross-entropy loss
+      - $J=-\sum_{i=2}^N\sum_{j=1}^i y_{ij}logp(m_j,m_i)$
+    - Pick some threshold and add **coreference links** between mention pairs where $p(m_i,m_j)$ is above the threshold
+    - Take the transitive closure to get the clustering
+  - Mention Ranking
+    - End-to-end Neural Coref model
+      - Kenton Lee et al. from UW (EMNLP 2017)
+      - Improvements over simple feed-forward NN
+        - use an LSTM
+        - use attention
+        - do mention detection and coreference end-to-end
+    - BERT-based coref: Now has the best results
+      - SpanBERT
+      - BERT-QA
+  - Clustering
