@@ -25,6 +25,11 @@ In this seminar, we examine the details of how Transformers work, and dive deep 
 
 > Since [V2 page](https://web.stanford.edu/class/cs25/prev_years/2023_winter/index.html) has the most detailed schedule and corresponding course materials, I will update the lecture notes mainly according to the V2 page.<br>
 > Lecture notes are taken regarding [V1/V2/V3 video playlist](https://www.youtube.com/playlist?list=PLoROMvodv4rNiJRchCzutFw5ItR_Z27CM). <br><br>
+
+> [!IMPORTANT]
+> Since April 23, 2024, the first V4 video has been uploaded! We will take notes for V4 videos if they keep uploading new ones!
+
+ 
 > Version representations:
 > - :white_check_mark:  V1
 > - :large_blue_circle:  V2
@@ -33,4 +38,42 @@ In this seminar, we examine the details of how Transformers work, and dive deep 
 
 | Lecture | Course Materials | Key Takeaways |
 | ---- | ---- | ---- |
-| :white_check_mark: [DL Models that have revolutionized NLP,CV,RL](https://www.youtube.com/watch?v=P127jhj-8-Y&list=PLoROMvodv4rNiJRchCzutFw5ItR_Z27CM&index=1&t=29s) | Slides: <br> :red_circle: [Overview of Transformers](./slides/week1/CS25%20V4%20Lecture%201%20(Spring%202024).pdf) | |
+| :red_circle: [Overview of Transformers](https://www.youtube.com/watch?v=fKMB5UlVY1E) | Slides: <br> :red_circle: [Overview of Transformers](./slides/week1/CS25%20V4%20Lecture%201%20(Spring%202024).pdf) | [[Detailed Notes]](#lecture-1-overview-of-transformers) |
+| :red_circle: []() | :red_circle: [Intuitions on Language Models](./slides/week2/2024%20stanford%20cs25%20guest%20lecture%20jason%20wei.pdf) <br> :red_circle: [Shaping the Future of AI from the History of Transformer](./slides/week2/Stanford_CS_25.pdf)  | |
+
+### Lecture 1: Overview of Transformers
+ 
+- Recent Trends of and Remaining Weakness of LLMs
+  - BabyLM: Children vs. LLMs
+    - Require large amounts of data, compute and cost
+  - Minified LLMs and On-Device LLMs
+    - AutoGPT and ChatGPT plugins
+    - smaller open-source models (e.g., LLaMA, Mistral)
+  - Memory Augmentation & Personalization
+    - Weakness of LLMs is that they are frozen in knowledge at a particular point  in time, and don't augment knowledge "on the fly"
+    - Potential approaches
+      - Memory bank
+      - Prefix-tuning approaches
+      - Some prompt-based approach
+      - RAG (retrieval-augmented generation)
+  - Pretraining Data Synthesis & Selection
+    - Example: Microsoft Phi models ("Textbooks Are All You Need")
+    - Microsoft Phi-2: 2.7 billion-parameter model
+  - New Knowledge or "Memorizing"?
+  - Continual Learning
+    - AKA, infinite and permanent fundamental self-improvement
+  - Interpretability of LLMs
+  - Model Modularity + Mixture of Experts (MoE)
+  - Self-Improvement/Self-Reflection
+  - Hallucination Problem
+- Chain-of-thought (CoT)
+  - Series of intermediate reasoning steps
+  - Currently, CoT works effectively for models of approx. 100B params or more
+  - Tree of Thoughts
+    - consider multiple different reasoning paths and self-evaluating choices to decide the next course of action
+  -  Socrative Questioning
+     -  Divide-and-conquer fashing algorithm that simulates the self-questioning and recursive thinking process
+-  From Language Models to AI Agents
+
+### Lecture 2
+
