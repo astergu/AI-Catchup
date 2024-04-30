@@ -74,6 +74,8 @@ In this seminar, we examine the details of how Transformers work, and dive deep 
   -  Socrative Questioning
      -  Divide-and-conquer fashing algorithm that simulates the self-questioning and recursive thinking process
 -  From Language Models to AI Agents
+   - Allows to "focus attention" on particular aspects of the input text
+   - Attention weights are computed (dot product of the query, key and value matrix), then a softmax function is applied to the dot product $attention(Q,K,V)=softmax(\frac{QK^{\intercal}}{\sqrt{d_k}})V$ 
 
 ### Lecture 2
 
