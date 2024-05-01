@@ -68,7 +68,25 @@
       - This implies that $y^{(i)}|x^{(i)};\theta \sim \mathcal{N}(\theta^{\intercal}x^{(i)}, \sigma^2)$
       - Likelihood of $\theta$: $L(\theta)=P(\vec{y}|x;\theta)=\prod_{i=1}^m P(y^{(i)}|x^{(i)};\theta)$
       - Log likelihood $l(\theta)=logL(\theta)=mlog\frac{1}{\sqrt{2\pi}\sigma}+\sum_{i=1}^m -\frac{(y^{(i)}-\theta^{\intercal}x^{(i)})^2}{2\sigma^2}$
-      - Maximum Likelihood Estimation (MLE): Choose $\theta$ to maximize $l(\theta)$, which is exactly least squa
-      - red error
-- Logistic Regression 
+      - Maximum Likelihood Estimation (MLE): Choose $\theta$ to maximize $l(\theta)$, which is exactly least squared error
+- Logistic Regression
+  - The most commonly used classification algorithm 
+  - One special case of generalized linear models
+  - Want $h_{\theta}(x)\in [0,1]$
+  - Define "sigmoid" (logistic) function $g(z)=\frac{1}{1+e{-z}}$
+  - Thus $h_{\theta}(x)=g(\theta^{\intercal}x)=\frac{1}{1+e^{-\theta^{\intercal}x}}$
+  - Since $y\in {0, 1}$, $p(y|x;\theta)=h(x)^y (1-h(x))^{1-y}$
+  - Likelihood of parameters $L(\theta)=p(\vec{y}|x;\theta)=\prod_{i=1}^m h_{\theta}(x^{(i)})^{y^{(i)}}(1-h_{\theta}(x^{(i)}))^{1-y^{(i)}}$
+  - Log likelihood $l(\theta)=log(L(\theta))=\sum_{i=1}^m y^{(i)}logh_{\theta}(x^{(i)})+(1-y^{(i)})log(1-h_{\theta}(x^{(i)}))$
+  - Goal: Choose $\theta$ t0 maximize $l(\theta)$
+  - Use Batch Gradient Ascent to maximize $l(\theta)$
+    - $\theta_j\colonequals \theta_j+\alpha\frac{\partial}{\partial \theta_j}l(\theta)=\theta_j+\alpha\sum_{i=1}^m (y^{(i)}-h_{\theta}(x^{(i)}))x_j^{(i)}$
+    - $l(\theta)$ has only one global maximum
+    - Exactly the same as linear regression
 - Newton's method
+  - Say you have function $f$, you want to find $\theta, s.t.f(\theta)=0$
+  - Update $\theta^{(t+1)}\colonequals \theta^{(t)}-\frac{f(\theta^{(t)})}{f'(\theta^{(t)})}$
+
+
+## Lecture 4: Perceptron & Generalized Linear Model
+
