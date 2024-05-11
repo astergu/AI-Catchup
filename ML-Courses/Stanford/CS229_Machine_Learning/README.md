@@ -88,5 +88,9 @@
   - Update $\theta^{(t+1)}\colonequals \theta^{(t)}-\frac{f(\theta^{(t)})}{f'(\theta^{(t)})}$
 
 
-## Lecture 4: Perceptron & Generalized Linear Model
+## Lecture 4: Perceptron & Generalized Linear Models
 
+- Perceptron
+  - Use function $g(z)=1$ if $z \geq 0$, $g(z)=0$ if $z < 0$
+- Exponential Family
+- Generalized Linear Models
