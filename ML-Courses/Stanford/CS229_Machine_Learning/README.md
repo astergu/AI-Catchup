@@ -78,7 +78,7 @@
   - Since $y\in {0, 1}$, $p(y|x;\theta)=h(x)^y (1-h(x))^{1-y}$
   - Likelihood of parameters $L(\theta)=p(\vec{y}|x;\theta)=\prod_{i=1}^m h_{\theta}(x^{(i)})^{y^{(i)}}(1-h_{\theta}(x^{(i)}))^{1-y^{(i)}}$
   - Log likelihood $l(\theta)=log(L(\theta))=\sum_{i=1}^m y^{(i)}logh_{\theta}(x^{(i)})+(1-y^{(i)})log(1-h_{\theta}(x^{(i)}))$
-  - Goal: Choose $\theta$ t0 maximize $l(\theta)$
+  - Goal: Choose $\theta$ to maximize $l(\theta)$
   - Use Batch Gradient Ascent to maximize $l(\theta)$
     - $\theta_j\colonequals \theta_j+\alpha\frac{\partial}{\partial \theta_j}l(\theta)=\theta_j+\alpha\sum_{i=1}^m (y^{(i)}-h_{\theta}(x^{(i)}))x_j^{(i)}$
     - $l(\theta)$ has only one global maximum
@@ -92,5 +92,6 @@
 
 - Perceptron
   - Use function $g(z)=1$ if $z \geq 0$, $g(z)=0$ if $z < 0$
-- Exponential Family
+  - Update rule for Perceptron and Logistic Regression is the same: $\theta_j \colonequals \theta_j + \alpha(y^{(i)}-h_{\theta}(x)^{(i)})x_j^{(i)}$
+- Exponential Familiy
 - Generalized Linear Models

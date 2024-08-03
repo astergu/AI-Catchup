@@ -6,7 +6,9 @@
   - [Lecture 2: 提示工程\&AI代理人](#lecture-2-提示工程ai代理人)
   - [Lecture 3: 生成策略\&从专才到通才](#lecture-3-生成策略从专才到通才)
   - [Lecture 4 \& 5: 深度学习\&Transformer](#lecture-4--5-深度学习transformer)
-  - [Lecture 6](#lecture-6)
+  - [Lecture 6: 评估生成式AI \& 道德议题](#lecture-6-评估生成式ai--道德议题)
+  - [Lecture 7：Transformer \& 生成式AI的可解释性](#lecture-7transformer--生成式ai的可解释性)
+  - [Lecture 8: 评估生成式AI \& 道德议题](#lecture-8-评估生成式ai--道德议题)
 - [References](#references)
 
 
@@ -26,13 +28,13 @@
 
 | Date | Topic | Slides |  Extra Materials | Presentation | Homework |
 | -------- | ------- | -------- | ------- | -------- | -------- |
-| 02/23 | **课程概述** <br> [[课程说明]](https://youtu.be/AVIKFXLCPY8) <br> [[课程规则]](https://youtu.be/vCxyd_S4R24)  <br> [[第1讲：生成式AI是什么？]](https://youtu.be/JGtqpQXfJis) |  1. [课程内容说明](./slides/01/0223_course.pdf) <br> 2. [什么是生成式人工智能？](./slides/01/0223_universal.pdf) <br> 3. [今日的生成式人工智能厉害在哪里](./slides/01/0223_intro_gai.pdf) | [80分钟快速了解大型语言模型](https://youtu.be/wG8-IUtqu-s?si=-YWWLqbeX7wiRQ4M) <br> [[slide]](./slides/01/LLM_80min%20(v5).pdf) |  | 真假难辨的世界 :white_check_mark: <br> [[video]](https://www.youtube.com/watch?v=QOrtPUxaIG8) [[pdf]](./assignments/HW1/GenAI%20HW1%20slides.pdf) |
-| 03/01 | **提示工程&AI代理人** <br> [[第2讲：今日的生成式人工智能厉害在哪里？]](https://youtu.be/glBhOQ1_RkE) <br> [[第3讲：训练不了人工智能吗？你可以训练你自己（上）]](https://youtu.be/A3Yx35KrSN0) | 1. [今日的生成式人工智能](./slides/02/0301_universal.pdf) <br> 2. [prompt engineering](./slides/02/0301_prompt_part1.pdf) | [Prompt Engineering Guide](https://www.promptingguide.ai/) | | 都是AI的作文比赛 :white_check_mark: <br> [[video]](https://www.youtube.com/watch?v=MLvfqvEuINk) [[pdf]](./assignments/HW2/GenAI2024%20HW2.pdf) | 
-| 03/08 | **生成策略&从专才到通才** <br> [[第4讲：训练不了人工智能？你可以训练你自己（中）]](https://youtu.be/lwe3_x50_uw) | [prompt part 2](./slides/03/0308_prompt_part2.pdf) | [语言模型如何学习使用工具](https://youtu.be/ZID220t_MpI) <br> [[pdf]](./slides/03/NewBing%20(v4).pdf) | | 以AI搭建自己的应用 :heavy_exclamation_mark: <br> [[video]](https://youtu.be/mQb5Zbbm_T8?si=8M8YOuV7QY1vojig) [[pdf]](./assignments/HW3/GenAI_HW3.pdf) [[code]](https://colab.research.google.com/drive/15jh4v_TBPsTyIBhi0Fz46gEkjvhzGaBR?usp=sharing) | 
-| 03/22 | 深度学习&Transformer <br> [[第5讲：训练不了人工智能？你可以训练你自己（下）]](https://www.youtube.com/watch?v=inebiWdQW-4) <br> [[第6讲：大型语言模型修炼史-第一阶段：自我学习，累积实力]]() | 1. [prompt part 3](./slides/04/prompt_part3.pdf) <br> 2. [LLM training part 1](./slides/04/0322_LLMtraining_part1.pdf) <br> 3. [LLM training part 2](./slides/04/0322_LLMtraining_part2.pdf) | 1. [让AI村民组成虚拟村庄会发生什么事](https://youtu.be/G44Lkj7XDsA) <br> 2. [为什么神经网络可以正确地分辨宝可梦和数码宝贝呢？](https://youtu.be/WQY85vaQfTI) |  | 成为AI催眠大师 :heavy_exclamation_mark: <br> [[video]](https://youtu.be/igCtvqfZhms?si=e9HL_ZJKsWJD4r1i) [[pdf]](./assignments/HW4/GenAI_HW_4.pdf) [[code]](https://colab.research.google.com/drive/16JzVN_Mu4mJfyHQpQEuDx1q6jI-cAnEl?hl=zh-tw#scrollTo=dk-L0dvg9Q-y&uniqifier=1) |
-| 03/29 | 深度学习&Transformer <br> [[第7讲：大型语言模型修炼史-第二阶段：名师指点，发挥潜力]](https://youtu.be/Q9cNkUPXUB8)  | [LLM training part 2](./slides/05/LLMtraining_part2%20(v5).pdf) | [Llama 2: Open Foundation and Fine-Tuned Chat Models](https://arxiv.org/abs/2307.09288) | NVIDIA团队演讲 | 训练自己的语言模型 :bangbang: <br> [[video]](https://www.youtube.com/watch?v=yAsmr10xrog) [[pdf]](./assignments/HW5/GenAI_hw5.pdf) [[code]](https://colab.research.google.com/drive/1nB3jwRJVKXSDDNO-pbURrao0N2MpqHl8?usp=sharing) |
-| 04/12 | 评估生成式AI&道德议题 <br> [第8讲：大型语言模型修炼史——第三阶段：参与实战，打磨技巧](https://youtu.be/v12IKvF6Cj8) <br> [第9讲：以大型语言模型打造的AI Agent](https://youtu.be/bJZTJ7MjYqg) | 1. [LLM training part 3](./slides/06/0412_LLMtraining_part3.pdf) <br> 2. [agent](./slides/06/0412_agent.pdf) | [The Rise and Potential of Large Language Model Based Agents: A Survey](https://arxiv.org/abs/2309.07864) | | AI透过人类的回馈学习 :heavy_exclamation_mark: | 
-| 05/03 | Transformer & 生成式AI的可解释性 <br> [第10讲：今日的语言模型是如何做文字接龙的——浅谈Transformer](https://youtu.be/uhNsUCb2fJI) <br> [第11讲：大型语言模型在想什么呢？——浅谈大型语言模型的可解释性](https://youtu.be/rZzfqkfZhY8) | 1. [explain](./slides/07/0503_explain.pdf) 2. [transformer](./slides/07/0503_transformer.pdf) | 1. [Transformer(上)](https://youtu.be/n9TlOhRjYoc) <br> 2. [Transformer(下)](https://youtu.be/N6aRv06iv2g) <br> 3. [用语言模型来解释语言模型（上）](https://youtu.be/GBXm30qRAqg) <br> 4. [用语言模型来解释语言模型（下）](https://youtu.be/OOvhBIIHITE)  |  | |
+| 02/23 | **课程概述** <br> [[课程说明]](https://youtu.be/AVIKFXLCPY8) <br> [[课程规则]](https://youtu.be/vCxyd_S4R24)  <br> [[第1讲：生成式AI是什么？]](https://youtu.be/JGtqpQXfJis) |  1. [课程内容说明](./slides/01/0223_course.pdf) <br> 2. [什么是生成式人工智能？](./slides/01/0223_universal.pdf) <br> 3. [今日的生成式人工智能厉害在哪里](./slides/01/0223_intro_gai.pdf) | [80分钟快速了解大型语言模型](https://youtu.be/wG8-IUtqu-s?si=-YWWLqbeX7wiRQ4M) <br> [[slide]](./slides/01/LLM_80min%20(v5).pdf) |  | [HW1: 真假难辨的世界](./assignments/HW1/README.md) :white_check_mark: <br> [[video]](https://www.youtube.com/watch?v=QOrtPUxaIG8) [[pdf]](./assignments/HW1/GenAI%20HW1%20slides.pdf) |
+| 03/01 | **提示工程&AI代理人** <br> [[第2讲：今日的生成式人工智能厉害在哪里？]](https://youtu.be/glBhOQ1_RkE) <br> [[第3讲：训练不了人工智能吗？你可以训练你自己（上）]](https://youtu.be/A3Yx35KrSN0) | 1. [今日的生成式人工智能](./slides/02/0301_universal.pdf) <br> 2. [prompt engineering](./slides/02/0301_prompt_part1.pdf) | [Prompt Engineering Guide](https://www.promptingguide.ai/) | | [HW2: 都是AI的作文比赛](./assignments/HW2/README.md) :white_check_mark: <br> [[video]](https://www.youtube.com/watch?v=MLvfqvEuINk) [[pdf]](./assignments/HW2/GenAI2024%20HW2.pdf) | 
+| 03/08 | **生成策略&从专才到通才** <br> [[第4讲：训练不了人工智能？你可以训练你自己（中）]](https://youtu.be/lwe3_x50_uw) | [prompt part 2](./slides/03/0308_prompt_part2.pdf) | [语言模型如何学习使用工具](https://youtu.be/ZID220t_MpI) <br> [[pdf]](./slides/03/NewBing%20(v4).pdf) | | [HW3: 以AI搭建自己的应用](./assignments/HW3/README.md) :heavy_exclamation_mark: <br> [[video]](https://youtu.be/mQb5Zbbm_T8?si=8M8YOuV7QY1vojig) [[pdf]](./assignments/HW3/GenAI_HW3.pdf) [[code]](https://colab.research.google.com/drive/15jh4v_TBPsTyIBhi0Fz46gEkjvhzGaBR?usp=sharing) | 
+| 03/22 | 深度学习&Transformer <br> [[第5讲：训练不了人工智能？你可以训练你自己（下）]](https://www.youtube.com/watch?v=inebiWdQW-4) <br> [[第6讲：大型语言模型修炼史-第一阶段：自我学习，累积实力]]() | 1. [prompt part 3](./slides/04/prompt_part3.pdf) <br> 2. [LLM training part 1](./slides/04/0322_LLMtraining_part1.pdf) <br> 3. [LLM training part 2](./slides/04/0322_LLMtraining_part2.pdf) | 1. [让AI村民组成虚拟村庄会发生什么事](https://youtu.be/G44Lkj7XDsA) <br> 2. [为什么神经网络可以正确地分辨宝可梦和数码宝贝呢？](https://youtu.be/WQY85vaQfTI) |  | [HW4: 成为AI催眠大师](./assignments/HW4/README.md) :heavy_exclamation_mark: <br> [[video]](https://youtu.be/igCtvqfZhms?si=e9HL_ZJKsWJD4r1i) [[pdf]](./assignments/HW4/GenAI_HW_4.pdf) [[code]](https://colab.research.google.com/drive/16JzVN_Mu4mJfyHQpQEuDx1q6jI-cAnEl?hl=zh-tw#scrollTo=dk-L0dvg9Q-y&uniqifier=1) |
+| 03/29 | 深度学习&Transformer <br> [[第7讲：大型语言模型修炼史-第二阶段：名师指点，发挥潜力]](https://youtu.be/Q9cNkUPXUB8)  | [LLM training part 2](./slides/05/LLMtraining_part2%20(v5).pdf) | [Llama 2: Open Foundation and Fine-Tuned Chat Models](https://arxiv.org/abs/2307.09288) | NVIDIA团队演讲 | [HW5: 训练自己的语言模型](./assignments/HW5/README.md) :bangbang: <br> [[video]](https://www.youtube.com/watch?v=yAsmr10xrog) [[pdf]](./assignments/HW5/GenAI_hw5.pdf) [[code]](https://colab.research.google.com/drive/1nB3jwRJVKXSDDNO-pbURrao0N2MpqHl8?usp=sharing) |
+| 04/12 | 评估生成式AI&道德议题 <br> [第8讲：大型语言模型修炼史——第三阶段：参与实战，打磨技巧](https://youtu.be/v12IKvF6Cj8) <br> [第9讲：以大型语言模型打造的AI Agent](https://youtu.be/bJZTJ7MjYqg) | 1. [LLM training part 3](./slides/06/0412_LLMtraining_part3.pdf) <br> 2. [agent](./slides/06/0412_agent.pdf) | [The Rise and Potential of Large Language Model Based Agents: A Survey](https://arxiv.org/abs/2309.07864) | | [HW6: AI透过人类的回馈学习](./assignments/HW6/README.md) :heavy_exclamation_mark: | 
+| 05/03 | Transformer & 生成式AI的可解释性 <br> [第10讲：今日的语言模型是如何做文字接龙的——浅谈Transformer](https://youtu.be/uhNsUCb2fJI) <br> [第11讲：大型语言模型在想什么呢？——浅谈大型语言模型的可解释性](https://youtu.be/rZzfqkfZhY8) | 1. [explain](./slides/07/0503_explain.pdf) <br> 2. [transformer](./slides/07/0503_transformer.pdf) | 1. [Transformer(上)](https://youtu.be/n9TlOhRjYoc) <br> 2. [Transformer(下)](https://youtu.be/N6aRv06iv2g) <br> 3. [用语言模型来解释语言模型（上）](https://youtu.be/GBXm30qRAqg) <br> 4. [用语言模型来解释语言模型（下）](https://youtu.be/OOvhBIIHITE)  |  | |
 | 05/10 | 评估生成式AI & 道德议题 <br> [第12讲：浅谈检定大型语言模型能力的各种方式](https://youtu.be/Hk8Z0uhmWg4)  | 1. [evaluation](./slides/08/0510_evaluation.pdf) <br> 2. [ethical](./slides/08/0510_ethical.pdf) | 1. [Can Large Language Models Be an Alternative to Human Evaluations?](https://arxiv.org/abs/2305.01937) <br> 2. [Judging LLM-as-a-Judge with MT-Bench and Chatbor Arena](https://arxiv.org/abs/2306.05685) | | 生成式AI的安全性议题 :heavy_exclamation_mark: |
 | 05/17 | 语音的生成式AI | | | | 演讲影片快速摘要 :heavy_exclamation_mark: |
 | 05/24 | 影像的生成式AI | | | MTK团队演讲 | |
@@ -161,7 +163,11 @@
         - [[LIMA: Less is More for Alignment]](https://arxiv.org/abs/2305.11206)
   - `参与实战，打磨技巧`：
 
-## Lecture 6
+## Lecture 6: 评估生成式AI & 道德议题
+
+## Lecture 7：Transformer & 生成式AI的可解释性
+
+## Lecture 8: 评估生成式AI & 道德议题
 
 
 
