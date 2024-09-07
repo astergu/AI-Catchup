@@ -13,7 +13,7 @@
 | Lecture 7 | [Kernels](https://youtu.be/8NYoQiRANpg?si=Y9-kNgeuo2xflHgz) | | | 
 | Lecture 8 | [Data Splits, Models & Cross-Validation](https://youtu.be/rjbkWSTjHzM?si=NGjBbXsMpp4hJ36U) | | | 
 | Lecture 9 | [Appox/Estimation Error & ERM](https://youtu.be/iVOxMcumR4A?si=mIAmyGKL75JeYFc0) | | | 
-| Lecture 10 | Decision Trees and Ensemble Methods | | |  
+| Lecture 10 | [Decision Trees and Ensemble Methods](https://youtu.be/wr9gUr-eWdA?si=zZqu3-P1DlFNCi0h) | | |  
 | Lecture 11 | Introduction to Neural Networks | | | 
 | Lecture 12 | Backprop & Improving Neural Networks | | |  
 | Lecture 13 | Debugging ML Models and Error Analysis | | |  
@@ -156,4 +156,32 @@
 
 ## Lecture 9: Approx/Estimation Error & ERM
 
+- Bias vs. variance
+- Approx Estimation
+  - Bayes error (Irreducible Error) $\epsilon(g)$
+  - Approximation Error $\epsilon(h^*)-\epsilon(g)$
+  - Estimation Error $\epsilon(\hat{h})-\epsilon(h^*)$
+  - Total Error $\epsilon(\hat{h})=\text{Estimation Error}+\text{Approx Error}+\text{Irreducible Error}=\text{Bias}+\text{Variance}+\text{Irreducible}$
+  - **Reduce Variance**
+    - More data
+    - Decrease number of features
+    - Add regularization
+  - **Reduce Bias**
+    - More complex model
+    - Add more features (polynomial features)
+    - Less regularization 
+- Empirical Risk Minimization (ERM)
+  - $\hat{ERM}=argmin_{h\in H} \frac{1}{m}\sum_{i=1}^m 1\{h(x^{(i)})\neq y^{(i)}\}$
+- Uniform Convergence
+  - Union Bound
+  - Hoeffding's Inequality
+
 ## Lecture 10: Decision Trees and Ensemble Methods
+
+- Decision Trees
+  - Split function $S_p(j,t)=(\{x|x_j<t, x\in R_p\}, \{x|x_j\geq t, x\in R_p\})$ 
+  - How to split 
+- Ensemble Methods
+- Bagging
+- Random Forests
+- Boosting
