@@ -1,3 +1,45 @@
+- [Preliminaries](#preliminaries)
+  - [Data Preprocessing](#data-preprocessing)
+    - [Reading the Dataset](#reading-the-dataset)
+    - [Handling Missing Data](#handling-missing-data)
+- [Linear Neural Networks](#linear-neural-networks)
+  - [Linear Regression](#linear-regression)
+    - [Minibatch Stochastic Gradient Descent](#minibatch-stochastic-gradient-descent)
+    - [The Normal Distribution and Squared Loss](#the-normal-distribution-and-squared-loss)
+    - [Linear Regression Implementation from Scratch](#linear-regression-implementation-from-scratch)
+      - [Generating the Dataset](#generating-the-dataset)
+      - [Reading the Dataset](#reading-the-dataset-1)
+      - [Initializing Model Parameters](#initializing-model-parameters)
+      - [Defining the Model](#defining-the-model)
+      - [Defining the Loss Function](#defining-the-loss-function)
+      - [Defining the Optimization Algorithm](#defining-the-optimization-algorithm)
+      - [Training](#training)
+    - [Concise Implementation of Linear Regression](#concise-implementation-of-linear-regression)
+      - [Generating the Dataset](#generating-the-dataset-1)
+      - [Reading the Dataset](#reading-the-dataset-2)
+      - [Defining the Model](#defining-the-model-1)
+      - [Initializing Model Parameters](#initializing-model-parameters-1)
+      - [Defining the Loss Function](#defining-the-loss-function-1)
+      - [Defining the Optimization Algorithm](#defining-the-optimization-algorithm-1)
+      - [Training](#training-1)
+  - [Softmax Regression](#softmax-regression)
+    - [The Image Classification Dataset](#the-image-classification-dataset)
+    - [Implementation of Softmax Regression from Scratch](#implementation-of-softmax-regression-from-scratch)
+      - [Initializing Model Parameters](#initializing-model-parameters-2)
+      - [Defining the Softmax Operation](#defining-the-softmax-operation)
+      - [Defining the Model](#defining-the-model-2)
+      - [Defining the Loss Function](#defining-the-loss-function-2)
+      - [Classification Accuracy](#classification-accuracy)
+      - [Training](#training-2)
+- [Multilayer Perceptrons](#multilayer-perceptrons)
+- [21. Recommender Systems](#21-recommender-systems)
+  - [Collaborative Filtering](#collaborative-filtering)
+    - [Matrix Factorization](#matrix-factorization)
+    - [AutoRec](#autorec)
+    - [Bayesian Personalized Ranking Loss](#bayesian-personalized-ranking-loss)
+    - [Hinge Loss](#hinge-loss)
+    - [Neural Collaborative Filtering](#neural-collaborative-filtering)
+
 # Preliminaries
 
 ## Data Preprocessing
@@ -391,3 +433,38 @@ def train_epoch(net, train_ieter, loss, updater):
 
 # Multilayer Perceptrons
 
+# 21. Recommender Systems
+
+## Collaborative Filtering
+
+Overall, CF techniques can be categorized into: memory-based CF, model-based CF, and their hybrid (Su and Khoshgoftaar, 2009). Representative memory-based CF techniques are nearest neighbor-based CF such as `user-based CF` and `item-based CF` (Sarwar et al., 2001). Latent factor models such as `matrix factorization` are examples of model-based CF. 
+
+### Matrix Factorization
+
+- The predicted rating user $u$ gives to item $i$ is calculated by $\hat{R_{ui}}=p_u q_i^{\intercal}+b_u+b_i$.
+- We train the matrix factorization model by minimizing the mean squared error between predicted rating scores and real rating scores. The objective function is defined as follows: $argmin \sum_{(u,i)\in K}||R_{ui}-\hat{R_{ui}}||^2+\lambda(||P||_F^2+||Q||_F^2+b_u^2+b_i^2)$, where $\lambda$ denotes the regularization rate.
+- Although the matrix factorization model achieves decent performance on the rating prediction task, it is essentially a linear model.
+
+### AutoRec
+
+AUtoRec ([Sedhain et al. 2015](https://d2l.ai/chapter_references/zreferences.html#id253)) identifies collaborative filtering (CF) with an autoencoder architecture and aims to integrate nonlinear transformations into CF on the basis of explicit feedback. 
+
+### Bayesian Personalized Ranking Loss
+
+Bayesian personalized ranking (BPR) ([Rendle et al., 2009](https://d2l.ai/chapter_references/zreferences.html#id235)) is a pairwise personalized ranking loss that is derived from the maximum posterior estimator. It has been widely used in many existing recommendation models. The training data of BPR consists of both positive and negative pairs (missing values). It assumes that the user prefers the positive item over all other non-observed items.
+
+In formal, the training data is constructed by tuples in the form of $(u,i,j)$, which represents that the user $u$ prefers the item $i$ over the item $j$.
+
+### Hinge Loss
+
+The loss used for ranking in recommender systems has the following form $\sum_{(u,i,j\in D)}max(m-\hat{y}_{ui}+\hat{y}_{uj}, 0)$, where $m$ is the safety margin size. It aims to push negative items away from positive items. 
+
+### Neural Collaborative Filtering
+
+NeuMF ([He et al., 2017](https://d2l.ai/chapter_references/zreferences.html#id106)) leverages the flexibility and non-linearity of neural networks to replace dot products of matrix factorization, aiming at enhancing the model expressiveness.
+
+In specific, this model is structured with two subnetworks including generalized matrix factorization (GMF) and MLP and models the interactions from two pathways instead of simple dot products. The outputs of these two networks are concatenated for the final prediction scores calculation. 
+
+To fuse the results of GMF and MLP, instead of simple addition, NeuMF concatenates the second last layers of two subnetworks to create a feature vector which can be passed to the further layers. Afterwards, the outputs are projected with matrix $h$ and a sigmoid activation function. The prediction layer is formulated as: $\hat{y}_{ui}=\sigma(h^{\intercal}\[x, \phi^L(z^{(L-1)})\])$.
+
+![](https://d2l.ai/_images/rec-neumf.svg)
