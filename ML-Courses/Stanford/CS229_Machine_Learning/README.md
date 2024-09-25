@@ -185,3 +185,46 @@
 - Bagging
 - Random Forests
 - Boosting
+
+
+## Lecture 11: Introduction to Neural Networks
+
+- softmax cross-entropy loss
+- Neural Networks
+  - Propagation Equations
+  - Optimization
+    - Optimize $w^{[1]}$, $w^{[2]}$, $w^{[3]}$, $b^{[1]}$, $b^{[2]}$, $b^{[3]}$
+    - Define objective function (loss/cost function)
+
+| Layer | Forward |  
+| ---- | ---- | 
+| Layer 1 | $z^{[1]}=w^{[1]}x+b^{[1]}$ <br> $a^{[1]}=\sigma(z^{[1]})$ | 
+| Layer 2 | $z^{[2]}=w^{[2]}\cdot a^{[1]}+b^{[2]}$ <br> $a^{[2]}=\sigma(z^{[2]})$ | 
+| Layer 3 | $z^{[3]}=w^{[3]}\cdot a^{[2]}+b^{[3]}$ <br> $a^{[3]}=\sigma(z^{[3]})$ | 
+
+
+## Lecture 12: Backprop & Improving Neural Networks
+
+- Backpropagation
+  - cost function $J(\hat{y}, y)=\frac{1}{m}\sum_{i=1}^m L(\hat{y}, y)$
+- Tricks to improve Neural Networks
+  - Use different activation functions
+    - sigmoid, ReLU, tanh
+  - Initialization methods
+    - $w_i=np.random.randn(shape)\times np.sqrt(\frac{1}{n^{[L-1]}})$, $n^{[L-1]}$ measures the number of inputs of the layer, works well for sigmoid, $w_i=np.random.randn(shape)\times np.sqrt(\frac{2}{n^{[L-1]}})$ works well for ReLU
+    - Xavier Initialization
+      - $w^{[L]} \thicksim \sqrt{\frac{1}{n^{[L-1]}}}$ for tanh
+    - He Initialization
+      - $w^{[L]}\thicksim \sqrt{\frac{2}{n^{[L]}+n^{[L-1]}}}$
+  - Normalization methods
+    - use the data $\mu$ and $\sigma$ on the train set while doing normalization on test set
+  - Regularization
+  - Optimization
+    - Mini-batch SGD
+    - Momentum
+      - check the past updates 
+        - $v=\beta v+(1-\beta)\frac{\partial L}{\partial w}$
+        - $w=w-\alpha v$
+
+## Lecture 13: Debugging ML Models and Error Analysis
+
