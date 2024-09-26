@@ -228,3 +228,6 @@
 
 ## Lecture 13: Debugging ML Models and Error Analysis
 
+- Diagnostics for debugging learning algorithms
+- Error analyses and ablative analysis
+- How to get started on a machine learning problem
