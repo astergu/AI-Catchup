@@ -180,8 +180,40 @@
 
 - Decision Trees
   - Split function $S_p(j,t)=(\{x|x_j<t, x\in R_p\}, \{x|x_j\geq t, x\in R_p\})$ 
-  - How to split 
+  - How to splits
+    - Define loss $L(R)$, define $\hat{p_c}$ to be the proportion of examples in $R$ that are of class $c$, thus the loss of misclassification $L_{misclass}=1-\text{max}\hat{p_c}$.
+    - $max L(R_p)-(L(R_1)+L(R_2))$, meaning parent loss minus children loss.
+    - Cross-entropy loss $L_{cross}=-\sum\hat{p_c}log_2 \hat{p_c}$
+    - Gini loss $\sum\hat{p_c}(1-\hat{p_c})$
+  - Regression Trees
+    - Predict $\hat{y_m}=\frac{\sum_{i\in R_m}y_i}{|R_m|}$
+    - Loss $L_{squared}=\frac{\sum_{i\in R_m}(y_i-\hat{y_m})^2}{|R_m|}$
+  - Regularization of Decision Trees
+    - min leaf size
+    - max depth
+    - max number of nodes
+    - min decrease in loss
+    - prunning (misclassification with val set)
+  - Runtime
+    - $O(nfd)$, where $n$ is number of examples, $f$ is the number of features, $d$ is the max depth of the tree.
+  - Pros
+    - Easy to explain
+    - Interpretable
+    - Can deal with categorical variables
+    - Generally fast
+  - Cons
+    - High variance 
+    - Bad at additive structure
+    - Low predictive accuracy
 - Ensemble Methods
-- Bagging
-- Random Forests
+  - Ways to ensemble
+    - Bagging: Random Forests
+    - Boosting: Adaboost, xgboost
+- Bagging (Bootstrap Aggregation)
+  - Goal: decrease variance
+  - Random Forests
+    - At each split, consider only a fraction of the total features
 - Boosting
+  - Goal: decrease bias
+  - Determine for classifier $G_m$ a weight $\alpha_m$ proportional to $log(\frac{1-err_m}{err_m})$
+  - Each $G_m$ is trained on a re-weighted training set
