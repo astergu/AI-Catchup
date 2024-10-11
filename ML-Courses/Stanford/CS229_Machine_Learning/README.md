@@ -240,7 +240,7 @@
   - Use different activation functions
     - sigmoid, ReLU, tanh
   - Initialization methods
-    - $w_i=np.random.randn(shape)\times np.sqrt(\frac{1}{n^{[L-1]}})$, $n^{[L-1]}$ measures the number of inputs of the layer, works well for sigmoid, $w_i=np.random.randn(shape)\times np.sqrt(\frac{2}{n^{[L-1]}})$ works well for ReLU
+    - $w_i=np.random.randn(shape)\times np.sqrt(\frac{1}{n^{[L-1]}})$, $n^{[ L-1]}$ measures the number of inputs of the layer, works well for sigmoid, $w_i=np.random.randn(shape)\times np.sqrt(\frac{2}{n^{[L-1]}})$ works well for ReLU
     - Xavier Initialization
       - $w^{[L]} \thicksim \sqrt{\frac{1}{n^{[L-1]}}}$ for tanh
     - He Initialization
@@ -258,8 +258,37 @@
 ## Lecture 13: Debugging ML Models and Error Analysis
 
 - Diagnostics for debugging learning algorithms
+  - Signals
+    - test error
+    - gap between train error and test error
+  - Fixes
+    - Fix high variance
+      - get more training data
+      - try a smaller set of features
+    - Fix high bias
+      - try a larger set of features
+    - Fix optimization algorithm
+      - run gradient descent for more iterations
+      - try Newton's method
+    - Fix optimization objective
+      - try different $\lambda$
+  - Common questions
+    - Is the algorithm converging?
+    - Are you optimizing the right function?
 - Error analyses and ablative analysis
 - How to get started on a machine learning problem
+
+## Lecture 14: Expectation-Maximization Algorithms
+
+- Unsupervised Learning
+  - Clustering (market segmentation)
+    - k-means clustering
+  - Density Estimation
+    - Anomaly detection (Gaussian Disriminant Analysis, GDA)
+  - Expectation-Maximization
+    - E-step (expectation step)
+      - set $w_j^{(i)}=p(z^{(i)}=j|x^{(i)};\phi, \mu, \sigma)$
+    - M-step (maximization step)
   - Goal: decrease bias
   - Determine for classifier $G_m$ a weight $\alpha_m$ proportional to $log(\frac{1-err_m}{err_m})$
   - Each $G_m$ is trained on a re-weighted training set
