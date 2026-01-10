@@ -49,9 +49,7 @@ If you are following along at home, you can download these files with the comman
 
 ### Low-Resource/Downscaling Tip
 
-```
 With the staff solution code, we can train an LM to generate reasonably fluent text on an Apple M3 Max chip with 36 GB RAM, in under 5 minutes on Metal GPU (MPS) and about 30 minutes using the CPU. 
-```
 
 ## Byte-Pair Encoding (BPE) Tokenizer
 
