@@ -1,6 +1,47 @@
+- [DL Engineer Toolkit](#dl-engineer-toolkit)
+  - [阶段 0（可并行）：工具与编程基础（贯穿全程）](#阶段-0可并行工具与编程基础贯穿全程)
+  - [阶段 1：数学与机器学习基础（0–3 个月）](#阶段-1数学与机器学习基础03-个月)
+    - [数学（非常重要）](#数学非常重要)
+    - [传统机器学习](#传统机器学习)
+  - [阶段 2：深度学习核心（3–6 个月）](#阶段-2深度学习核心36-个月)
+    - [神经网络基础](#神经网络基础)
+    - [CNN / RNN / Attention](#cnn--rnn--attention)
+  - [阶段 3：训练技巧 \& Debug 能力（6–9 个月）](#阶段-3训练技巧--debug-能力69-个月)
+  - [阶段 4：高级模型与方向深化（9–15 个月）](#阶段-4高级模型与方向深化915-个月)
+    - [方向 A：序列建模 \& 推荐系统（你非常适合）](#方向-a序列建模--推荐系统你非常适合)
+    - [方向 B：生成模型](#方向-b生成模型)
+    - [方向 C：强化学习（DeepMind 核心）](#方向-c强化学习deepmind-核心)
+  - [阶段 5：科研能力（12–18 个月）](#阶段-5科研能力1218-个月)
+- [DeepMind风格研究题](#deepmind风格研究题)
+  - [题目 1（核心推荐）：多序列用户行为的因果表征学习](#题目-1核心推荐多序列用户行为的因果表征学习)
+    - [背景（DeepMind 风格）](#背景deepmind-风格)
+    - [你需要回答的问题](#你需要回答的问题)
+      - [Q1：模型设计](#q1模型设计)
+      - [Q2：因果挑战](#q2因果挑战)
+      - [Q3：实验设计](#q3实验设计)
+    - [加分项（非常 DeepMind）](#加分项非常-deepmind)
+    - [考察点](#考察点)
+  - [题目 2（强化学习方向）：长时延奖励下的用户转化建模](#题目-2强化学习方向长时延奖励下的用户转化建模)
+    - [背景](#背景)
+    - [你需要回答的问题](#你需要回答的问题-1)
+      - [Q1：状态、动作、奖励如何定义？](#q1状态动作奖励如何定义)
+      - [Q2：如何处理稀疏奖励？](#q2如何处理稀疏奖励)
+      - [Q3：为什么 Policy Gradient 比 Q-learning 更适合？](#q3为什么-policy-gradient-比-q-learning-更适合)
+      - [Q4：是否可以用 model-based RL？](#q4是否可以用-model-based-rl)
+      - [Q5：如何稳定训练？](#q5如何稳定训练)
+      - [Q6：如何评价 learned policy？](#q6如何评价-learned-policy)
+    - [加分项](#加分项)
+    - [考察点](#考察点-1)
+  - [题目 3（基础研究取向）：Attention 是否真的需要 Softmax？](#题目-3基础研究取向attention-是否真的需要-softmax)
+    - [背景](#背景-1)
+    - [任务](#任务)
+    - [你需要做的](#你需要做的)
+    - [加分项](#加分项-1)
+    - [考察点](#考察点-2)
+
 # DL Engineer Toolkit
 
-🎯 总目标（12–18 个月）
+> 🎯 总目标（12–18 个月）
 
 到计划结束时，你应当能够：
 - 独立设计和实现复杂 ML / DL 模型
@@ -55,16 +96,34 @@
 
 必须掌握
 
-- Linear / Logistic Regression
+- [Linear](ML-Code/src/regression.py) / [Logistic](ML-Code/src/classification.py) Regression
 - SVM（margin、kernel）
 - Decision Tree / Random Forest / GBDT
-- Bias–Variance tradeoff
-- Feature engineering
+- KNN
+- K-means
+- **Bias–Variance tradeoff**
+  - Metrics: train set error vs. validation set error
+    - low training error, large validation error (overfit): high variance
+    - large training error, large validation error (underfit): high bias
+    - large training error, larger validation error (not enough data): high bias, high variance
+    - low training error, low validation error (just right): low bias, low variance
+  - Recipe
+    - High bias: bigger network, train longer
+    - High variance: more data, regularization
+- **Regularization**
+  - L1 / L2
+    - L1: sparsity (meaning a lot of zeros)
+    - L2: smoothness (also called weight decay)
+  - Dropout
+  - Early stopping
+- **Feature engineering**
+  - 
 
 📘 推荐：
 
-- Andrew Ng ML
-- ESL（Hastie）
+- [Andrew Ng ML](https://www.coursera.org/specializations/machine-learning-introduction)
+  - [Youtube video playlist](https://www.youtube.com/watch?v=vStJoetOxJg&list=PLkDaE6sCZn6FNC6YRfRQc_FbeQrF8BwGI)
+- [Elements of Statistical Learning（Hastie）](https://hastie.su.domains/ElemStatLearn/)
 
 🎯 产出标准
 
@@ -105,9 +164,9 @@
 
 推荐：
 
-- CS231n
-- Attention Is All You Need
-- Jay Alammar 博客
+- [CS231n](https://cs231n.stanford.edu/)
+- [Attention Is All You Need](https://arxiv.org/abs/1706.03762)
+- [Jay Alammar 博客](https://jalammar.github.io/)
 
 🎯 产出标准
 
