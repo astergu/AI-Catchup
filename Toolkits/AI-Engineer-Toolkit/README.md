@@ -56,9 +56,9 @@
 
 | Month | Topics | Week breakdowns |
 | --- | --- | --- |
-| 1 | Core Foundations (Hands-On) | Week 1–2: Transformers & LLM Basics <br> Week 3–4: Prompting + APIs |
-| 2 | Real Systems (This Is Where You Shine) | Week 5–6: RAG (Critical Skill) <br> Week 7–8: Fine-Tuning & PEFT |
-| 3 | Production + Differentiation | Week 9–10: Evaluation & Safety <br> Week 11–12: Deployment & Optimization |
+| 1 | [Core Foundations (Hands-On)](#month-1-core-foundations-hands-on) | [Week 1–2: Transformers & LLM Basics](#week-12-transformers--llm-basics) <br> [Week 3–4: Prompting + APIs](#week-34-prompting--apis) |
+| 2 | [Real Systems (This Is Where You Shine)](#month-2-real-systems-this-is-where-you-shine) | [Week 5–6: RAG (Critical Skill)](#week-56-rag-critical-skill) <br> [Week 7–8: Fine-Tuning & PEFT](#week-78-fine-tuning--peft) |
+| 3 | [Production + Differentiation](#month-3-production-differentiation) | [Week 9–10: Evaluation & Safety](#week-910-evaluation--safety) <br> [Week 11–12: Deployment & Optimization](#week-1112-deployment--optimization) |
 
 
 ### Month 1: Core Foundations (Hands-On)
