@@ -68,11 +68,12 @@
 #### Week 1–2: Transformers & LLM Basics
 
 - Learn:
-  - Self-attention (QKV intuition)
+  - [Self-attention (QKV intuition)](./self_attention.md)
   - Tokenization (BPE)
   - Why scaling works
   - Decoder-only models (GPT-style)
 - Resources:
+  - [Andrej Karpathy: Nerual Networks - Zero to Hero](https://www.youtube.com/playlist?list=PLAqhIrjkxbuWI23v9cThsA9GvCAUhRvKZ)
   - [Attention is All You Need](https://arxiv.org/pdf/1706.03762)
   - [Understanding and Coding the Self-Attention Mechanism of LLM From Scratch](https://sebastianraschka.com/blog/2023/self-attention-from-scratch.html)
   - [LLM Reading List](https://sebastianraschka.com/blog/2023/llm-reading-list.html)
