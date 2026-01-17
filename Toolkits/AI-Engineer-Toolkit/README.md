@@ -76,7 +76,7 @@
   - [Andrej Karpathy: Nerual Networks - Zero to Hero](https://www.youtube.com/playlist?list=PLAqhIrjkxbuWI23v9cThsA9GvCAUhRvKZ)
   - [Attention is All You Need](https://arxiv.org/pdf/1706.03762)
   - [Understanding and Coding the Self-Attention Mechanism of LLM From Scratch](https://sebastianraschka.com/blog/2023/self-attention-from-scratch.html)
-  - [LLM Reading List](https://sebastianraschka.com/blog/2023/llm-reading-list.html)
+  - [Understanding Large Language Models -- A Transformative Reading List](https://sebastianraschka.com/blog/2023/llm-reading-list.html)
   - [Visualizing Neural Machine Translation: Mechanics of Seq2Seq Models with Attention](https://jalammar.github.io/visualizing-neural-machine-translation-mechanics-of-seq2seq-models-with-attention)
   - [Understanding Attention Mechanism](https://medium.com/@shashank7.iitd/understanding-attention-mechanism-35ff53fc328e)
   - [Attn Illustrated: Attention](https://towardsdatascience.com/attn-illustrated-attention-5ec4ad276ee3)
