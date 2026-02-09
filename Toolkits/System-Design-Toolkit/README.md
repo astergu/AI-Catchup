@@ -1,0 +1,1 @@
+- [How to Scale Your Model](https://jax-ml.github.io/scaling-book/)
