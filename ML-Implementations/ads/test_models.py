@@ -18,6 +18,7 @@ from mmoe import MMoE
 from ple import PLE
 from dien import DIEN
 from deepfm import DeepFM
+from autoint import AutoInt
 
 
 def generate_esmm_dataset(n_samples=30000, feature_dim=30):
@@ -363,6 +364,55 @@ def main():
         'TrainTime': f"{train_time:.1f}s",
     })
     print(f"AUC: {fm_auc:.4f}, Accuracy: {fm_acc:.4f}, Time: {train_time:.1f}s")
+
+    # ============================================================================
+    # AutoInt — Automatic Feature Interaction via Self-Attentive Neural Networks
+    # Reuses the DeepFM categorical dataset for a direct comparison.
+    # AutoInt replaces explicit FM / cross terms with multi-head self-attention
+    # over the stacked field embeddings; each layer attends over all n fields.
+    # ============================================================================
+    print("\n" + "="*70)
+    print("AutoInt: Automatic Feature Interaction (Self-Attention)")
+    print("="*70)
+    print("(Reusing DeepFM dataset for a direct comparison)")
+
+    start = time.time()
+    autoint = AutoInt(
+        field_dims=[N_USERS_FM, N_ITEMS_FM, N_CATS_FM],
+        embed_dim=16,
+        dense_feat_dim=DENSE_DIM_FM,
+        num_heads=2,
+        att_dim=8,       # per-head dim; total = 2×8 = 16 = embed_dim → no W_res
+        num_layers=3,
+        use_residual=True,
+        dnn_units=[],    # pure AutoInt (no parallel DNN)
+        dropout_rate=0.1,
+        learning_rate=0.001,
+    )
+    autoint.fit(
+        [uid_tr, iid_tr, cid_tr], y_fm_tr,
+        dense_feats=dense_tr,
+        epochs=25, batch_size=256, verbose=0,
+    )
+    train_time = time.time() - start
+
+    y_pred_ai = autoint.predict([uid_te, iid_te, cid_te], dense_feats=dense_te).flatten()
+    ai_auc = roc_auc_score(y_fm_te, y_pred_ai)
+    ai_acc = accuracy_score(y_fm_te, (y_pred_ai >= 0.5).astype(int))
+    results.append({
+        'Model':     'AutoInt',
+        'Accuracy':  ai_acc,
+        'Precision': precision_score(y_fm_te, (y_pred_ai >= 0.5).astype(int)),
+        'Recall':    recall_score(y_fm_te, (y_pred_ai >= 0.5).astype(int)),
+        'F1':        f1_score(y_fm_te, (y_pred_ai >= 0.5).astype(int)),
+        'AUC':       ai_auc,
+        'LogLoss':   log_loss(y_fm_te, y_pred_ai),
+        'TrainTime': f"{train_time:.1f}s",
+    })
+    print(f"AUC: {ai_auc:.4f}, Accuracy: {ai_acc:.4f}, Time: {train_time:.1f}s")
+    print(f"\nComparison on the same categorical dataset:")
+    print(f"  DeepFM  AUC: {fm_auc:.4f}")
+    print(f"  AutoInt AUC: {ai_auc:.4f}")
 
     # ============================================================================
     # DIN — Deep Interest Network

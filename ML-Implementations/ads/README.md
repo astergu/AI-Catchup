@@ -26,6 +26,7 @@ This will train and compare all implemented models on synthetic CTR data and sav
 | PLE | [ple.py](ple.py) | CTR + CVR | ✅ Complete |
 | DIEN | [dien.py](dien.py) | CTR | ✅ Complete |
 | DeepFM | [deepfm.py](deepfm.py) | CTR | ✅ Complete |
+| AutoInt | [autoint.py](autoint.py) | CTR | ✅ Complete |
 
 ## Model Descriptions
 
@@ -40,6 +41,7 @@ This will train and compare all implemented models on synthetic CTR data and sav
 | **PLE** | 2020 · Tencent | Separates shared and task-specific experts to avoid negative transfer, then progressively extracts task representations | Task-specific experts + shared experts per layer · Gating: `gate_k = softmax(W_k · x)` · Output: task towers | Outperforms MMoE on conflicting tasks by giving each task its own experts that aren't forced to compromise |
 | **DIEN** | 2019 · Alibaba | Models the temporal evolution of user interest with a two-stage RNN: GRU extracts interest states (with auxiliary next-click supervision), AUGRU evolves them conditioned on the target item | Stage 1: GRU + auxiliary loss · Stage 2: AUGRU (`u'_t = a_t ⊙ u_t`) · DNN | Captures interest drift over time; AUGRU update gate scales with target relevance, freezing evolution at irrelevant history steps |
 | **DeepFM** | 2017 · Huawei | Replace Wide & Deep's wide component with a Factorization Machine and share the embedding table between FM and DNN, eliminating the need for hand-crafted cross features | 1st-order: `Σ wᵢxᵢ` · 2nd-order FM: `½(‖Σeᵢ‖²−Σ‖eᵢ‖²)` · Deep: `DNN(flatten(e))` · Output: `σ(1st + 2nd + DNN)` | No manual feature engineering; FM captures all pairwise interactions in O(n·k); shared embeddings reduce parameters vs Wide & Deep |
+| **AutoInt** | 2019 · BIT | Apply multi-head self-attention to the stacked field embeddings so every field can attend to every other field, learning which pairs matter most in a sample-adaptive way | L interacting layers: `α = softmax(QKᵀ/√d_h)`, `ẽ = αV`, residual+ReLU · Flatten → Dense(1) · Optional parallel DNN (AutoInt+) | Interactions are explicit and interpretable; stacking L layers captures up to (L+1)-th order interactions without combinatorial enumeration |
 
 ## Benchmark Results
 
@@ -54,7 +56,8 @@ Results on synthetic CTR data (`test_models.py`). AUC is the primary metric.
 | DCN-v1 Parallel | 0.975 | 0.964 | 0.121 | Near-identical to v2 |
 | DIN | 0.888 | 0.918 | 0.297 | Sequence dataset (N=30k); behavior-conditioned attention |
 | DIEN | **0.901** | **0.925** | **0.260** | Same dataset as DIN; GRU + AUGRU with auxiliary supervision |
-| DeepFM | 0.885 | 0.918 | — | Categorical dataset (N=30k); FM + DNN with shared embeddings |
+| DeepFM | 0.881 | 0.918 | 0.321 | Categorical dataset (N=30k); FM + DNN with shared embeddings |
+| AutoInt | **0.887** | **0.930** | **0.261** | Same dataset as DeepFM; 3 interacting layers, 2 heads, d_h=8 |
 
 ESMM and MMoE are evaluated on a separate CTR+CVR funnel dataset (not directly comparable to single-task models):
 
@@ -171,6 +174,37 @@ model.fit(item_seq, target_item, y, neg_seq=neg_seq, epochs=10, batch_size=256)
 probs = model.predict(item_seq, target_item)  # neg_seq not needed at inference
 ```
 
+### AutoInt
+
+```python
+from autoint import AutoInt
+import numpy as np
+
+N_USERS, N_ITEMS, N_CATS, N = 200, 200, 5, 30000
+
+user_ids = np.random.randint(0, N_USERS, N).astype(np.int32)
+item_ids = np.random.randint(0, N_ITEMS, N).astype(np.int32)
+cat_ids  = np.random.randint(0, N_CATS,  N).astype(np.int32)
+sparse_feats = [user_ids, item_ids, cat_ids]
+
+dense_feats = np.random.randn(N, 5).astype(np.float32)
+y = np.random.binomial(1, 0.1, N).astype(np.float32)
+
+model = AutoInt(
+    field_dims=[N_USERS, N_ITEMS, N_CATS],
+    embed_dim=16,
+    dense_feat_dim=5,
+    num_heads=2,
+    att_dim=8,         # per-head; total = 2×8 = 16 = embed_dim (no projection)
+    num_layers=3,      # stacking L layers captures up to (L+1)-th order interactions
+    use_residual=True,
+    dnn_units=[],      # empty = pure AutoInt; non-empty = AutoInt+ (parallel DNN)
+    dropout_rate=0.1,
+)
+model.fit(sparse_feats, y, dense_feats=dense_feats, epochs=20, batch_size=256)
+probs = model.predict(sparse_feats, dense_feats=dense_feats)  # shape (N, 1)
+```
+
 ### DeepFM
 
 ```python
@@ -264,6 +298,7 @@ p_cvr = preds["cvr"]          # shape (N, 1)
 | PLE | [Progressive Layered Extraction (PLE): A Novel Multi-Task Learning (MTL) Model for Personalization](https://dl.acm.org/doi/10.1145/3383313.3412236) `2020` `Tencent` |
 | DIEN | [Deep Interest Evolution Network for Click-Through Rate Prediction](https://arxiv.org/abs/1809.03672) `2019` `Alibaba` |
 | DeepFM | [DeepFM: A Factorization-Machine based Neural Network for CTR Prediction](https://arxiv.org/abs/1703.04247) `2017` `Huawei` |
+| AutoInt | [AutoInt: Automatic Feature Interaction Learning via Self-Attentive Neural Networks](https://arxiv.org/abs/1810.11921) `2019` `BIT` |
 
 ---
 
@@ -525,7 +560,6 @@ metrics = test.run_full_test(
 ### Feature Interaction Models
 1. **Neural Factorization Machine** (NFM) - Bi-interaction pooling
 2. **Extreme Deep Factorization Machine** (xDeepFM) - Compressed interaction network
-3. **AutoInt** - Multi-head self-attention for feature interactions
 
 ## Implementation Tips
 
