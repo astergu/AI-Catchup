@@ -27,6 +27,8 @@ This will train and compare all implemented models on synthetic CTR data and sav
 | DIEN | [dien.py](dien.py) | CTR | ✅ Complete |
 | DeepFM | [deepfm.py](deepfm.py) | CTR | ✅ Complete |
 | AutoInt | [autoint.py](autoint.py) | CTR | ✅ Complete |
+| xDeepFM | [xdeepfm.py](xdeepfm.py) | CTR | ✅ Complete |
+| NFM | [nfm.py](nfm.py) | CTR | ✅ Complete |
 
 ## Model Descriptions
 
@@ -42,6 +44,8 @@ This will train and compare all implemented models on synthetic CTR data and sav
 | **DIEN** | 2019 · Alibaba | Models the temporal evolution of user interest with a two-stage RNN: GRU extracts interest states (with auxiliary next-click supervision), AUGRU evolves them conditioned on the target item | Stage 1: GRU + auxiliary loss · Stage 2: AUGRU (`u'_t = a_t ⊙ u_t`) · DNN | Captures interest drift over time; AUGRU update gate scales with target relevance, freezing evolution at irrelevant history steps |
 | **DeepFM** | 2017 · Huawei | Replace Wide & Deep's wide component with a Factorization Machine and share the embedding table between FM and DNN, eliminating the need for hand-crafted cross features | 1st-order: `Σ wᵢxᵢ` · 2nd-order FM: `½(‖Σeᵢ‖²−Σ‖eᵢ‖²)` · Deep: `DNN(flatten(e))` · Output: `σ(1st + 2nd + DNN)` | No manual feature engineering; FM captures all pairwise interactions in O(n·k); shared embeddings reduce parameters vs Wide & Deep |
 | **AutoInt** | 2019 · BIT | Apply multi-head self-attention to the stacked field embeddings so every field can attend to every other field, learning which pairs matter most in a sample-adaptive way | L interacting layers: `α = softmax(QKᵀ/√d_h)`, `ẽ = αV`, residual+ReLU · Flatten → Dense(1) · Optional parallel DNN (AutoInt+) | Interactions are explicit and interpretable; stacking L layers captures up to (L+1)-th order interactions without combinatorial enumeration |
+| **xDeepFM** | 2018 · Microsoft | Replace FM's 2nd-order scalar interactions with a Compressed Interaction Network (CIN) that learns explicit, bounded-degree, **vector-wise** interactions — entire field embeddings interact as units (not individual bits) | Linear · CIN: outer product → Conv1D(H_k, kernel=1) → sum-pool · DNN · `σ(linear + CIN + DNN)` | Vector-wise means field structure is preserved across all interaction degrees; stacking T CIN layers yields up to (T+1)-th order interactions |
+| **NFM** | 2017 · NUS | Compress all n(n-1)/2 pairwise embedding interactions into a single k-D vector via Bi-Interaction Pooling, then use a DNN to model higher-order combinations of those pairwise signals | `f_BI = ½(‖Σeᵢ‖² − Σ‖eᵢ‖²) ∈ R^k` → [BN] → DNN → Dense(1) · Linear + `σ(linear + DNN(f_BI))` | DNN input is k-wide (vs n·k in DeepFM), already interaction-aware; much more parameter-efficient for the same DNN depth |
 
 ## Benchmark Results
 
@@ -57,7 +61,9 @@ Results on synthetic CTR data (`test_models.py`). AUC is the primary metric.
 | DIN | 0.888 | 0.918 | 0.297 | Sequence dataset (N=30k); behavior-conditioned attention |
 | DIEN | **0.901** | **0.925** | **0.260** | Same dataset as DIN; GRU + AUGRU with auxiliary supervision |
 | DeepFM | 0.881 | 0.918 | 0.321 | Categorical dataset (N=30k); FM + DNN with shared embeddings |
-| AutoInt | **0.887** | **0.930** | **0.261** | Same dataset as DeepFM; 3 interacting layers, 2 heads, d_h=8 |
+| AutoInt | 0.888 | 0.934 | 0.253 | Same dataset as DeepFM; 3 interacting layers, 2 heads, d_h=8 |
+| xDeepFM | 0.883 | 0.930 | 0.267 | Same dataset as DeepFM; CIN [32,32] + DNN, l2_reg=0.001 |
+| NFM | 0.882 | 0.924 | 0.283 | Same dataset as DeepFM; BiInteraction(k=16) → DNN, BN+l2 |
 
 ESMM and MMoE are evaluated on a separate CTR+CVR funnel dataset (not directly comparable to single-task models):
 
@@ -172,6 +178,64 @@ model = DIEN(
 )
 model.fit(item_seq, target_item, y, neg_seq=neg_seq, epochs=10, batch_size=256)
 probs = model.predict(item_seq, target_item)  # neg_seq not needed at inference
+```
+
+### NFM (Neural Factorization Machine)
+
+```python
+from nfm import NFM
+import numpy as np
+
+N_USERS, N_ITEMS, N_CATS, N = 200, 200, 5, 30000
+
+user_ids = np.random.randint(0, N_USERS, N).astype(np.int32)
+item_ids = np.random.randint(0, N_ITEMS, N).astype(np.int32)
+cat_ids  = np.random.randint(0, N_CATS,  N).astype(np.int32)
+sparse_feats = [user_ids, item_ids, cat_ids]
+
+dense_feats = np.random.randn(N, 5).astype(np.float32)
+y = np.random.binomial(1, 0.1, N).astype(np.float32)
+
+model = NFM(
+    field_dims=[N_USERS, N_ITEMS, N_CATS],
+    embed_dim=16,
+    dense_feat_dim=5,
+    dnn_units=[256, 128, 64],  # DNN input is only k=16 wide (vs n·k=128 in DeepFM)
+    dropout_rate=0.1,
+    l2_reg=0.001,
+    use_batch_norm=True,       # BN after Bi-Interaction stabilises training
+)
+model.fit(sparse_feats, y, dense_feats=dense_feats, epochs=25, batch_size=256)
+probs = model.predict(sparse_feats, dense_feats=dense_feats)  # shape (N, 1)
+```
+
+### xDeepFM
+
+```python
+from xdeepfm import XDeepFM
+import numpy as np
+
+N_USERS, N_ITEMS, N_CATS, N = 200, 200, 5, 30000
+
+user_ids = np.random.randint(0, N_USERS, N).astype(np.int32)
+item_ids = np.random.randint(0, N_ITEMS, N).astype(np.int32)
+cat_ids  = np.random.randint(0, N_CATS,  N).astype(np.int32)
+sparse_feats = [user_ids, item_ids, cat_ids]
+
+dense_feats = np.random.randn(N, 5).astype(np.float32)
+y = np.random.binomial(1, 0.1, N).astype(np.float32)
+
+model = XDeepFM(
+    field_dims=[N_USERS, N_ITEMS, N_CATS],
+    embed_dim=16,
+    dense_feat_dim=5,
+    cin_layer_sizes=[32, 32],   # T=2 → degree-3 interactions; larger H_k = more patterns
+    dnn_units=[256, 128, 64],
+    l2_reg=0.001,               # regularise embeddings + CIN kernels + DNN to prevent overfitting
+    dropout_rate=0.1,
+)
+model.fit(sparse_feats, y, dense_feats=dense_feats, epochs=25, batch_size=256)
+probs = model.predict(sparse_feats, dense_feats=dense_feats)  # shape (N, 1)
 ```
 
 ### AutoInt
@@ -299,6 +363,8 @@ p_cvr = preds["cvr"]          # shape (N, 1)
 | DIEN | [Deep Interest Evolution Network for Click-Through Rate Prediction](https://arxiv.org/abs/1809.03672) `2019` `Alibaba` |
 | DeepFM | [DeepFM: A Factorization-Machine based Neural Network for CTR Prediction](https://arxiv.org/abs/1703.04247) `2017` `Huawei` |
 | AutoInt | [AutoInt: Automatic Feature Interaction Learning via Self-Attentive Neural Networks](https://arxiv.org/abs/1810.11921) `2019` `BIT` |
+| xDeepFM | [xDeepFM: Combining Explicit and Implicit Feature Interactions for Recommender Systems](https://arxiv.org/abs/1803.05170) `2018` `Microsoft` |
+| NFM | [Neural Factorization Machines for Sparse Predictive Analytics](https://arxiv.org/abs/1708.05027) `2017` `NUS` |
 
 ---
 
@@ -557,9 +623,7 @@ metrics = test.run_full_test(
 
 ## Popular Models to Implement
 
-### Feature Interaction Models
-1. **Neural Factorization Machine** (NFM) - Bi-interaction pooling
-2. **Extreme Deep Factorization Machine** (xDeepFM) - Compressed interaction network
+All planned models have been implemented. See the **Implemented Models** table above.
 
 ## Implementation Tips
 

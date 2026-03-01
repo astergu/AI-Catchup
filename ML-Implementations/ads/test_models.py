@@ -19,6 +19,8 @@ from ple import PLE
 from dien import DIEN
 from deepfm import DeepFM
 from autoint import AutoInt
+from xdeepfm import XDeepFM
+from nfm import NFM
 
 
 def generate_esmm_dataset(n_samples=30000, feature_dim=30):
@@ -288,6 +290,7 @@ def main():
     # the FM second-order term captures user×category affinity without any
     # manual feature engineering.
     # ============================================================================
+    tf.random.set_seed(1)   # reset before FM-dataset block for reproducibility
     print("\n" + "="*70)
     print("DeepFM: Deep Factorization Machine")
     print("="*70)
@@ -371,6 +374,7 @@ def main():
     # AutoInt replaces explicit FM / cross terms with multi-head self-attention
     # over the stacked field embeddings; each layer attends over all n fields.
     # ============================================================================
+    tf.random.set_seed(2)
     print("\n" + "="*70)
     print("AutoInt: Automatic Feature Interaction (Self-Attention)")
     print("="*70)
@@ -413,6 +417,111 @@ def main():
     print(f"\nComparison on the same categorical dataset:")
     print(f"  DeepFM  AUC: {fm_auc:.4f}")
     print(f"  AutoInt AUC: {ai_auc:.4f}")
+
+    # ============================================================================
+    # xDeepFM — eXtreme Deep Factorization Machine
+    # Replaces the FM term with a Compressed Interaction Network (CIN) that
+    # explicitly models VECTOR-WISE high-order interactions. Each CIN layer
+    # computes outer products of field embeddings (H_prev × n pairs), compresses
+    # them to H_k feature maps via Conv1D, and sum-pools over the embedding
+    # dimension. Combined with DNN (bit-level implicit) and linear (1st-order).
+    # Reuses the DeepFM/AutoInt categorical dataset for a direct comparison.
+    # ============================================================================
+    tf.random.set_seed(3)
+    print("\n" + "="*70)
+    print("xDeepFM: eXtreme Deep Factorization Machine")
+    print("="*70)
+    print("(Reusing DeepFM dataset for a direct comparison)")
+
+    start = time.time()
+    xdeepfm = XDeepFM(
+        field_dims=[N_USERS_FM, N_ITEMS_FM, N_CATS_FM],
+        embed_dim=16,
+        dense_feat_dim=DENSE_DIM_FM,
+        cin_layer_sizes=[32, 32],      # T=2 layers → degree-3 interactions
+        dnn_units=[256, 128, 64],
+        dropout_rate=0.1,
+        l2_reg=0.001,                  # regularise embeddings + CIN + DNN kernels
+        learning_rate=0.001,
+    )
+    xdeepfm.fit(
+        [uid_tr, iid_tr, cid_tr], y_fm_tr,
+        dense_feats=dense_tr,
+        epochs=25, batch_size=256, verbose=0,
+    )
+    train_time = time.time() - start
+
+    y_pred_xdfm = xdeepfm.predict([uid_te, iid_te, cid_te], dense_feats=dense_te).flatten()
+    xdfm_auc = roc_auc_score(y_fm_te, y_pred_xdfm)
+    xdfm_acc = accuracy_score(y_fm_te, (y_pred_xdfm >= 0.5).astype(int))
+    results.append({
+        'Model':     'xDeepFM',
+        'Accuracy':  xdfm_acc,
+        'Precision': precision_score(y_fm_te, (y_pred_xdfm >= 0.5).astype(int)),
+        'Recall':    recall_score(y_fm_te, (y_pred_xdfm >= 0.5).astype(int)),
+        'F1':        f1_score(y_fm_te, (y_pred_xdfm >= 0.5).astype(int)),
+        'AUC':       xdfm_auc,
+        'LogLoss':   log_loss(y_fm_te, y_pred_xdfm),
+        'TrainTime': f"{train_time:.1f}s",
+    })
+    print(f"AUC: {xdfm_auc:.4f}, Accuracy: {xdfm_acc:.4f}, Time: {train_time:.1f}s")
+    print(f"\nComparison on the same categorical dataset:")
+    print(f"  DeepFM  AUC: {fm_auc:.4f}  (FM 2nd-order + DNN)")
+    print(f"  AutoInt AUC: {ai_auc:.4f}  (self-attention, 3 layers)")
+    print(f"  xDeepFM AUC: {xdfm_auc:.4f}  (CIN vector-wise + DNN)")
+
+    # ============================================================================
+    # NFM — Neural Factorization Machine
+    # Replaces DeepFM's Flatten(all embeddings) → DNN with a Bi-Interaction
+    # Pooling step that first compresses all n(n-1)/2 pairwise interactions
+    # into a k-D vector, then feeds that into a DNN. The DNN input is k-wide
+    # (vs n·k for DeepFM), making it far more compact while already encoding
+    # 2nd-order interaction structure.
+    # Reuses the DeepFM/AutoInt/xDeepFM categorical dataset for direct comparison.
+    # ============================================================================
+    tf.random.set_seed(4)
+    print("\n" + "="*70)
+    print("NFM: Neural Factorization Machine")
+    print("="*70)
+    print("(Reusing DeepFM dataset for a direct comparison)")
+
+    start = time.time()
+    nfm = NFM(
+        field_dims=[N_USERS_FM, N_ITEMS_FM, N_CATS_FM],
+        embed_dim=16,
+        dense_feat_dim=DENSE_DIM_FM,
+        dnn_units=[256, 128, 64],  # DNN input is k=16 wide (vs n·k=128 for DeepFM)
+        dropout_rate=0.1,
+        l2_reg=0.001,
+        use_batch_norm=True,       # BN after Bi-Interaction is key to NFM stability
+        learning_rate=0.001,
+    )
+    nfm.fit(
+        [uid_tr, iid_tr, cid_tr], y_fm_tr,
+        dense_feats=dense_tr,
+        epochs=25, batch_size=256, verbose=0,
+    )
+    train_time = time.time() - start
+
+    y_pred_nfm = nfm.predict([uid_te, iid_te, cid_te], dense_feats=dense_te).flatten()
+    nfm_auc = roc_auc_score(y_fm_te, y_pred_nfm)
+    nfm_acc = accuracy_score(y_fm_te, (y_pred_nfm >= 0.5).astype(int))
+    results.append({
+        'Model':     'NFM',
+        'Accuracy':  nfm_acc,
+        'Precision': precision_score(y_fm_te, (y_pred_nfm >= 0.5).astype(int)),
+        'Recall':    recall_score(y_fm_te, (y_pred_nfm >= 0.5).astype(int)),
+        'F1':        f1_score(y_fm_te, (y_pred_nfm >= 0.5).astype(int)),
+        'AUC':       nfm_auc,
+        'LogLoss':   log_loss(y_fm_te, y_pred_nfm),
+        'TrainTime': f"{train_time:.1f}s",
+    })
+    print(f"AUC: {nfm_auc:.4f}, Accuracy: {nfm_acc:.4f}, Time: {train_time:.1f}s")
+    print(f"\nComparison on the same categorical dataset:")
+    print(f"  DeepFM  AUC: {fm_auc:.4f}  (Flatten(n·k) → DNN)")
+    print(f"  NFM     AUC: {nfm_auc:.4f}  (BiInteraction(k) → DNN  ← compact input)")
+    print(f"  AutoInt AUC: {ai_auc:.4f}  (self-attention)")
+    print(f"  xDeepFM AUC: {xdfm_auc:.4f}  (CIN vector-wise)")
 
     # ============================================================================
     # DIN — Deep Interest Network
