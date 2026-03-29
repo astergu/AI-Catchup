@@ -1,6 +1,7 @@
 # CS224N: Natural Language Processing with Deep Learning
 
-[Course Homepage](https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1234/) [[course videos]](https://www.youtube.com/watch?v=rmVRLeJRkl4&list=PLoROMvodv4rOSH4v6133s9LFPRHjEmbmJ)
+- [Course Homepage](https://web.stanford.edu/class/cs224n/) 
+- [[course videos]](https://www.youtube.com/watch?v=rmVRLeJRkl4&list=PLoROMvodv4rOSH4v6133s9LFPRHjEmbmJ)
 
 **Scope**
 
