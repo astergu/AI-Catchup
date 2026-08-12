@@ -1,3 +1,5 @@
+
+
 # AI-Catchup
 
 ## Project Overview
@@ -9,6 +11,13 @@ This project is dedicated to sharing and learning about machine learning, deep l
 - **Learning Resources:** A curated list of materials covering topics such as machine learning, deep learning, natural language processing, and more.
 - **Sample Code:** Various AI code examples, ranging from basic to advanced, for learning and hands-on practice.
 - **Project Experiences:** Real-world application cases to help you apply the acquired knowledge to practical projects.
+
+## Directory Structure
+
+- **`ML-Implementations/`**: From-scratch implementations of ML/DL models (the bulk of executable code).
+- **`Roadmaps/`**: Markdown curricula (AI Engineer, DL Engineer, Ads, System Design) and a vanilla-JS progress tracker web app.
+- **`ML-Courses/`**: Course notes and assignments from Stanford, NTU (Hung-Yi Lee), and Andrej Karpathy.
+- **`Books/` & `Papers/`**: Read-only reference material including PDFs and study notes.
 
 ## How to Contribute
 
